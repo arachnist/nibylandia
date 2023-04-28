@@ -40,6 +40,7 @@ in {
         greylist = null; # Apply greylisting when reaching this score
       }
     '';
+
     services.rspamd.locals = {
       "groups.conf".text = ''
         symbols = {

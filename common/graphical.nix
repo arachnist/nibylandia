@@ -1,10 +1,6 @@
 { config, lib, pkgs, ... }:
 
-let
-  # artifact; not required anymore
-  workingNerdfonts = lib.filter (x: x != "IBMPlexMono")
-    (builtins.attrNames (import <nixpkgs/pkgs/data/fonts/nerdfonts/shas.nix>));
-in {
+{
   options = {
     my.graphical.enable =
       lib.mkEnableOption "Configuration specific for graphical machines";
@@ -71,7 +67,6 @@ in {
     fonts = {
       enableDefaultFonts = true;
       fonts = with pkgs; [
-        # (nerdfonts.override { fonts = workingNerdfonts; })
         nerdfonts
         terminus_font
         terminus_font_ttf
@@ -135,7 +130,6 @@ in {
       inkscape
       kate
       keybase-gui
-      # kmail - not using it anyway :(
       kolourpaint
       nixfmt
       okular
@@ -169,27 +163,14 @@ in {
       krita
       vlc
       mastodon-update-script
-      # aseprite-unfree
 
       pynitrokey
-
-      #      cadquery-server
-      #
-      #    #  (pkgs.python-for-cadquery.withPackages (pp: with pp; [
-      #    #    ipython
-      #    #    cadquery
-      #    #    cq-kit
-      #    #    cadquery-massembly
-      #    #    cad-viewer-widget
-      #    #    voila
-      #    #  ]))
 
       (vscode-with-extensions.override {
         vscodeExtensions = with vscode-extensions;
           [
             bbenoist.nix
             ms-python.python
-            # 4ops.terraform
             bierner.emojisense
             bierner.markdown-checkbox
             bierner.markdown-emoji
@@ -229,11 +210,6 @@ in {
       })
 
       prusa-slicer
-      #      (prusa-slicer.overrideAttrs (old: {
-      #        patches = old.patches or [] ++ [
-      #	  ../pkgs/prusa-slicer-basicauth.patch
-      #	];
-      #      }))
     ];
 
     zramSwap.enable = true;

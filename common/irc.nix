@@ -10,17 +10,7 @@
   };
 
   config = lib.mkIf config.my.irc.enable {
-    environment.systemPackages = with pkgs;
-      [
-        #      (weechat.override {
-        #        configure = { availablePlugins, ... }: {
-        #	  scripts = with pkgs.weechatScripts; [
-        #	    # weechat-matrix
-        #	  ];
-        #	};
-        #      })
-        weechat
-      ];
+    environment.systemPackages = with pkgs; [ weechat ];
 
     services.nginx.virtualHosts.${config.my.irc.domain} = {
       forceSSL = true;

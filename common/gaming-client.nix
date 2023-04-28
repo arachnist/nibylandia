@@ -9,8 +9,5 @@ in {
       enable = true;
       remotePlay.openFirewall = true;
     };
-    #    # Firewall ports used by Steam in-home streaming.
-    #    networking.firewall.allowedTCPPorts = [ 27036 27037 ];
-    #    networking.firewall.allowedUDPPorts = [ 27031 27036 ];
   };
 }
