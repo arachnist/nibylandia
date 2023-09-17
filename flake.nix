@@ -2,7 +2,7 @@
   description = "Nibylandia configurations";
 
   inputs = {
-    nixpkgs.url = "github:arachnist/nixpkgs/kea-json-includes";
+    nixpkgs.url = "github:arachnist/nixpkgs/ar-patchset-unstable";
     home-manager.url = "github:nix-community/home-manager";
     nix-colors.url = "github:misterio77/nix-colors";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";

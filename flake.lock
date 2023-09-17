@@ -137,11 +137,11 @@
         "nmt": "nmt"
       },
       "locked": {
-        "lastModified": 1689022371,
-        "narHash": "sha256-+jxvMYzmzKaGFh7VDgKBmdP1ZBaGhdzL5WZaspdKpTA=",
+        "lastModified": 1694984852,
+        "narHash": "sha256-A1x55uLb2LT9evsTWYc1U9+iki1AmE5ROxOuCKPf3JE=",
         "owner": "Gerschtli",
         "repo": "nix-formatter-pack",
-        "rev": "d974547b3d7c7ce2975dc120ef3bc53f9dd61127",
+        "rev": "23795a4daf29ce784b3edc13b9776c7b445c453b",
         "type": "github"
       },
       "original": {
@@ -265,16 +265,16 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1694972439,
-        "narHash": "sha256-LXkr3gvhm9u+h+RqZB51XQeZQww/wD5QRnDDMq91QZM=",
+        "lastModified": 1694978972,
+        "narHash": "sha256-DkVh+UNzPvd7x2r/FO3Q59Pj30vEiWu57nvpJkzbpiU=",
         "owner": "arachnist",
         "repo": "nixpkgs",
-        "rev": "3a369a4140123299311eb6e4a5b430fc52d4ce9e",
+        "rev": "d6e32b32aa4d891b580e3367509da2d3949df006",
         "type": "github"
       },
       "original": {
         "owner": "arachnist",
-        "ref": "kea-json-includes",
+        "ref": "ar-patchset-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }

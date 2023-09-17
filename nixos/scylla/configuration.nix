@@ -1,6 +1,17 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
+let
+  keaJsonWithIncludes = name: value:
+    pkgs.callPackage ({ runCommand, jq, gnused }:
+      runCommand name {
+        nativeBuildInputs = [ jq gnused ];
+        value = builtins.toJSON value;
+        passAsFile = [ "value" ];
+      } ''
+        jq . "$valuePath" | \
+          sed -r -e 's@["]__keaInclude ([^"]+)["]@<?include "\1"?>@g'> $out
+      '') { };
+in {
   imports = [ ./hardware-configuration.nix ];
 
   boot.loader.systemd-boot.enable = true;
@@ -308,37 +319,39 @@
 
     dhcp-ddns = {
       enable = true;
-      settings = {
-        dns-server-timeout = 100;
-        ip-address = "127.0.0.1";
-        ncr-format = "JSON";
-        ncr-protocol = "UDP";
-        forward-ddns = {
-          ddns-domains = [{
-            key-name = "bind-key-2021-12-27";
-            dns-servers = [{ ip-address = "192.168.20.1"; }];
-            name = "nibylandia.lan.";
+      configFile = keaJsonWithIncludes "kea-dhcp-ddns.conf" {
+        DhcpDdns = {
+          dns-server-timeout = 100;
+          ip-address = "127.0.0.1";
+          ncr-format = "JSON";
+          ncr-protocol = "UDP";
+          forward-ddns = {
+            ddns-domains = [{
+              key-name = "bind-key-2021-12-27";
+              dns-servers = [{ ip-address = "192.168.20.1"; }];
+              name = "nibylandia.lan.";
+            }];
+          };
+          reverse-ddns = {
+            ddns-domains = [
+              {
+                key-name = "bind-key-2021-12-27";
+                dns-servers = [{ ip-address = "192.168.20.1"; }];
+                name = "20.168.192.in-addr.arpa.";
+              }
+              {
+                key-name = "bind-key-2021-12-27";
+                dns-servers = [{ ip-address = "192.168.20.1"; }];
+                name = "24.168.192.in-addr.arpa.";
+              }
+            ];
+          };
+          tsig-keys = [{
+            name = "bind-key-2021-12-27";
+            algorithm = "HMAC-SHA512";
+            secret = "__keaInclude ${config.age.secrets.ddnsKeyKea.path}";
           }];
         };
-        reverse-ddns = {
-          ddns-domains = [
-            {
-              key-name = "bind-key-2021-12-27";
-              dns-servers = [{ ip-address = "192.168.20.1"; }];
-              name = "20.168.192.in-addr.arpa.";
-            }
-            {
-              key-name = "bind-key-2021-12-27";
-              dns-servers = [{ ip-address = "192.168.20.1"; }];
-              name = "24.168.192.in-addr.arpa.";
-            }
-          ];
-        };
-        tsig-keys = [{
-          name = "bind-key-2021-12-27";
-          algorithm = "HMAC-SHA512";
-          secret = "__keaInclude ${config.age.secrets.ddnsKeyKea.path}";
-        }];
       };
     };
   };
