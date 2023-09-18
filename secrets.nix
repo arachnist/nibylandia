@@ -7,12 +7,16 @@ let
 
   scylla =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1X7EaPNfLhWH32IAyaZj2dhJz+QLnyGuXPCZUYRTjg";
+  khas =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO6VxPqJHYKmVB5d7bd6vuRqBNKXV1fo2R/WvdSF77xa";
   zorigami =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM/7CsIWlJH2F0VQpgsGgZOQeAd7Zh98WpCvmTyXCTty";
   stereolith =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVuDOcKE8ANKGjd6kfFH1qLLzLwg91o0exJ0isIEw4O";
 in {
 
+  "secrets/secureboot-key.age".publicKeys = ar ++ [ khas ];
+  "secrets/secureboot-cert.age".publicKeys = ar ++ [ khas ];
   "secrets/wg/nibylandia_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/wg/dn42_w1kl4s_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/lan/nibylandia-ddns-kea.age".publicKeys = ar ++ [ scylla ];

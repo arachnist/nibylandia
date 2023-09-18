@@ -22,8 +22,7 @@ let
 in {
   imports = [ ./hardware-configuration.nix ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  nibylandia-boot.uefi.enable = true;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -408,7 +407,9 @@ in {
     checkConfig = false;
     config = builtins.readFile ./bird/bird2.conf;
   };
-  environment.etc."bird/peers/w1kl4s.conf" = { source = ./bird/peers_w1kl4s.conf; };
+  environment.etc."bird/peers/w1kl4s.conf" = {
+    source = ./bird/peers_w1kl4s.conf;
+  };
   systemd.timers.dn42-roa = {
     description = "Trigger a ROA table update";
 
@@ -466,36 +467,8 @@ in {
     config.boot.kernelPackages.perf
   ];
 
-  programs = {
-    mtr.enable = true;
-    mosh.enable = true;
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
-    };
-    zsh = {
-      enable = true;
-      enableBashCompletion = true;
-      autosuggestions.enable = true;
-      syntaxHighlighting.enable = true;
-    };
-    command-not-found.enable = false;
-  };
-
-  nix = {
-    package = pkgs.nixUnstable;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-  };
-
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGfIRe1nH6vwjQTjqHNnkKAdr1VYqGEeQnqInmf3A6UN ar@khas"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO6rEwERSm/Fj4KO4SxFIo0BUvi9YNyf8PSL1FteMcMt arachnist@monolith"
   ];
-
-  services.openssh.enable = true;
-  system.stateVersion = "23.11";
 }
