@@ -109,7 +109,8 @@ in {
       peers = [{
         publicKey = "xwTYtejNZCtOyPMNcZVlsBIGYae6aUQczh7UwujLxXg=";
         allowedIPs = [ "10.255.255.0/24" ];
-        endpoint = "zorigami.is-a.cat:51315";
+        # endpoint = "zorigami.is-a.cat:51315";
+        endpoint = "185.236.240.137:51315";
         persistentKeepalive = 15;
       }];
     };
@@ -446,29 +447,5 @@ in {
   nixpkgs.overlays =
     [ (self: super: { restool = self.callPackage ./pkgs/restool { }; }) ];
 
-  environment.systemPackages = with pkgs; [
-    pv
-    libarchive
-    lshw
-    zip
-    file
-    tcpdump
-    lsof
-    restool
-    ethtool
-    pciutils
-    usbutils
-    dig
-    dstat
-    wget
-    bind
-    nmap
-    iperf
-    config.boot.kernelPackages.perf
-  ];
-
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGfIRe1nH6vwjQTjqHNnkKAdr1VYqGEeQnqInmf3A6UN ar@khas"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO6rEwERSm/Fj4KO4SxFIo0BUvi9YNyf8PSL1FteMcMt arachnist@monolith"
-  ];
+  environment.systemPackages = with pkgs; [ restool ethtool ];
 }

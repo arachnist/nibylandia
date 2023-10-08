@@ -17,6 +17,7 @@ in {
 
   "secrets/secureboot-key.age".publicKeys = ar ++ [ khas ];
   "secrets/secureboot-cert.age".publicKeys = ar ++ [ khas ];
+  "secrets/khas-ar.age".publicKeys = ar ++ [ khas ];
   "secrets/wg/nibylandia_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/wg/dn42_w1kl4s_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/lan/nibylandia-ddns-kea.age".publicKeys = ar ++ [ scylla ];
@@ -40,4 +41,6 @@ in {
   "secrets/mail/keycloak.age".publicKeys = ar ++ [ zorigami ];
   "secrets/mail/keycloakPlain.age".publicKeys = ar ++ [ zorigami ];
   "secrets/keycloakDatabase.age".publicKeys = ar ++ [ zorigami ];
+
+  inherit ar;
 }

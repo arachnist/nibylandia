@@ -1,7 +1,8 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  # imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  hardware.enableAllFirmware = true;
+  nibylandia-boot.ryzen.enable = true;
 
   boot.initrd.availableKernelModules =
     [ "nvme" "ehci_pci" "xhci_pci" "rtsx_pci_sdmmc" ];
@@ -36,6 +37,13 @@
     device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
     fsType = "btrfs";
     options = [ "subvol=home" ];
+  };
+
+  fileSystems."/etc/ssh" = {
+    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    fsType = "btrfs";
+    options = [ "subvol=etc_ssh" ];
+    neededForBoot = true;
   };
 
   fileSystems."/etc/NetworkManager" = {
@@ -79,5 +87,4 @@
     fsType = "btrfs";
     options = [ "subvol=var_lib_tpm" ];
   };
-
 }

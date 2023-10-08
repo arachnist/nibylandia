@@ -3,10 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:arachnist/nixpkgs/ar-patchset-unstable";
-    bootspec-secureboot = {
-      url = "github:DeterminateSystems/bootspec-secureboot/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager.url = "github:nix-community/home-manager";
     nix-colors.url = "github:misterio77/nix-colors";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
@@ -16,10 +12,14 @@
       url = "github:ryantm/agenix";
       inputs.darwin.follows = "";
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, bootspec-secureboot, nix-formatter-pack
-    , nix-index-database, deploy-rs, agenix, ... }:
+  outputs = { self, nixpkgs, nix-formatter-pack, nix-index-database, deploy-rs
+    , agenix, lanzaboote, ... }:
     let forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
     in {
       # forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
@@ -44,7 +44,7 @@
         nibylandia-boot.imports = [ ./modules/boot.nix ];
 
         nibylandia-secureboot.imports = [
-          bootspec-secureboot.nixosModules.bootspec-secureboot
+          lanzaboote.nixosModules.lanzaboote
 
           ({ config, lib, ... }: {
             age.secrets = {
@@ -52,11 +52,12 @@
               secureboot-key.file = ./secrets/secureboot-key.age;
             };
 
-            boot.loader.secureboot = {
+            boot.lanzaboote = {
               enable = true;
-              signingKeyPath = "${config.age.secrets.secureboot-key.path}";
-              signingCertPath = "${config.age.secrets.secureboot-cert.path}";
+              publicKeyFile = config.age.secrets.secureboot-cert.path;
+              privateKeyFile = config.age.secrets.secureboot-key.path;
             };
+
             nibylandia-boot.uefi.enable = lib.mkForce false;
           })
         ];
@@ -110,6 +111,18 @@
           sshUser = "root";
           path = deploy-rs.lib.aarch64-linux.activate.nixos
             self.nixosConfigurations.scylla;
+        };
+      };
+
+      deploy.nodes.khas = {
+        fastConnection = false;
+        remoteBuild = true;
+        hostname = "khas";
+        profiles.system = {
+          user = "root";
+          sshUser = "root";
+          path = deploy-rs.lib.x86_64-linux.activate.nixos
+            self.nixosConfigurations.khas;
         };
       };
 
