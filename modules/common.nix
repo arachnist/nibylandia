@@ -2,7 +2,8 @@
 
 let secrets = import ../secrets.nix;
 in {
-
+  boot.binfmt.emulatedSystems =
+    lib.lists.remove pkgs.system [ "x86_64-linux" "aarch64-linux" ];
   programs.command-not-found.enable = false;
   system.stateVersion = "23.11";
   services.openssh = {
