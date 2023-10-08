@@ -22,7 +22,6 @@
     , agenix, lanzaboote, ... }:
     let forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
     in {
-      # forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
       formatter = forAllSystems (system:
         nix-formatter-pack.lib.mkFormatter {
           inherit nixpkgs system;
@@ -78,6 +77,8 @@
         ];
 
         nibylandia-laptop.imports = [ ./modules/laptop.nix ];
+
+        nibylandia-gaming.imports = [ ./modules/gaming.nix ];
       };
 
       nixosConfigurations = with self.nixosModules; {
@@ -96,6 +97,7 @@
             nibylandia-graphical
             nibylandia-laptop
             nibylandia-secureboot
+            nibylandia-gaming
 
             ./nixos/khas
           ];

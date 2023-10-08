@@ -116,4 +116,16 @@ in {
     hashedPassword = lib.mkDefault null;
     openssh.authorizedKeys.keys = secrets.ar;
   };
+
+  console.keyMap = "us";
+  i18n = {
+    defaultLocale = "en_CA.UTF-8";
+    supportedLocales = [
+      "en_CA.UTF-8/UTF-8"
+      "en_US.UTF-8/UTF-8"
+      "en_DK.UTF-8/UTF-8"
+      "pl_PL.UTF-8/UTF-8"
+    ];
+  };
+  time.timeZone = "Europe/Warsaw";
 }
