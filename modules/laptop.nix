@@ -12,9 +12,4 @@
   services.fwupd.enable = true;
   services.fwupd.extraRemotes = [ "lvfs-testing" "vendor" "vendor-directory" ];
   services.fwupd.daemonSettings.OnlyTrusted = false;
-  #services.fwupd.package = (pkgs.fwupd.overrideAttrs (oldAttrs: {
-  #  patches = (oldAttrs.patches or []) ++ [
-  #    ./disable-secureboot-checks.patch
-  #  ];
-  #}));
 }

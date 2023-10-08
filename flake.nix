@@ -20,7 +20,24 @@
 
   outputs = { self, nixpkgs, nix-formatter-pack, nix-index-database, deploy-rs
     , agenix, lanzaboote, ... }:
-    let forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
+    let
+      forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
+      pkgsForDeploy =
+        forAllSystems (system: import nixpkgs { inherit system; });
+      deployPkgs = forAllSystems (system:
+        let pkgs = pkgsForDeploy.${system};
+        in import nixpkgs {
+          inherit system;
+          overlays = [
+            deploy-rs.overlay
+            (self: super: {
+              deploy-rs = {
+                inherit (pkgs) deploy-rs;
+                inherit (super.deploy-rs) lib;
+              };
+            })
+          ];
+        });
     in {
       formatter = forAllSystems (system:
         nix-formatter-pack.lib.mkFormatter {
@@ -66,6 +83,11 @@
           agenix.nixosModules.default
 
           nibylandia-boot
+
+          ({ pkgs, ... }: {
+            environment.systemPackages =
+              [ agenix.packages.${pkgs.system}.default ];
+          })
 
           ./modules/common.nix
         ];
@@ -122,7 +144,7 @@
         profiles.system = {
           user = "root";
           sshUser = "root";
-          path = deploy-rs.lib.aarch64-linux.activate.nixos
+          path = deployPkgs.aarch64-linux.deploy-rs.lib.activate.nixos
             self.nixosConfigurations.scylla;
         };
       };
@@ -134,7 +156,7 @@
         profiles.system = {
           user = "root";
           sshUser = "root";
-          path = deploy-rs.lib.x86_64-linux.activate.nixos
+          path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos
             self.nixosConfigurations.khas;
         };
       };
@@ -146,7 +168,7 @@
         profiles.system = {
           user = "root";
           sshUser = "root";
-          path = deploy-rs.lib.x86_64-linux.activate.nixos
+          path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos
             self.nixosConfigurations.microlith;
         };
       };
