@@ -102,6 +102,17 @@
             ./nixos/khas
           ];
         };
+
+        microlith = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            nibylandia-graphical
+            nibylandia-secureboot
+            nibylandia-gaming
+
+            ./nixos/microlith
+          ];
+        };
       };
 
       deploy.nodes.scylla = {
@@ -125,6 +136,18 @@
           sshUser = "root";
           path = deploy-rs.lib.x86_64-linux.activate.nixos
             self.nixosConfigurations.khas;
+        };
+      };
+
+      deploy.nodes.microlith = {
+        fastConnection = false;
+        remoteBuild = true;
+        hostname = "microlith";
+        profiles.system = {
+          user = "root";
+          sshUser = "root";
+          path = deploy-rs.lib.x86_64-linux.activate.nixos
+            self.nixosConfigurations.microlith;
         };
       };
 

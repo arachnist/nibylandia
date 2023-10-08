@@ -13,11 +13,14 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM/7CsIWlJH2F0VQpgsGgZOQeAd7Zh98WpCvmTyXCTty";
   stereolith =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVuDOcKE8ANKGjd6kfFH1qLLzLwg91o0exJ0isIEw4O";
+  microlith =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDghNuH/3G+0BXwrBZWZXX0V3K0tfu/Q/AKokLXY5zTD";
 in {
 
   "secrets/secureboot-key.age".publicKeys = ar ++ [ khas ];
   "secrets/secureboot-cert.age".publicKeys = ar ++ [ khas ];
   "secrets/khas-ar.age".publicKeys = ar ++ [ khas ];
+  "secrets/microlith-ar.age".publicKeys = ar ++ [ microlith ];
   "secrets/wg/nibylandia_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/wg/dn42_w1kl4s_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/lan/nibylandia-ddns-kea.age".publicKeys = ar ++ [ scylla ];
