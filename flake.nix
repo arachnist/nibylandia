@@ -129,8 +129,8 @@
           system = "x86_64-linux";
           modules = [
             nibylandia-graphical
-            nibylandia-secureboot
             nibylandia-gaming
+            nibylandia-secureboot
 
             ./nixos/microlith
           ];
