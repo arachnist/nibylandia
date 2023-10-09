@@ -17,8 +17,8 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDghNuH/3G+0BXwrBZWZXX0V3K0tfu/Q/AKokLXY5zTD";
 in {
 
-  "secrets/secureboot-key.age".publicKeys = ar ++ [ khas ];
-  "secrets/secureboot-cert.age".publicKeys = ar ++ [ khas ];
+  "secrets/secureboot-key.age".publicKeys = ar ++ [ khas microlith ];
+  "secrets/secureboot-cert.age".publicKeys = ar ++ [ khas microlith ];
   "secrets/khas-ar.age".publicKeys = ar ++ [ khas ];
   "secrets/microlith-ar.age".publicKeys = ar ++ [ microlith ];
   "secrets/wg/nibylandia_scylla.age".publicKeys = ar ++ [ scylla ];
