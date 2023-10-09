@@ -164,7 +164,7 @@
       deploy.nodes.microlith = {
         fastConnection = false;
         remoteBuild = true;
-        hostname = "microlith";
+        hostname = "microlith.nibylandia.lan";
         profiles.system = {
           user = "root";
           sshUser = "root";
