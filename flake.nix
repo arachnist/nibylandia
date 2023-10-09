@@ -2,12 +2,13 @@
   description = "Nibylandia configurations";
 
   inputs = {
-    nixpkgs.url = "github:arachnist/nixpkgs/ar-patchset-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     nix-colors.url = "github:misterio77/nix-colors";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
     nix-index-database.url = "github:Mic92/nix-index-database";
     deploy-rs.url = "github:serokell/deploy-rs";
+    microvm.url = "github:astro/microvm.nix";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.darwin.follows = "";
@@ -19,7 +20,7 @@
   };
 
   outputs = { self, nixpkgs, nix-formatter-pack, nix-index-database, deploy-rs
-    , agenix, lanzaboote, ... }:
+    , agenix, lanzaboote, microvm, ... }:
     let
       forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
       pkgsForDeploy =
@@ -81,6 +82,8 @@
         nibylandia-common.imports = [
           nix-index-database.nixosModules.nix-index
           agenix.nixosModules.default
+
+          microvm.nixosModules.host
 
           nibylandia-boot
 
