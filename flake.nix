@@ -107,6 +107,22 @@
       };
 
       nixosConfigurations = with self.nixosModules; {
+        ciTest = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            nibylandia-common
+
+            {
+              nibylandia-boot.uefi.enable = true;
+              fileSystems."/" = {
+                device = "none";
+                fsType = "tmpfs";
+                options = [ "defaults" "size=8G" "mode=755" ];
+              };
+            }
+          ];
+        };
+
         scylla = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           modules = [
