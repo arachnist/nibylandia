@@ -49,6 +49,8 @@ in {
   "secrets/mail/keycloakPlain.age".publicKeys = ar ++ [ zorigami ];
   "secrets/keycloakDatabase.age".publicKeys = ar ++ [ zorigami ];
   "secrets/synapseExtraConfig.age".publicKeys = ar ++ [ zorigami ];
+  "secrets/gitea-runner-token-zorigami.age".publicKeys = ar ++ [ zorigami ];
+  "secrets/gitea-runner-token-scylla.age".publicKeys = ar ++ [ scylla ];
 
   inherit ar;
 }

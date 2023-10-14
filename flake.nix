@@ -26,7 +26,8 @@
   outputs = { self, nixpkgs, nix-formatter-pack, nix-index-database, deploy-rs
     , agenix, lanzaboote, microvm, simple-nixos-mailserver, ... }:
     let
-      forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
+      systems = [ "x86_64-linux" "aarch64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
       pkgsForDeploy =
         forAllSystems (system: import nixpkgs { inherit system; });
       deployPkgs = forAllSystems (system:
@@ -113,29 +114,57 @@
         nibylandia-gaming.imports = [ ./modules/gaming.nix ];
 
         nibylandia-monitoring.imports = [ ./modules/monitoring.nix ];
+
+        nibylandia-ci-runners.imports = [
+          ({ config, pkgs, lib, ... }:
+            let gitea-runner-directory = "/var/lib/gitea-runner";
+            in {
+              age.secrets.gitea-runner-token = {
+                file = ./secrets/gitea-runner-token-${config.networking.hostName}.age;
+              };
+
+              services.gitea-actions-runner.instances.nix = {
+                enable = true;
+                name = config.networking.hostName;
+                tokenFile = config.age.secrets.gitea-runner-token.path;
+                labels = [ "nixos-${pkgs.system}:host" "nixos:host" "self-hosted-${pkgs.system}" "self-hosted" ];
+                url = "https://code.hackerspace.pl";
+                settings = {
+                  cache.enabled = true;
+                  host.workdir_parent =
+                    "${gitea-runner-directory}/action-cache-dir";
+                };
+
+                hostPackages = with pkgs; [
+                  bash
+                  coreutils
+                  curl
+                  gawk
+                  git-lfs
+                  nixFlakes
+                  gitFull
+                  gnused
+                  nodejs
+                  wget
+                  jq
+                  nixos-rebuild
+                ];
+              };
+
+              systemd.services.gitea-runner-nix.environment = {
+                XDG_CONFIG_HOME = gitea-runner-directory;
+                XDG_CACHE_HOME = "${gitea-runner-directory}/.cache";
+              };
+            })
+        ];
       };
 
       nixosConfigurations = with self.nixosModules; {
-        ciTest = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            nibylandia-common
-
-            {
-              nibylandia-boot.uefi.enable = true;
-              fileSystems."/" = {
-                device = "none";
-                fsType = "tmpfs";
-                options = [ "defaults" "size=8G" "mode=755" ];
-              };
-            }
-          ];
-        };
-
         scylla = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           modules = [
             nibylandia-common
+            nibylandia-ci-runners
 
             ./nixos/scylla
           ];
@@ -191,6 +220,8 @@
             nibylandia-common
             nibylandia-secureboot
             nibylandia-monitoring
+            nibylandia-ci-runners
+
             simple-nixos-mailserver.nixosModule
 
             ./nixos/zorigami

@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  nixos-x86_64-linux:
+    runs-on: self-hosted-x86_64-linux
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./.ci.sh
+
+  nixos-aarch64-linux:
+    runs-on: self-hosted-aarch64-linux
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./.ci.sh
