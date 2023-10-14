@@ -2,17 +2,15 @@
 
 set -eou pipefail
 
-export NIX_CONFIG="use-xdg-base-directories = true"
+set -x
 
-nix profile install nixpkgs#nixos-rebuild
-
-~/.local/state/nix/profile/bin/nixos-rebuild build --flake ".#ciTest"
-
-# for hostOutput in $(nix eval --raw --impure --expr '
-#     with import <nixpkgs> { };
-#     (lib.mapAttrsToList (name: value: value)
-#         (builtins.getFlake(builtins.toString ./.)).outputs.nixosConfigurations)[0]'
-# ); do
-#     ~/.local/state/nix/profile/bin/nixos-rebuild build --flake ".#${hostOutput}"
-# done
-# 
+while read hostOutput; do
+  echo "$(date) ${hostOutput}"
+  nixos-rebuild build --verbose --flake ".#${hostOutput}"
+done < <(nix eval -I nixpkgs=$(nix flake metadata nixpkgs --json | jq -r .path) --raw --impure --expr '
+    with import <nixpkgs> { };
+    (lib.strings.concatStringsSep "\n"
+    (lib.mapAttrsToList (n: v: n)
+      (lib.attrsets.filterAttrs (n: v: v.pkgs.system == pkgs.system)
+        (builtins.getFlake(builtins.toString ./.)).outputs.nixosConfigurations)))
+')

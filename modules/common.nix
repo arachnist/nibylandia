@@ -78,6 +78,7 @@ in {
     gomuks
     bind
     nmap
+    jq
   ];
 
   documentation = {
