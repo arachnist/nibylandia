@@ -40,13 +40,14 @@ in {
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    settings.trusted-users = [ "ar" ];
   };
-
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
 
   environment.systemPackages = with pkgs; [
     deploy-rs
+    mastodon-update-script
     file
     git
     go
@@ -128,4 +129,30 @@ in {
     ];
   };
   time.timeZone = "Europe/Warsaw";
+
+  systemd.network = {
+    enable = true;
+    netdevs.virbr0.netdevConfig = {
+      Kind = "bridge";
+      Name = "virbr0";
+    };
+    networks.virbr0 = {
+      matchConfig.Name = "virbr0";
+      # Hand out IP addresses to MicroVMs.
+      # Use `networkctl status virbr0` to see leases.
+      networkConfig = {
+        DHCPServer = true;
+        IPv6SendRA = true;
+      };
+      addresses = [
+        { addressConfig.Address = "10.0.0.1/24"; }
+        { addressConfig.Address = "fd12:3456:789a::1/64"; }
+      ];
+      ipv6Prefixes = [{ ipv6PrefixConfig.Prefix = "fd12:3456:789a::/64"; }];
+    };
+    networks.microvm-eth0 = {
+      matchConfig.Name = "vm-*";
+      networkConfig.Bridge = "virbr0";
+    };
+  };
 }

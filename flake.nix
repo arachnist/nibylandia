@@ -17,10 +17,14 @@
       url = "github:nix-community/lanzaboote";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    simple-nixos-mailserver = {
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, nix-formatter-pack, nix-index-database, deploy-rs
-    , agenix, lanzaboote, microvm, ... }:
+    , agenix, lanzaboote, microvm, simple-nixos-mailserver, ... }:
     let
       forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ];
       pkgsForDeploy =
@@ -57,6 +61,8 @@
           };
         });
 
+      overlays = import ./overlays;
+
       nixosModules = with self.nixosModules; {
         nibylandia-boot.imports = [ ./modules/boot.nix ];
 
@@ -88,6 +94,7 @@
           nibylandia-boot
 
           ({ pkgs, ... }: {
+            nixpkgs.overlays = [ self.overlays.nibylandia ];
             environment.systemPackages =
               [ agenix.packages.${pkgs.system}.default ];
           })
@@ -104,6 +111,8 @@
         nibylandia-laptop.imports = [ ./modules/laptop.nix ];
 
         nibylandia-gaming.imports = [ ./modules/gaming.nix ];
+
+        nibylandia-monitoring.imports = [ ./modules/monitoring.nix ];
       };
 
       nixosConfigurations = with self.nixosModules; {
@@ -140,6 +149,27 @@
             nibylandia-secureboot
             nibylandia-gaming
 
+            ({ config, pkgs, lib, ... }: {
+              boot.kernelPatches = with lib.kernel; [{
+                name = "disable transparent hugepages for virtio-gpu";
+                patch = null;
+                extraStructuredConfig = {
+                  TRANSPARENT_HUGEPAGE = lib.mkForce no;
+                };
+              }];
+            })
+
+            # appears to be broken for me for some reason            
+            {
+              nixpkgs.overlays = [ microvm.overlay ];
+              microvm.vms = {
+                elementVm = {
+                  # pkgs = import nixpkgs { system = "x86_64-linux"; };
+                  config = import ./microvms/elementVm.nix;
+                };
+              };
+            }
+
             ./nixos/khas
           ];
         };
@@ -152,6 +182,18 @@
             nibylandia-secureboot
 
             ./nixos/microlith
+          ];
+        };
+
+        zorigami = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            nibylandia-common
+            nibylandia-secureboot
+            nibylandia-monitoring
+            simple-nixos-mailserver.nixosModule
+
+            ./nixos/zorigami
           ];
         };
       };
@@ -189,6 +231,18 @@
           sshUser = "root";
           path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos
             self.nixosConfigurations.microlith;
+        };
+      };
+
+      deploy.nodes.zorigami = {
+        fastConnection = false;
+        remoteBuild = true;
+        hostname = "zorigami";
+        profiles.system = {
+          user = "root";
+          sshUser = "root";
+          path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos
+            self.nixosConfigurations.zorigami;
         };
       };
 

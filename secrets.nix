@@ -17,14 +17,17 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDghNuH/3G+0BXwrBZWZXX0V3K0tfu/Q/AKokLXY5zTD";
 in {
 
-  "secrets/secureboot-key.age".publicKeys = ar ++ [ khas microlith ];
-  "secrets/secureboot-cert.age".publicKeys = ar ++ [ khas microlith ];
+  "secrets/secureboot-key.age".publicKeys = ar
+    ++ [ khas microlith zorigami scylla ];
+  "secrets/secureboot-cert.age".publicKeys = ar
+    ++ [ khas microlith zorigami scylla ];
   "secrets/khas-ar.age".publicKeys = ar ++ [ khas ];
   "secrets/microlith-ar.age".publicKeys = ar ++ [ microlith ];
   "secrets/wg/nibylandia_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/wg/dn42_w1kl4s_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/lan/nibylandia-ddns-kea.age".publicKeys = ar ++ [ scylla ];
   "secrets/lan/nibylandia-ddns-bind.age".publicKeys = ar ++ [ scylla ];
+  "secrets/notbotEnvironment.age".publicKeys = ar ++ [ zorigami ];
   "secrets/nextCloudAdmin.age".publicKeys = ar ++ [ zorigami ];
   "secrets/nextCloudExporter.age".publicKeys = ar ++ [ zorigami ];
   "secrets/norkclubMinecraftRestic.age".publicKeys = ar ++ [ zorigami ];
@@ -34,6 +37,7 @@ in {
   "secrets/wg/nibylandia_zorigami.age".publicKeys = ar ++ [ zorigami ];
   "secrets/mail/ar.age".publicKeys = ar ++ [ zorigami ];
   "secrets/mail/apo.age".publicKeys = ar ++ [ zorigami ];
+  "secrets/mail/amie.age".publicKeys = ar ++ [ zorigami ];
   "secrets/mail/mastodon.age".publicKeys = ar ++ [ zorigami ];
   "secrets/mail/mastodonPlain.age".publicKeys = ar ++ [ zorigami ];
   "secrets/mail/madargon.age".publicKeys = ar ++ [ zorigami ];
@@ -44,6 +48,7 @@ in {
   "secrets/mail/keycloak.age".publicKeys = ar ++ [ zorigami ];
   "secrets/mail/keycloakPlain.age".publicKeys = ar ++ [ zorigami ];
   "secrets/keycloakDatabase.age".publicKeys = ar ++ [ zorigami ];
+  "secrets/synapseExtraConfig.age".publicKeys = ar ++ [ zorigami ];
 
   inherit ar;
 }
