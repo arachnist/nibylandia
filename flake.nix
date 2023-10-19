@@ -88,35 +88,18 @@
         nibylandia-ci-runners.imports = [ ./modules/ci-runners.nix ];
       };
 
-      nixosConfigurations = {
-        scylla = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          modules = [ ./nixos/scylla ];
+      nixosConfigurations = builtins.mapAttrs (name: value:
+        nixpkgs.lib.nixosSystem {
+          inherit (value) system;
+          modules = [ (./. + "/nixos/${name}") ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
           specialArgs = { inherit inputs; };
+        }) {
+          scylla.system = "aarch64-linux";
+          khas.system = "x86_64-linux";
+          microlith.system = "x86_64-linux";
+          zorigami.system = "x86_64-linux";
         };
-
-        khas = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./nixos/khas ];
-          extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
-          specialArgs = { inherit inputs; };
-        };
-
-        microlith = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./nixos/microlith ];
-          extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
-          specialArgs = { inherit inputs; };
-        };
-
-        zorigami = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./nixos/zorigami ];
-          extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
-          specialArgs = { inherit inputs; };
-        };
-      };
 
       deploy.nodes = builtins.mapAttrs (name: value: {
         fastConnection = false;
