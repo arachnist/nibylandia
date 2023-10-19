@@ -1,7 +1,16 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
-  imports = [ ./hardware.nix ];
+  imports = with inputs.self.nixosModules; [
+    nibylandia-common
+    nibylandia-secureboot
+    nibylandia-monitoring
+    nibylandia-ci-runners
+
+    inputs.simple-nixos-mailserver.nixosModule
+
+    ./hardware.nix
+  ];
 
   boot.kernelPackages = pkgs.linuxPackages;
 

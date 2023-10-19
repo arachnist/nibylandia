@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   keaJsonWithIncludes = name: value:
@@ -20,7 +20,12 @@ let
     ${pkgs.bird2}/bin/birdc reload in all
   '';
 in {
-  imports = [ ./hardware-configuration.nix ];
+  imports = with inputs.self.nixosModules; [
+    ./hardware-configuration.nix
+
+    nibylandia-common
+    nibylandia-ci-runners
+  ];
 
   nibylandia-boot.uefi.enable = true;
 

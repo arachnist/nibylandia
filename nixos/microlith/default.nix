@@ -1,10 +1,16 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   networking.hostName = "microlith";
   deployment.targetHost = "microlith.nibylandia.lan";
 
-  imports = [ ./hardware-configuration.nix ];
+  imports = with inputs.self.nixosModules; [
+    ./hardware-configuration.nix
+
+    nibylandia-graphical
+    nibylandia-gaming
+    nibylandia-secureboot
+  ];
   age.secrets.ar-password.file = ../../secrets/microlith-ar.age;
 
   users.users.ar.hashedPasswordFile = config.age.secrets.ar-password.path;
