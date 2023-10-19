@@ -23,11 +23,11 @@ in {
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix
 
-    nibylandia-common
-    nibylandia-ci-runners
+    common
+    ci-runners
   ];
 
-  nibylandia-boot.uefi.enable = true;
+  boot.uefi.enable = true;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;

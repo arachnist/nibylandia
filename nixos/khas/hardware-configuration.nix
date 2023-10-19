@@ -2,7 +2,7 @@
 
 {
   hardware.enableAllFirmware = true;
-  nibylandia-boot.ryzen.enable = true;
+  boot.ryzen.enable = true;
 
   boot.initrd.availableKernelModules =
     [ "nvme" "ehci_pci" "xhci_pci" "rtsx_pci_sdmmc" ];

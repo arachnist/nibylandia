@@ -8,7 +8,7 @@ in {
 
     microvm.nixosModules.host
 
-    self.nixosModules.nibylandia-boot
+    self.nixosModules.boot
   ];
 
   deployment = {

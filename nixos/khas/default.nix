@@ -7,10 +7,10 @@
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix
 
-    nibylandia-graphical
-    nibylandia-laptop
-    nibylandia-secureboot
-    nibylandia-gaming
+    graphical
+    laptop
+    secureboot
+    gaming
   ];
 
   boot.kernelPatches = with lib.kernel; [{

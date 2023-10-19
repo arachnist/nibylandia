@@ -1,7 +1,7 @@
 { config, lib, pkgs, inputs, ... }:
 
 {
-  imports = [ inputs.self.nixosModules.nibylandia-common ];
+  imports = [ inputs.self.nixosModules.common ];
 
   boot = {
     extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
