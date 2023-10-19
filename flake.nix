@@ -9,6 +9,10 @@
     nix-index-database.url = "github:Mic92/nix-index-database";
     deploy-rs.url = "github:serokell/deploy-rs";
     microvm.url = "github:astro/microvm.nix";
+    colmena = {
+      url = "github:zhaofengli/colmena/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     agenix = {
       url = "github:ryantm/agenix";
       inputs.darwin.follows = "";
@@ -24,7 +28,8 @@
   };
 
   outputs = { self, nixpkgs, nix-formatter-pack, nix-index-database, deploy-rs
-    , agenix, lanzaboote, microvm, simple-nixos-mailserver, ... }:
+    , agenix, lanzaboote, microvm, simple-nixos-mailserver, colmena, ...
+    }@inputs:
     let
       systems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -44,6 +49,7 @@
             })
           ];
         });
+      inherit (nixpkgs) lib;
     in {
       formatter = forAllSystems (system:
         nix-formatter-pack.lib.mkFormatter {
@@ -94,10 +100,14 @@
 
           nibylandia-boot
 
-          ({ pkgs, ... }: {
+          ({ pkgs, lib, ... }: {
             nixpkgs.overlays = [ self.overlays.nibylandia ];
             environment.systemPackages =
               [ agenix.packages.${pkgs.system}.default ];
+            #deployment = {
+            #  allowLocalDeployment = true;
+            #  buildOnTarget = true;
+            #};
           })
 
           ./modules/common.nix
@@ -120,14 +130,20 @@
             let gitea-runner-directory = "/var/lib/gitea-runner";
             in {
               age.secrets.gitea-runner-token = {
-                file = ./secrets/gitea-runner-token-${config.networking.hostName}.age;
+                file =
+                  ./secrets/gitea-runner-token-${config.networking.hostName}.age;
               };
 
               services.gitea-actions-runner.instances.nix = {
                 enable = true;
                 name = config.networking.hostName;
                 tokenFile = config.age.secrets.gitea-runner-token.path;
-                labels = [ "nixos-${pkgs.system}:host" "nixos:host" "self-hosted-${pkgs.system}" "self-hosted" ];
+                labels = [
+                  "nixos-${pkgs.system}:host"
+                  "nixos:host"
+                  "self-hosted-${pkgs.system}"
+                  "self-hosted"
+                ];
                 url = "https://code.hackerspace.pl";
                 settings = {
                   cache.enabled = true;
@@ -168,15 +184,16 @@
 
             ./nixos/scylla
           ];
+          extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
         };
 
         khas = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            nibylandia-graphical
-            nibylandia-laptop
-            nibylandia-secureboot
-            nibylandia-gaming
+            self.nixosModules.nibylandia-graphical
+            self.nixosModules.nibylandia-laptop
+            self.nixosModules.nibylandia-secureboot
+            self.nixosModules.nibylandia-gaming
 
             ({ config, pkgs, lib, ... }: {
               boot.kernelPatches = with lib.kernel; [{
@@ -201,6 +218,7 @@
 
             ./nixos/khas
           ];
+          extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
         };
 
         microlith = nixpkgs.lib.nixosSystem {
@@ -212,6 +230,7 @@
 
             ./nixos/microlith
           ];
+          extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
         };
 
         zorigami = nixpkgs.lib.nixosSystem {
@@ -226,56 +245,34 @@
 
             ./nixos/zorigami
           ];
+          extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
         };
       };
 
-      deploy.nodes.scylla = {
+      deploy.nodes = builtins.mapAttrs (name: value: {
         fastConnection = false;
         remoteBuild = true;
-        hostname = "i.am-a.cat";
+        hostname = value.config.deployment.targetHost;
         profiles.system = {
           user = "root";
           sshUser = "root";
-          path = deployPkgs.aarch64-linux.deploy-rs.lib.activate.nixos
-            self.nixosConfigurations.scylla;
+          path =
+            deployPkgs.${value.config.nixpkgs.system}.deploy-rs.lib.activate.nixos
+            value;
         };
-      };
+      }) self.nixosConfigurations;
 
-      deploy.nodes.khas = {
-        fastConnection = false;
-        remoteBuild = true;
-        hostname = "khas";
-        profiles.system = {
-          user = "root";
-          sshUser = "root";
-          path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos
-            self.nixosConfigurations.khas;
+      colmena = {
+        meta = {
+          nixpkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
+          nodeNixpkgs =
+            builtins.mapAttrs (_: v: v.pkgs) self.nixosConfigurations;
+          nodeSpecialArgs = builtins.mapAttrs (_: v: v._module.specialArgs)
+            self.nixosConfigurations;
+          specialArgs.lib = lib;
         };
-      };
-
-      deploy.nodes.microlith = {
-        fastConnection = false;
-        remoteBuild = true;
-        hostname = "microlith.nibylandia.lan";
-        profiles.system = {
-          user = "root";
-          sshUser = "root";
-          path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos
-            self.nixosConfigurations.microlith;
-        };
-      };
-
-      deploy.nodes.zorigami = {
-        fastConnection = false;
-        remoteBuild = true;
-        hostname = "zorigami";
-        profiles.system = {
-          user = "root";
-          sshUser = "root";
-          path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos
-            self.nixosConfigurations.zorigami;
-        };
-      };
+      } // builtins.mapAttrs (_: v: { imports = v._module.args.modules; })
+        self.nixosConfigurations;
 
       checks = builtins.mapAttrs
         (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;

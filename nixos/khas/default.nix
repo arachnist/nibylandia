@@ -2,6 +2,8 @@
 
 {
   networking.hostName = "khas";
+  deployment.targetHost = "khas.nibylandia.lan";
+
   imports = [ ./hardware-configuration.nix ];
   age.secrets.ar-password.file = ../../secrets/khas-ar.age;
 

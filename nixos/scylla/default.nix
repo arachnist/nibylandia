@@ -67,6 +67,8 @@ in {
   };
 
   networking.hostName = "scylla";
+  deployment.targetHost = "i.am-a.cat";
+
   networking.wireless.enable = false;
 
   time.timeZone = "Europe/Warsaw";
