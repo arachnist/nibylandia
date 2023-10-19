@@ -79,6 +79,7 @@ in {
     bind
     nmap
     jq
+    colmena
   ];
 
   documentation = {

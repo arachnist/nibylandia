@@ -2,6 +2,8 @@
 
 {
   networking.hostName = "microlith";
+  deployment.targetHost = "microlith.nibylandia.lan";
+
   imports = [ ./hardware-configuration.nix ];
   age.secrets.ar-password.file = ../../secrets/microlith-ar.age;
 
