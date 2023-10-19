@@ -70,54 +70,14 @@
 
       overlays = import ./overlays;
 
-      nixosModules = with self.nixosModules; {
+      nixosModules = {
         nibylandia-boot.imports = [ ./modules/boot.nix ];
 
-        nibylandia-secureboot.imports = [
-          lanzaboote.nixosModules.lanzaboote
+        nibylandia-secureboot.imports = [ ./modules/secureboot.nix ];
 
-          ({ config, lib, ... }: {
-            age.secrets = {
-              secureboot-cert.file = ./secrets/secureboot-cert.age;
-              secureboot-key.file = ./secrets/secureboot-key.age;
-            };
+        nibylandia-common.imports = [ ./modules/common.nix ];
 
-            boot.lanzaboote = {
-              enable = true;
-              publicKeyFile = config.age.secrets.secureboot-cert.path;
-              privateKeyFile = config.age.secrets.secureboot-key.path;
-            };
-
-            nibylandia-boot.uefi.enable = lib.mkForce false;
-          })
-        ];
-
-        nibylandia-common.imports = [
-          nix-index-database.nixosModules.nix-index
-          agenix.nixosModules.default
-
-          microvm.nixosModules.host
-
-          nibylandia-boot
-
-          ({ pkgs, lib, ... }: {
-            nixpkgs.overlays = [ self.overlays.nibylandia ];
-            environment.systemPackages =
-              [ agenix.packages.${pkgs.system}.default ];
-            #deployment = {
-            #  allowLocalDeployment = true;
-            #  buildOnTarget = true;
-            #};
-          })
-
-          ./modules/common.nix
-        ];
-
-        nibylandia-graphical.imports = [
-          nibylandia-common
-
-          ./modules/graphical.nix
-        ];
+        nibylandia-graphical.imports = [ ./modules/graphical.nix ];
 
         nibylandia-laptop.imports = [ ./modules/laptop.nix ];
 
@@ -125,127 +85,36 @@
 
         nibylandia-monitoring.imports = [ ./modules/monitoring.nix ];
 
-        nibylandia-ci-runners.imports = [
-          ({ config, pkgs, lib, ... }:
-            let gitea-runner-directory = "/var/lib/gitea-runner";
-            in {
-              age.secrets.gitea-runner-token = {
-                file =
-                  ./secrets/gitea-runner-token-${config.networking.hostName}.age;
-              };
-
-              services.gitea-actions-runner.instances.nix = {
-                enable = true;
-                name = config.networking.hostName;
-                tokenFile = config.age.secrets.gitea-runner-token.path;
-                labels = [
-                  "nixos-${pkgs.system}:host"
-                  "nixos:host"
-                  "self-hosted-${pkgs.system}"
-                  "self-hosted"
-                ];
-                url = "https://code.hackerspace.pl";
-                settings = {
-                  cache.enabled = true;
-                  host.workdir_parent =
-                    "${gitea-runner-directory}/action-cache-dir";
-                };
-
-                hostPackages = with pkgs; [
-                  bash
-                  coreutils
-                  curl
-                  gawk
-                  git-lfs
-                  nixFlakes
-                  gitFull
-                  gnused
-                  nodejs
-                  wget
-                  jq
-                  nixos-rebuild
-                ];
-              };
-
-              systemd.services.gitea-runner-nix.environment = {
-                XDG_CONFIG_HOME = gitea-runner-directory;
-                XDG_CACHE_HOME = "${gitea-runner-directory}/.cache";
-              };
-            })
-        ];
+        nibylandia-ci-runners.imports = [ ./modules/ci-runners.nix ];
       };
 
-      nixosConfigurations = with self.nixosModules; {
+      nixosConfigurations = {
         scylla = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
-          modules = [
-            nibylandia-common
-            nibylandia-ci-runners
-
-            ./nixos/scylla
-          ];
+          modules = [ ./nixos/scylla ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
+          specialArgs = { inherit inputs; };
         };
 
         khas = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [
-            self.nixosModules.nibylandia-graphical
-            self.nixosModules.nibylandia-laptop
-            self.nixosModules.nibylandia-secureboot
-            self.nixosModules.nibylandia-gaming
-
-            ({ config, pkgs, lib, ... }: {
-              boot.kernelPatches = with lib.kernel; [{
-                name = "disable transparent hugepages for virtio-gpu";
-                patch = null;
-                extraStructuredConfig = {
-                  TRANSPARENT_HUGEPAGE = lib.mkForce no;
-                };
-              }];
-            })
-
-            # appears to be broken for me for some reason            
-            {
-              nixpkgs.overlays = [ microvm.overlay ];
-              microvm.vms = {
-                elementVm = {
-                  # pkgs = import nixpkgs { system = "x86_64-linux"; };
-                  config = import ./microvms/elementVm.nix;
-                };
-              };
-            }
-
-            ./nixos/khas
-          ];
+          modules = [ ./nixos/khas ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
+          specialArgs = { inherit inputs; };
         };
 
         microlith = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [
-            nibylandia-graphical
-            nibylandia-gaming
-            nibylandia-secureboot
-
-            ./nixos/microlith
-          ];
+          modules = [ ./nixos/microlith ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
+          specialArgs = { inherit inputs; };
         };
 
         zorigami = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [
-            nibylandia-common
-            nibylandia-secureboot
-            nibylandia-monitoring
-            nibylandia-ci-runners
-
-            simple-nixos-mailserver.nixosModule
-
-            ./nixos/zorigami
-          ];
+          modules = [ ./nixos/zorigami ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
+          specialArgs = { inherit inputs; };
         };
       };
 

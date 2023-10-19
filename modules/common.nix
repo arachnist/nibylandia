@@ -1,7 +1,21 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let secrets = import ../secrets.nix;
 in {
+  imports = with inputs; [
+    nix-index-database.nixosModules.nix-index
+    agenix.nixosModules.default
+
+    microvm.nixosModules.host
+
+    self.nixosModules.nibylandia-boot
+  ];
+
+  deployment = {
+    allowLocalDeployment = true;
+    buildOnTarget = true;
+  };
+
   boot.binfmt.emulatedSystems =
     lib.lists.remove pkgs.system [ "x86_64-linux" "aarch64-linux" ];
   programs.command-not-found.enable = false;
@@ -44,6 +58,7 @@ in {
   };
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
+  nixpkgs.overlays = [ inputs.self.overlays.nibylandia ];
 
   environment.systemPackages = with pkgs; [
     deploy-rs
@@ -80,6 +95,8 @@ in {
     nmap
     jq
     colmena
+
+    inputs.agenix.packages.${pkgs.system}.default
   ];
 
   documentation = {
