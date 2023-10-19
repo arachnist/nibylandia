@@ -13,5 +13,5 @@
     privateKeyFile = config.age.secrets.secureboot-key.path;
   };
 
-  nibylandia-boot.uefi.enable = lib.mkForce false;
+  boot.uefi.enable = lib.mkForce false;
 }

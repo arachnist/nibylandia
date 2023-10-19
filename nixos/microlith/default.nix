@@ -7,9 +7,9 @@
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix
 
-    nibylandia-graphical
-    nibylandia-gaming
-    nibylandia-secureboot
+    graphical
+    gaming
+    secureboot
   ];
   age.secrets.ar-password.file = ../../secrets/microlith-ar.age;
 

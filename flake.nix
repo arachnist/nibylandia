@@ -70,23 +70,16 @@
 
       overlays = import ./overlays;
 
-      nixosModules = {
-        nibylandia-boot.imports = [ ./modules/boot.nix ];
-
-        nibylandia-secureboot.imports = [ ./modules/secureboot.nix ];
-
-        nibylandia-common.imports = [ ./modules/common.nix ];
-
-        nibylandia-graphical.imports = [ ./modules/graphical.nix ];
-
-        nibylandia-laptop.imports = [ ./modules/laptop.nix ];
-
-        nibylandia-gaming.imports = [ ./modules/gaming.nix ];
-
-        nibylandia-monitoring.imports = [ ./modules/monitoring.nix ];
-
-        nibylandia-ci-runners.imports = [ ./modules/ci-runners.nix ];
-      };
+      nixosModules = nixpkgs.lib.genAttrs [
+        "boot"
+        "secureboot"
+        "common"
+        "graphical"
+        "laptop"
+        "gaming"
+        "monitoring"
+        "ci-runners"
+      ] (modname: { imports = [ (./modules/. + "/${modname}.nix") ]; });
 
       nixosConfigurations = builtins.mapAttrs (name: value:
         nixpkgs.lib.nixosSystem {

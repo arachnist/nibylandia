@@ -9,7 +9,7 @@
   boot.zfs.enableUnstable = true;
   boot.supportedFilesystems = [ "zfs" ];
 
-  nibylandia-boot.ryzen.enable = true;
+  boot.ryzen.enable = true;
 
   networking.hostId = "7999af7c";
 

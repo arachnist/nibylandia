@@ -2,10 +2,10 @@
 
 {
   imports = with inputs.self.nixosModules; [
-    nibylandia-common
-    nibylandia-secureboot
-    nibylandia-monitoring
-    nibylandia-ci-runners
+    common
+    secureboot
+    monitoring
+    ci-runners
 
     inputs.simple-nixos-mailserver.nixosModule
 

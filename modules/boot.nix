@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
-let cfg = config.nibylandia-boot;
+let cfg = config.boot;
 in {
-  options.nibylandia-boot = {
+  options.boot = {
     uefi.enable = lib.mkEnableOption "Boot via UEFI";
     ryzen.enable = lib.mkEnableOption "Enable AMD Ryzen-specific options";
   };
