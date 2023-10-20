@@ -56,14 +56,16 @@ in {
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    settings.trusted-users = [ "ar" ];
-    trusted-substituters = (if config.networking.hostName != "scylla" then
+    settings = {
+      trusted-users = [ "ar" ];
+      trusted-substituters = (if config.networking.hostName != "scylla" then
         [ "ssh-ng://i.am-a.cat?ssh-key=${config.age.secrets.nix-store.path}" ]
       else
         [ ]) ++ (if config.networking.hostName != "zorigami" then
           [ "ssh-ng://is-a.cat?ssh-key=${config.age.secrets.nix-store.path}" ]
         else
           [ ]);
+    };
   };
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
