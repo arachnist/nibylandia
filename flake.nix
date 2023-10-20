@@ -27,9 +27,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nix-formatter-pack, nix-index-database, deploy-rs
-    , agenix, lanzaboote, microvm, simple-nixos-mailserver, colmena, ...
-    }@inputs:
+  outputs = { self, nixpkgs, deploy-rs, ... }@inputs:
     let
       systems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -52,7 +50,7 @@
       inherit (nixpkgs) lib;
     in {
       formatter = forAllSystems (system:
-        nix-formatter-pack.lib.mkFormatter {
+        inputs.nix-formatter-pack.lib.mkFormatter {
           inherit nixpkgs system;
 
           config = {
