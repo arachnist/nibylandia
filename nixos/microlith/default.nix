@@ -18,4 +18,11 @@
   virtualisation.docker.enable = true;
 
   networking.firewall.allowedTCPPorts = [ 8000 8080 ];
+
+  systemd.network.wait-online.enable = false;
+
+  systemd.services.NetworkManager-wait-online.serviceConfig.ExecStart = lib.mkForce [
+    ""
+    "${pkgs.networkmanager}/bin/nm-online"
+  ];
 }
