@@ -70,16 +70,10 @@
 
       overlays = import ./overlays;
 
-      nixosModules = nixpkgs.lib.genAttrs [
-        "boot"
-        "secureboot"
-        "common"
-        "graphical"
-        "laptop"
-        "gaming"
-        "monitoring"
-        "ci-runners"
-      ] (modname: { imports = [ (./modules/. + "/${modname}.nix") ]; });
+      nixosModules = lib.mapAttrs' (name: value:
+        lib.nameValuePair (builtins.replaceStrings [ ".nix" ] [ "" ] name) {
+          imports = [ (./modules/. + "/${name}") ];
+        }) (builtins.readDir ./modules);
 
       nixosConfigurations = builtins.mapAttrs (name: value:
         nixpkgs.lib.nixosSystem {
