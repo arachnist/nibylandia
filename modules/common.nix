@@ -57,26 +57,26 @@ in {
       experimental-features = nix-command flakes
     '';
     settings = {
-      trusted-users = [ "ar" ];
+      trusted-users = [ "ar" "root" ];
       substituters = (if config.networking.hostName != "scylla" then
         [
-          "ssh://nix-ssh@i.am-a.cat?ssh-key=${config.age.secrets.nix-store.path}"
+          "ssh://nix-ssh@i.am-a.cat?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
         ]
       else
         [ ]) ++ (if config.networking.hostName != "zorigami" then
           [
-            "ssh://nix-ssh@is-a.cat?ssh-key=${config.age.secrets.nix-store.path}"
+            "ssh://nix-ssh@is-a.cat?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
           ]
         else
           [ ]);
       trusted-substituters = (if config.networking.hostName != "scylla" then
         [
-          "ssh://nix-ssh@i.am-a.cat?ssh-key=${config.age.secrets.nix-store.path}"
+          "ssh://nix-ssh@i.am-a.cat?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
         ]
       else
         [ ]) ++ (if config.networking.hostName != "zorigami" then
           [
-            "ssh://nix-ssh@is-a.cat?ssh-key=${config.age.secrets.nix-store.path}"
+            "ssh://nix-ssh@is-a.cat?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
           ]
         else
           [ ]);
