@@ -55,7 +55,7 @@ $ nixos-rebuild switch --target-host root@zorigami --build-host root@zorigami --
 ```
 remotely using `deploy-rs`:
 ```
-$ deploy scylla
+$ deploy .#scylla
 ```
 or using `colmena`:
 ```
@@ -65,6 +65,11 @@ All of these *should* generally work, though I prefer to use `deploy-rs` on my
 router (because of magic rollback) when deploying bigger changes, and `colmena`
 in most cases, because it's faster. And if the changes you're about to deploy
 had a chance to be built by "CI", most stuff shouldn't need to be built locally.
+
+Warnings about `colmena` and `deploy` being unknown flake outputs are known, and
+will stay here at least until
+[schemas](https://determinate.systems/posts/flake-schemas) get implemented for
+these.
 
 ## General notes
 Feel free to use this as a basis for your own configuration flakes, but while I
