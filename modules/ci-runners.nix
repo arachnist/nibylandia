@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
-let gitea-runner-directory = "/var/lib/gitea-runner";
+let
+  gitea-runner-directory = "/var/lib/gitea-runner";
+  secrets = import ../secrets.nix;
 in {
   age.secrets.gitea-runner-token = {
     file = ../secrets/gitea-runner-token-${config.networking.hostName}.age;
@@ -45,9 +47,9 @@ in {
 
   nix.sshServe = {
     enable = true;
-    protocol = "ssh-ng";
+    protocol = "ssh";
     keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILeC/Nr7STpYEZ50p7X+XrFdeaIfib60tt2QN4Kvxscr"
-    ];
+    ] ++ secrets.ar;
   };
 }

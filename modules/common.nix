@@ -16,7 +16,7 @@ in {
     buildOnTarget = true;
   };
 
-  age.secrets = { nix-store.file = ../secrets/nix-store.age; };
+  age.secrets.nix-store.file = ../secrets/nix-store.age;
 
   boot.binfmt.emulatedSystems =
     lib.lists.remove pkgs.system [ "x86_64-linux" "aarch64-linux" ];
@@ -58,11 +58,26 @@ in {
     '';
     settings = {
       trusted-users = [ "ar" ];
-      trusted-substituters = (if config.networking.hostName != "scylla" then
-        [ "ssh-ng://i.am-a.cat?ssh-key=${config.age.secrets.nix-store.path}" ]
+      substituters = (if config.networking.hostName != "scylla" then
+        [
+          "ssh://nix-ssh@i.am-a.cat?ssh-key=${config.age.secrets.nix-store.path}"
+        ]
       else
         [ ]) ++ (if config.networking.hostName != "zorigami" then
-          [ "ssh-ng://is-a.cat?ssh-key=${config.age.secrets.nix-store.path}" ]
+          [
+            "ssh://nix-ssh@is-a.cat?ssh-key=${config.age.secrets.nix-store.path}"
+          ]
+        else
+          [ ]);
+      trusted-substituters = (if config.networking.hostName != "scylla" then
+        [
+          "ssh://nix-ssh@i.am-a.cat?ssh-key=${config.age.secrets.nix-store.path}"
+        ]
+      else
+        [ ]) ++ (if config.networking.hostName != "zorigami" then
+          [
+            "ssh://nix-ssh@is-a.cat?ssh-key=${config.age.secrets.nix-store.path}"
+          ]
         else
           [ ]);
     };
