@@ -21,8 +21,6 @@
 
   systemd.network.wait-online.enable = false;
 
-  systemd.services.NetworkManager-wait-online.serviceConfig.ExecStart = lib.mkForce [
-    ""
-    "${pkgs.networkmanager}/bin/nm-online"
-  ];
+  systemd.services.NetworkManager-wait-online.serviceConfig.ExecStart =
+    lib.mkForce [ "" "${pkgs.networkmanager}/bin/nm-online" ];
 }

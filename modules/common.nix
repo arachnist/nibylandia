@@ -16,6 +16,8 @@ in {
     buildOnTarget = true;
   };
 
+  age.secrets = { nix-store.file = ../secrets/nix-store.age; };
+
   boot.binfmt.emulatedSystems =
     lib.lists.remove pkgs.system [ "x86_64-linux" "aarch64-linux" ];
   programs.command-not-found.enable = false;
@@ -55,6 +57,13 @@ in {
       experimental-features = nix-command flakes
     '';
     settings.trusted-users = [ "ar" ];
+    trusted-substituters = (if config.networking.hostName != "scylla" then
+        [ "ssh-ng://i.am-a.cat?ssh-key=${config.age.secrets.nix-store.path}" ]
+      else
+        [ ]) ++ (if config.networking.hostName != "zorigami" then
+          [ "ssh-ng://is-a.cat?ssh-key=${config.age.secrets.nix-store.path}" ]
+        else
+          [ ]);
   };
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;

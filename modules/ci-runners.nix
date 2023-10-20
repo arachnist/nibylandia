@@ -42,4 +42,12 @@ in {
     XDG_CONFIG_HOME = gitea-runner-directory;
     XDG_CACHE_HOME = "${gitea-runner-directory}/.cache";
   };
+
+  nix.sshServe = {
+    enable = true;
+    protocol = "ssh-ng";
+    keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILeC/Nr7STpYEZ50p7X+XrFdeaIfib60tt2QN4Kvxscr"
+    ];
+  };
 }
