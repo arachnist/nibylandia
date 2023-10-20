@@ -77,16 +77,11 @@
 
       nixosConfigurations = builtins.mapAttrs (name: value:
         nixpkgs.lib.nixosSystem {
-          inherit (value) system;
-          modules = [ (./. + "/nixos/${name}") ];
+          system = builtins.readFile (./nixos/. + "/${name}/system");
+          modules = [ (./nixos/. + "/${name}") ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
           specialArgs = { inherit inputs; };
-        }) {
-          scylla.system = "aarch64-linux";
-          khas.system = "x86_64-linux";
-          microlith.system = "x86_64-linux";
-          zorigami.system = "x86_64-linux";
-        };
+        }) (builtins.readDir ./nixos);
 
       deploy.nodes = builtins.mapAttrs (name: value: {
         fastConnection = false;
