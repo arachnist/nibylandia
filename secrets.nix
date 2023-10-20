@@ -23,6 +23,8 @@ in {
     ++ [ khas microlith zorigami scylla ];
   "secrets/khas-ar.age".publicKeys = ar ++ [ khas ];
   "secrets/microlith-ar.age".publicKeys = ar ++ [ microlith ];
+  "secrets/nix-store.age".publicKeys = ar
+    ++ [ zorigami scylla stereolith khas microlith ];
   "secrets/wg/nibylandia_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/wg/dn42_w1kl4s_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/lan/nibylandia-ddns-kea.age".publicKeys = ar ++ [ scylla ];
