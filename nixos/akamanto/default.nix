@@ -17,6 +17,7 @@
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
+    supportedFilesystems = lib.mkForce [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" "ext4" "vfat" ];
   };
   
   # seems deprecated? will need to check later
