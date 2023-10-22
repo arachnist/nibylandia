@@ -66,7 +66,8 @@
     enable = true;
     firmwares = {
       mcu = {
-        enable = true;
+        enableKlipperFlash = true;
+        enable = false;
         configFile = ./klipper-smoothie.cfg;
         serial = "/dev/ttyACM0";
       };
