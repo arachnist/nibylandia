@@ -53,6 +53,7 @@ in {
   "secrets/synapseExtraConfig.age".publicKeys = ar ++ [ zorigami ];
   "secrets/gitea-runner-token-zorigami.age".publicKeys = ar ++ [ zorigami ];
   "secrets/gitea-runner-token-scylla.age".publicKeys = ar ++ [ scylla ];
+  "secrets/hswaw-wifi.age".publicKeys = ar ++ []; # TODO: we're not getting ssh keys for the generated disk image…
 
   inherit ar;
 }
