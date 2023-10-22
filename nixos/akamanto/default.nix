@@ -12,32 +12,45 @@
   sdImage.compressImage = false;
   hardware.enableRedistributableFirmware = true;
   boot = {
-    kernelPackages = pkgs.linuxKernel.packages.linux_rpi3;
+    kernelPackages = pkgs.linuxPackages_rpi3;
     loader = {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    supportedFilesystems = lib.mkForce [ "btrfs" "cifs" "f2fs" "jfs" "ntfs" "reiserfs" "vfat" "xfs" "ext4" "vfat" ];
+    supportedFilesystems = lib.mkForce [
+      "btrfs"
+      "cifs"
+      "f2fs"
+      "jfs"
+      "ntfs"
+      "reiserfs"
+      "vfat"
+      "xfs"
+      "ext4"
+      "vfat"
+    ];
+    # rpi kernel config misses a bunch of things
+    initrd.includeDefaultModules = false;
   };
-  
+
   # seems deprecated? will need to check later
   boot.loader.raspberryPi = {
     version = 3;
     firmwareConfig = # camera
-    ''
-      start_x=1
-      gpu_mem=256
-    '' + # normal clocks
-    ''
-      force_turbo=1
-    '' + # audio
-    ''
-      dtparam=audio=on
-    '';
+      ''
+        start_x=1
+        gpu_mem=256
+      '' + # normal clocks
+      ''
+        force_turbo=1
+      '' + # audio
+      ''
+        dtparam=audio=on
+      '';
   };
   # camera, kernel side
   boot.kernelModules = [ "bcm2835-v4l2" ];
-  
+
   age.secrets.hswaw-wifi.file = ../../secrets/hswaw-wifi.age;
   networking = {
     useDHCP = false;
@@ -48,7 +61,7 @@
       networks."hackerspace.pl-guests-5G".psk = "@HSWAW_WIFI@";
     };
   };
-  
+
   services.avahi = {
     enable = true;
     publish = {
@@ -59,7 +72,8 @@
   };
 
   time.timeZone = "Europe/Warsaw";
-  users.users.ar.openssh.authorizedKeys.keys = config.users.users.root.openssh.authorizedKeys.keys;
+  users.users.ar.openssh.authorizedKeys.keys =
+    config.users.users.root.openssh.authorizedKeys.keys;
   users.mutableUsers = false;
 
   # strictly printer stuff below
@@ -94,13 +108,8 @@
       history = { };
       authorization = {
         force_logins = true;
-        cors_domains = [
-          "*.local"
-          "*.waw.hackerspace.pl"
-        ];
-        trusted_clients = [
-          "10.8.0.0/23"
-        ];
+        cors_domains = [ "*.local" "*.waw.hackerspace.pl" ];
+        trusted_clients = [ "10.8.0.0/23" ];
       };
     };
   };
@@ -109,7 +118,7 @@
     enable = true;
     nginx.locations."/webcam".proxyPass = "http://127.0.0.1:8080/stream";
   };
-  
+
   services.nginx.clientMaxBodySize = "1000m";
 
   systemd.services.ustreamer = {
@@ -117,7 +126,8 @@
     description = "uStreamer for video0";
     serviceConfig = {
       Type = "simple";
-      ExecStart = ''${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --drop-same-frames=30'';
+      ExecStart =
+        "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --drop-same-frames=30";
     };
   };
 }
