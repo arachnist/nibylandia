@@ -12,44 +12,16 @@
   sdImage.compressImage = false;
   hardware.enableRedistributableFirmware = true;
   boot = {
-    kernelPackages = pkgs.linuxPackages_rpi3;
-    loader = {
-      grub.enable = false;
-      generic-extlinux-compatible.enable = true;
-    };
+    # revisit https://github.com/NixOS/nixpkgs/issues/154163 if actually needed
+    # kernelPackages = pkgs.linuxPackages_rpi3;
+    # camera, kernel side
+    kernelModules = [ "bcm2835-v4l2" ];
+    # avoid building zfs
     supportedFilesystems = lib.mkForce [
-      "btrfs"
-      "cifs"
-      "f2fs"
-      "jfs"
-      "ntfs"
-      "reiserfs"
       "vfat"
-      "xfs"
       "ext4"
-      "vfat"
     ];
-    # rpi kernel config misses a bunch of things
-    initrd.includeDefaultModules = false;
   };
-
-  # seems deprecated? will need to check later
-  boot.loader.raspberryPi = {
-    version = 3;
-    firmwareConfig = # camera
-      ''
-        start_x=1
-        gpu_mem=256
-      '' + # normal clocks
-      ''
-        force_turbo=1
-      '' + # audio
-      ''
-        dtparam=audio=on
-      '';
-  };
-  # camera, kernel side
-  boot.kernelModules = [ "bcm2835-v4l2" ];
 
   age.secrets.hswaw-wifi.file = ../../secrets/hswaw-wifi.age;
   networking = {
