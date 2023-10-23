@@ -4,8 +4,13 @@ let
   gitea-runner-directory = "/var/lib/gitea-runner";
   secrets = import ../secrets.nix;
 in {
-  age.secrets.gitea-runner-token = {
-    file = ../secrets/gitea-runner-token-${config.networking.hostName}.age;
+  age.secrets = {
+    gitea-runner-token.file =
+      ../secrets/gitea-runner-token-${config.networking.hostName}.age;
+    ci-secrets = { # for printer host sd images
+      file = ../secrets/ci-secrets.age;
+      mode = "444";
+    };
   };
 
   services.gitea-actions-runner.instances.nix = {

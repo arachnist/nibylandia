@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source /run/agenix/ci-secrets
+
 set -eou pipefail
 
 set -x
