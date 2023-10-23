@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
+set -a
 source /run/agenix/ci-secrets
+set +a
+
+cat ci-secrets.nix | envsubst > ci-secrets.nix.tmp
+mv ci-secrets.nix.tmp ci-secrets.nix
 
 set -eou pipefail
 

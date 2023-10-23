@@ -1,5 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 
+let ci-secrets = import ../../ci-secrets.nix;
+in
 {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
@@ -20,8 +22,7 @@
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
   };
 
-  environment.etc."wifi-secrets".text =
-    builtins.getEnv "__SECRET_wifi_secrets";
+  environment.etc."wifi-secrets".text = ci-secrets.wifi;
 
   networking = {
     useDHCP = false;
