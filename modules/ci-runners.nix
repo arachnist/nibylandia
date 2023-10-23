@@ -42,6 +42,7 @@ in {
       wget
       jq
       nixos-rebuild
+      envsubst
     ];
   };
 
