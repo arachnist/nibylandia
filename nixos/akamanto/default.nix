@@ -17,18 +17,17 @@
     # camera, kernel side
     kernelModules = [ "bcm2835-v4l2" ];
     # avoid building zfs
-    supportedFilesystems = lib.mkForce [
-      "vfat"
-      "ext4"
-    ];
+    supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
   };
 
-  age.secrets.hswaw-wifi.file = ../../secrets/hswaw-wifi.age;
+  environment.etc."wifi-secrets".text =
+    builtins.getEnv "__SECRET_wifi_secrets";
+
   networking = {
     useDHCP = false;
     wireless = {
       enable = true;
-      environmentFile = config.age.secrets.hswaw-wifi.path;
+      environmentFile = "/etc/wifi-secrets";
       networks."hackerspace.pl-guests".psk = "@HSWAW_WIFI@";
       networks."hackerspace.pl-guests-5G".psk = "@HSWAW_WIFI@";
     };
