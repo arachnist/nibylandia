@@ -2,13 +2,16 @@
   description = "Nibylandia configurations";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "git+file:/home/ar/scm/nixpkgs";
+    nixpkgs.url = "github:arachnist/nixpkgs/klipper-firmwares-package-overrides";
     home-manager.url = "github:nix-community/home-manager";
     nix-colors.url = "github:misterio77/nix-colors";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
     nix-index-database.url = "github:Mic92/nix-index-database";
     deploy-rs.url = "github:serokell/deploy-rs";
     microvm.url = "github:astro/microvm.nix";
+    impermanence.url = "github:nix-community/impermanence";
     colmena = {
       url = "github:zhaofengli/colmena/main";
       inputs.nixpkgs.follows = "nixpkgs";
