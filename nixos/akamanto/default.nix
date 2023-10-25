@@ -10,6 +10,7 @@ in
   imports = with inputs.self.nixosModules; [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
     common
+    inputs.impermanence.nixosModule
   ];
   sdImage.compressImage = false;
   hardware.enableRedistributableFirmware = true;
@@ -48,15 +49,34 @@ in
     config.users.users.root.openssh.authorizedKeys.keys;
   users.mutableUsers = false;
 
+  environment.persistence."/persistent" = {
+    hideMounts = true;
+    directories = [
+      "/var/log"
+      "/var/lib/bluetooth"
+      "/var/lib/nixos"
+    ];
+    files = [
+      "/etc/machine-id"
+      { file = "/etc/ssh/ssh_host_ed25519_key"; parentDirectory = { mode = "0755"; }; }
+      { file = "/etc/ssh/ssh_host_ed25519_key.pub"; parentDirectory = { mode = "0755"; }; }
+      { file = "/etc/ssh/ssh_host_rsa_key"; parentDirectory = { mode = "0755"; }; }
+      { file = "/etc/ssh/ssh_host_rsa_key.pub"; parentDirectory = { mode = "0755"; }; }
+    ];
+  };
+
   # strictly printer stuff below
   services.klipper = {
     enable = true;
     firmwares = {
       mcu = {
         enableKlipperFlash = true;
-        enable = false;
+        enable = true;
         configFile = ./klipper-smoothie.cfg;
         serial = "/dev/ttyACM0";
+        package = pkgs.klipper-firmware.override {
+          gcc-arm-embedded = pkgs.gcc-arm-embedded-11;
+        };
       };
     };
     settings = {
