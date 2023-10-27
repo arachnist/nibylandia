@@ -160,4 +160,5 @@ in {
     program = "${cageScript}/bin/klipperCageScript";
     environment = { GDK_BACKEND = "wayland"; };
   };
+  systemd.services."cage-tty1".serviceConfig.Restart = "always";
 }
