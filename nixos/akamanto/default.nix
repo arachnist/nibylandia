@@ -31,7 +31,7 @@ in {
     kernelModules = [ "bcm2835-v4l2" ];
     # avoid building zfs
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
-    kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:1" ];
+    kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:2" ];
   };
 
   environment.etc."wifi-secrets".text = ci-secrets.wifi;
