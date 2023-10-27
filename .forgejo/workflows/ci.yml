@@ -11,11 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: ./.ci.sh
-      - run: ./.ci.sdImages.sh
+      # - run: ./.ci.sdImages.sh
 
   nixos-aarch64-linux:
     runs-on: self-hosted-aarch64-linux
     steps:
       - uses: actions/checkout@v3
       - run: ./.ci.sh
-      - run: ./.ci.sdImages.sh
+      # - run: ./.ci.sdImages.sh

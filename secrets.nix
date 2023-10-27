@@ -15,6 +15,8 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEVuDOcKE8ANKGjd6kfFH1qLLzLwg91o0exJ0isIEw4O";
   microlith =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDghNuH/3G+0BXwrBZWZXX0V3K0tfu/Q/AKokLXY5zTD";
+  akamanto =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKb4i+BmIb2wiT4y5uWsCOmSo1dRp6Ql36toUsRHN6pC";
 in {
 
   "secrets/secureboot-key.age".publicKeys = ar
@@ -24,7 +26,7 @@ in {
   "secrets/khas-ar.age".publicKeys = ar ++ [ khas ];
   "secrets/microlith-ar.age".publicKeys = ar ++ [ microlith ];
   "secrets/nix-store.age".publicKeys = ar
-    ++ [ zorigami scylla stereolith khas microlith ];
+    ++ [ zorigami scylla stereolith khas microlith akamanto ];
   "secrets/wg/nibylandia_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/wg/dn42_w1kl4s_scylla.age".publicKeys = ar ++ [ scylla ];
   "secrets/lan/nibylandia-ddns-kea.age".publicKeys = ar ++ [ scylla ];
