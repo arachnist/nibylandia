@@ -91,6 +91,14 @@ in {
 
   hardware.opengl.enable = true;
   # strictly printer stuff below
+  # temporary until configs are finalized
+  systemd.services.klipper.serviceConfig = {
+    ExecStart = lib.mkForce [
+      ""
+      "${pkgs.klipper}/bin/klippy --input-tty=/run/klipper/tty --api-server=/run/klipper/api /var/lib/moonraker/config/klipper.cfg"
+    ];
+    ReadWritePaths = "/var/lib/moonraker/config/";
+  };
   services.klipper = {
     enable = true;
     mutableConfig = false;
@@ -105,6 +113,7 @@ in {
         };
       };
     };
+    # lies; not actually in use for now
     settings = {
       mcu.serial = "/dev/ttyACM0";
       pause_resume = { };
@@ -122,6 +131,11 @@ in {
       fan = { pin = "P2.4"; };
 
       "fan_generic exhaust" = { pin = "P2.6"; };
+
+      probe = {
+        pin = "P1.25";
+        z_offset = "3.36";
+      };
 
       stepper_x = {
         step_pin = "P2.3";
@@ -263,6 +277,7 @@ in {
     user = "root";
     enable = true;
     address = "0.0.0.0";
+    allowSystemControl = true;
     settings = {
       octoprint_compat = { };
       history = { };
