@@ -274,7 +274,7 @@ in {
         initial_duration = ".02";
       };
     } // lib.mapAttrs' (name: value:
-      lib.nameValuePair ("gcode_macro " + name) {
+      lib.nameValuePair ("gcode_macro " + (builtins.replaceStrings [ ".gcode" ] [ "" ] name)) {
         gcode = lib.remove "" (lib.splitString "\n"
           (builtins.readFile (./klipper-macros/. + "/${name}")));
       }) (builtins.readDir ./klipper-macros/.);
