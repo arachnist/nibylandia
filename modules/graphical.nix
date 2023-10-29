@@ -109,13 +109,16 @@
     kdeconnect.enable = true;
     sway.enable = true;
     hyprland.enable = true;
+    firefox = {
+      enable = true;
+      nativeMessagingHosts.packages = with pkgs; [
+        browserpass
+        plasma-browser-integration
+      ];
+    };
   };
 
   nixpkgs.config = {
-    firefox = {
-      enablePlasmaBrowserIntegration = true;
-      enableBrowserpass = true;
-    };
     joypixels.acceptLicense = true;
   };
 
