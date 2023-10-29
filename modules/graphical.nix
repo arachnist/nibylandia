@@ -111,10 +111,10 @@
     hyprland.enable = true;
     firefox = {
       enable = true;
-      nativeMessagingHosts.packages = with pkgs; [
-        browserpass
-        plasma-browser-integration
-      ];
+      #nativeMessagingHosts.packages = with pkgs; [
+      #  browserpass
+      #  plasma-browser-integration
+      #];
     };
   };
 
@@ -124,7 +124,7 @@
 
   environment.systemPackages = with pkgs; [
     chromium
-    electrum
+    # electrum
     ffmpeg-full
     firefox
     imagemagick

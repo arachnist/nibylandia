@@ -5,7 +5,7 @@
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs.url = "git+file:/home/ar/scm/nixpkgs";
     nixpkgs.url =
-      "github:arachnist/nixpkgs/klipper-firmwares-package-overrides";
+      "github:arachnist/nixpkgs/ar-patchset-unstable";
     home-manager.url = "github:nix-community/home-manager";
     nix-colors.url = "github:misterio77/nix-colors";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
