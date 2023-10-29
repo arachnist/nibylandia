@@ -112,6 +112,21 @@ in {
           gcc-arm-embedded = pkgs.gcc-arm-embedded-11;
         };
       };
+      host = {
+        enable = true;
+        configFile = ./klipper-rpi.cfg;
+        serial = "/run/klipper/host-mcu";
+        package = pkgs.klipper-firmware.overrideAttrs (old: {
+          postPatch = (old.postPatch or "") + ''
+            substituteInPlace ./Makefile \
+              --replace '-Isrc' '-iquote src'
+            substituteInPlace ./src/linux/gpio.c \
+              --replace '/usr/include/linux/gpio.h' 'linux/gpio.h'
+            substituteInPlace ./src/linux/main.c \
+              --replace '/usr/include/sched.h' 'sched.h'
+          '';
+        });
+      };
     };
     # imported using:
     # sed -r -e 's/^([^:]*):/\1=/' -e 's/=(.{1,})$/="\1"/' -e '/^\[.*[ ]/s/\[(.*)\]/["\1"]/' klipper-printer.cfg > klipper-printer.toml
@@ -126,6 +141,7 @@ in {
         max_z_velocity = "5";
       };
       mcu = { serial = "/dev/ttyACM0"; };
+      host = { serial = "/run/klipper/host-mcu"; };
       virtual_sdcard = { path = "/var/lib/moonraker/gcodes"; };
 
       pause_resume = { };
