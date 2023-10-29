@@ -590,16 +590,16 @@
     },
     "nixpkgs_7": {
       "locked": {
-        "lastModified": 1698592573,
-        "narHash": "sha256-foL5v67lXpYsAVpMJzfXseZCkJbQoUxGmJyoBWyc8lQ=",
+        "lastModified": 1698253241,
+        "narHash": "sha256-4irODF6ZEes2bq26A1gGJByRSmJ/ighlFuXLX4G9atE=",
         "owner": "arachnist",
         "repo": "nixpkgs",
-        "rev": "6f4f1090acd9e271a020bbac7d8abd3a1652478b",
+        "rev": "556fd110eecdb67ff088f5bb895b13f820ad6bbd",
         "type": "github"
       },
       "original": {
         "owner": "arachnist",
-        "ref": "ar-patchset-unstable",
+        "ref": "klipper-firmwares-package-overrides",
         "repo": "nixpkgs",
         "type": "github"
       }
