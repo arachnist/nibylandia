@@ -112,7 +112,7 @@ in {
           gcc-arm-embedded = pkgs.gcc-arm-embedded-11;
         };
       };
-      host = {
+      rpi = {
         enable = true;
         configFile = ./klipper-rpi.cfg;
         serial = "/run/klipper/host-mcu";
@@ -141,7 +141,7 @@ in {
         max_z_velocity = "5";
       };
       mcu = { serial = "/dev/ttyACM0"; };
-      host = { serial = "/run/klipper/host-mcu"; };
+      "mcu rpi" = { serial = "/run/klipper/host-mcu"; };
       virtual_sdcard = { path = "/var/lib/moonraker/gcodes"; };
 
       pause_resume = { };
