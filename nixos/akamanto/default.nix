@@ -82,21 +82,6 @@ in {
   }) [ "man" "info" "nixos" "doc" "dev" ]);
 
   services.openssh.settings.PasswordAuthentication = lib.mkForce true;
-  #environment.persistence."/persistent" = {
-  #  hideMounts = true;
-  #  directories = [
-  #    "/var/log"
-  #    "/var/lib/bluetooth"
-  #    "/var/lib/nixos"
-  #  ];
-  #  files = [
-  #    "/etc/machine-id"
-  #    { file = "/etc/ssh/ssh_host_ed25519_key"; parentDirectory = { mode = "0755"; }; }
-  #    { file = "/etc/ssh/ssh_host_ed25519_key.pub"; parentDirectory = { mode = "0755"; }; }
-  #    { file = "/etc/ssh/ssh_host_rsa_key"; parentDirectory = { mode = "0755"; }; }
-  #    { file = "/etc/ssh/ssh_host_rsa_key.pub"; parentDirectory = { mode = "0755"; }; }
-  #  ];
-  #};
 
   # list inherited from common is too long
   environment.systemPackages = with pkgs; [ alsa-utils wlr-randr ];
@@ -115,32 +100,31 @@ in {
   services.klipper = {
     enable = true;
     mutableConfig = false;
-    # bloats the image
-    #firmwares = {
-    #  mcu = {
-    #    enableKlipperFlash = true;
-    #    enable = true;
-    #    configFile = ./klipper-smoothie.cfg;
-    #    serial = "/dev/ttyACM0";
-    #    package = pkgs.klipper-firmware.override { };
-    #  };
-    #  # this will be handled differently anyway
-    #  #rpi = {
-    #  #  enable = true;
-    #  #  configFile = ./klipper-rpi.cfg;
-    #  #  serial = "/run/klipper/host-mcu";
-    #  #  package = pkgs.klipper-firmware.overrideAttrs (old: {
-    #  #    postPatch = (old.postPatch or "") + ''
-    #  #      substituteInPlace ./Makefile \
-    #  #        --replace '-Isrc' '-iquote src'
-    #  #      substituteInPlace ./src/linux/gpio.c \
-    #  #        --replace '/usr/include/linux/gpio.h' 'linux/gpio.h'
-    #  #      substituteInPlace ./src/linux/main.c \
-    #  #        --replace '/usr/include/sched.h' 'sched.h'
-    #  #    '';
-    #  #  });
-    #  #};
-    #};
+    firmwares = {
+      mcu = {
+        enableKlipperFlash = true;
+        enable = true;
+        configFile = ./klipper-smoothie.cfg;
+        serial = "/dev/ttyACM0";
+        package = pkgs.klipper-firmware.override { };
+      };
+      # this will be handled differently anyway
+      #rpi = {
+      #  enable = true;
+      #  configFile = ./klipper-rpi.cfg;
+      #  serial = "/run/klipper/host-mcu";
+      #  package = pkgs.klipper-firmware.overrideAttrs (old: {
+      #    postPatch = (old.postPatch or "") + ''
+      #      substituteInPlace ./Makefile \
+      #        --replace '-Isrc' '-iquote src'
+      #      substituteInPlace ./src/linux/gpio.c \
+      #        --replace '/usr/include/linux/gpio.h' 'linux/gpio.h'
+      #      substituteInPlace ./src/linux/main.c \
+      #        --replace '/usr/include/sched.h' 'sched.h'
+      #    '';
+      #  });
+      #};
+    };
     # imported using:
     # sed -r -e 's/^([^:]*):/\1=/' -e 's/=(.{1,})$/="\1"/' -e '/^\[.*[ ]/s/\[(.*)\]/["\1"]/' klipper-printer.cfg > klipper-printer.toml
     # + some small fixes
