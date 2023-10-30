@@ -16,11 +16,7 @@ in {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
   deployment.targetHost = "akamanto.local";
-
-  deployment = {
-    allowLocalDeployment = true;
-    buildOnTarget = false;
-  };
+  deployment.buildOnTarget = lib.mkForce false;
 
   age.secrets.nix-store.file = ../../secrets/nix-store.age;
 
@@ -166,14 +162,15 @@ in {
         max_x = 210.0;
         min_y = 5.0;
         max_y = 200.0;
-        # divided into sublists for formatting purposes
-        points = lib.flatten [
-          [ "-0.747500" "-0.752500" "-0.776250" "-0.851250" "-0.990625" ]
-          [ "-0.590000" "-0.582500" "-0.588750" "-0.688750" "-0.839375" ]
-          [ "-0.376875" "-0.362500" "-0.388750" "-0.464375" "-0.623750" ]
-          [ "-0.184375" "-0.220000" "-0.208750" "-0.221250" "-0.361875" ]
-          [ "0.128125" "0.078750" "0.065000" "0.038750" "-0.075625" ]
-        ];
+        # klippy is, apparently, very specific about bed mesh formatting
+        points = "\n" + lib.concatStringsSep "\n" (map (s: "  " + s)
+          (map (l: lib.concatStringsSep ", " l) [
+            [ "-0.747500" "-0.752500" "-0.776250" "-0.851250" "-0.990625" ]
+            [ "-0.590000" "-0.582500" "-0.588750" "-0.688750" "-0.839375" ]
+            [ "-0.376875" "-0.362500" "-0.388750" "-0.464375" "-0.623750" ]
+            [ "-0.184375" "-0.220000" "-0.208750" "-0.221250" "-0.361875" ]
+            [ "0.128125" "0.078750" "0.065000" "0.038750" "-0.075625" ]
+          ]));
       };
 
       probe = {
