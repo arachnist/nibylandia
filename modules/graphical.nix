@@ -27,6 +27,10 @@
 
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.backend = "wpa_supplicant";
+  systemd.network.wait-online.enable = false;
+  systemd.services.NetworkManager-wait-online.serviceConfig.ExecStart =
+    lib.mkForce [ "" "${pkgs.networkmanager}/bin/nm-online" ];
+
   hardware.glasgow.enable = true;
   hardware.nitrokey.enable = true;
   hardware.steam-hardware.enable = true;
@@ -118,9 +122,7 @@
     };
   };
 
-  nixpkgs.config = {
-    joypixels.acceptLicense = true;
-  };
+  nixpkgs.config = { joypixels.acceptLicense = true; };
 
   environment.systemPackages = with pkgs; [
     chromium
@@ -197,5 +199,19 @@
     })
 
     prusa-slicer
+
+    mastodon-update-script
+    deploy-rs
+    go
+    pry
+    sshfs
+    dig
+    whois
+    cfssl
+    gomuks
+    bind
+    nmap
+    colmena
+    inputs.agenix.packages.${pkgs.system}.default
   ];
 }

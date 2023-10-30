@@ -1,7 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  secrets = import ../../secrets.nix;
   ci-secrets = import ../../ci-secrets.nix;
   klipperScreenConfig = builtins.toFile "KlipperConfig.conf" ''
     [printer Kodak]
@@ -20,19 +19,19 @@ in {
 
   deployment = {
     allowLocalDeployment = true;
-    buildOnTarget = true;
+    buildOnTarget = false;
   };
 
   age.secrets.nix-store.file = ../../secrets/nix-store.age;
 
   imports = with inputs.self.nixosModules; [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-    # common - pulls in too many things
+    common
     # inputs.impermanence.nixosModule
-    inputs.agenix.nixosModules.default
   ];
   sdImage.compressImage = false;
-  hardware.enableRedistributableFirmware = true;
+  hardware.enableRedistributableFirmware = lib.mkForce false;
+  hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
   boot = {
     # revisit https://github.com/NixOS/nixpkgs/issues/154163 if actually needed
     # kernelPackages = pkgs.linuxPackages_rpi3;
@@ -44,6 +43,8 @@ in {
   };
 
   environment.etc."wifi-secrets".text = ci-secrets.wifi;
+
+  microvm.host.enable = false;
 
   systemd.network.enable = lib.mkForce false;
   networking = {
@@ -64,84 +65,23 @@ in {
       enable = true;
       addresses = true;
       workstation = true;
+      userServices = true;
     };
   };
 
-  time.timeZone = "Europe/Warsaw";
-  users.users.root.openssh.authorizedKeys.keys = secrets.ar;
   users.users.root.hashedPassword =
     "$y$j9T$MO1vp6hFuWqWDJCxyzR.E0$7jJDzeL.fMg64tzmW76HjBy49LC4rtTBHH3/ivGOGc.";
   users.mutableUsers = false;
-  users.groups.ar = { gid = 1000; };
-  users.users.ar = {
-    openssh.authorizedKeys.keys = secrets.ar;
-    group = "ar";
-    extraGroups = [ "video" "dialout" "plugdev" ];
-    isNormalUser = true;
-    uid = 1000;
-  };
-
+  users.users.ar = { extraGroups = [ "video" "dialout" "plugdev" ]; };
 
   documentation = {
     enable = lib.mkForce false;
-    man.enable = lib.mkForce false;
-    info.enable = lib.mkForce false;
-    nixos.enable = lib.mkForce false;
-    doc.enable = lib.mkForce false;
-    dev.enable = lib.mkForce false;
-  };
-  environment.noXlibs = true;
+  } // builtins.listToAttrs (map (x: {
+    name = x;
+    value = { enable = lib.mkForce false; };
+  }) [ "man" "info" "nixos" "doc" "dev" ]);
 
-  programs.command-not-found.enable = false;
-  system.stateVersion = "23.11";
-  services.openssh = {
-    enable = true;
-    openFirewall = true;
-    settings.PasswordAuthentication = true;
-  };
-  programs = {
-    mtr.enable = true;
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
-    };
-    zsh = {
-      enable = true;
-      enableBashCompletion = true;
-      autosuggestions.enable = true;
-      syntaxHighlighting.enable = true;
-      ohMyZsh.enable = true;
-    };
-    tmux = {
-      enable = true;
-      terminal = "screen256-color";
-      clock24 = true;
-    };
-    bash.enableCompletion = true;
-    mosh.enable = true;
-  };
-  nix = {
-    package = pkgs.nixUnstable;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-    settings = {
-      trusted-users = [ "ar" "root" ];
-      substituters = [
-          "ssh://nix-ssh@i.am-a.cat?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
-          "ssh://nix-ssh@is-a.cat?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
-          ];
-      trusted-substituters = [
-          "ssh://nix-ssh@i.am-a.cat?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
-          "ssh://nix-ssh@is-a.cat?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
-          ];
-    };
-  };
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.allowBroken = true;
-  nixpkgs.overlays = [ inputs.self.overlays.nibylandia ];
+  services.openssh.settings.PasswordAuthentication = lib.mkForce true;
   #environment.persistence."/persistent" = {
   #  hideMounts = true;
   #  directories = [
@@ -158,31 +98,11 @@ in {
   #  ];
   #};
 
-  security.polkit.enable = true;
+  # list inherited from common is too long
+  environment.systemPackages = with pkgs; [ alsa-utils wlr-randr ];
 
-  environment.systemPackages = with pkgs; [
-    minicom
-    # alsa-utils
-    # wlr-randr
-    # libinput
+  hardware.opengl.enable = true;
 
-    file
-    git
-    libarchive
-    lm_sensors
-    pv
-    strace
-    usbutils
-    wget
-    zip
-    age
-    dstat
-    htop
-    jq
-    inputs.agenix.packages.${pkgs.system}.default
-  ];
-
-  hardware.opengl.enable = false;
   # strictly printer stuff below
   ## uncomment if you need manual config changes
   #systemd.services.klipper.serviceConfig = {
@@ -195,33 +115,32 @@ in {
   services.klipper = {
     enable = true;
     mutableConfig = false;
-    firmwares = {
-      mcu = {
-        enableKlipperFlash = true;
-        enable = true;
-        configFile = ./klipper-smoothie.cfg;
-        serial = "/dev/ttyACM0";
-        package = pkgs.klipper-firmware.override {
-          gcc-arm-embedded = pkgs.gcc-arm-embedded-11;
-        };
-      };
-      # this will be handled differently anyway
-      #rpi = {
-      #  enable = true;
-      #  configFile = ./klipper-rpi.cfg;
-      #  serial = "/run/klipper/host-mcu";
-      #  package = pkgs.klipper-firmware.overrideAttrs (old: {
-      #    postPatch = (old.postPatch or "") + ''
-      #      substituteInPlace ./Makefile \
-      #        --replace '-Isrc' '-iquote src'
-      #      substituteInPlace ./src/linux/gpio.c \
-      #        --replace '/usr/include/linux/gpio.h' 'linux/gpio.h'
-      #      substituteInPlace ./src/linux/main.c \
-      #        --replace '/usr/include/sched.h' 'sched.h'
-      #    '';
-      #  });
-      #};
-    };
+    # bloats the image
+    #firmwares = {
+    #  mcu = {
+    #    enableKlipperFlash = true;
+    #    enable = true;
+    #    configFile = ./klipper-smoothie.cfg;
+    #    serial = "/dev/ttyACM0";
+    #    package = pkgs.klipper-firmware.override { };
+    #  };
+    #  # this will be handled differently anyway
+    #  #rpi = {
+    #  #  enable = true;
+    #  #  configFile = ./klipper-rpi.cfg;
+    #  #  serial = "/run/klipper/host-mcu";
+    #  #  package = pkgs.klipper-firmware.overrideAttrs (old: {
+    #  #    postPatch = (old.postPatch or "") + ''
+    #  #      substituteInPlace ./Makefile \
+    #  #        --replace '-Isrc' '-iquote src'
+    #  #      substituteInPlace ./src/linux/gpio.c \
+    #  #        --replace '/usr/include/linux/gpio.h' 'linux/gpio.h'
+    #  #      substituteInPlace ./src/linux/main.c \
+    #  #        --replace '/usr/include/sched.h' 'sched.h'
+    #  #    '';
+    #  #  });
+    #  #};
+    #};
     # imported using:
     # sed -r -e 's/^([^:]*):/\1=/' -e 's/=(.{1,})$/="\1"/' -e '/^\[.*[ ]/s/\[(.*)\]/["\1"]/' klipper-printer.cfg > klipper-printer.toml
     # + some small fixes
@@ -384,7 +303,8 @@ in {
         initial_duration = ".02";
       };
     } // lib.mapAttrs' (name: value:
-      lib.nameValuePair ("gcode_macro " + (builtins.replaceStrings [ ".gcode" ] [ "" ] name)) {
+      lib.nameValuePair
+      ("gcode_macro " + (builtins.replaceStrings [ ".gcode" ] [ "" ] name)) {
         gcode = lib.remove "" (lib.splitString "\n"
           (builtins.readFile (./klipper-macros/. + "/${name}")));
       }) (builtins.readDir ./klipper-macros/.);

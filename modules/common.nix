@@ -87,42 +87,28 @@ in {
   nixpkgs.overlays = [ inputs.self.overlays.nibylandia ];
 
   environment.systemPackages = with pkgs; [
-    deploy-rs
-    mastodon-update-script
     file
     git
-    go
     libarchive
     lm_sensors
     lshw
     lsof
     pciutils
-    pry
     pv
     strace
     usbutils
     wget
     zip
-    config.boot.kernelPackages.perf
+    # config.boot.kernelPackages.perf
     age
-    sshfs
-    dig
     dstat
     htop
     iperf
-    whois
     xxd
     tcpdump
     traceroute
-    age
-    cfssl
-    gomuks
-    bind
-    nmap
     jq
     colmena
-
-    inputs.agenix.packages.${pkgs.system}.default
   ];
 
   documentation = {
