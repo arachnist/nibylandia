@@ -4,7 +4,7 @@
   inputs = {
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs.url =
-    #  "github:arachnist/nixpkgs/klipper-firmwares-package-overrides";
+      #  "github:arachnist/nixpkgs/klipper-firmwares-package-overrides";
       "github:arachnist/nixpkgs/ar-patchset-unstable";
     #  "git+file:/home/ar/scm/nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
