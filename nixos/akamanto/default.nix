@@ -118,11 +118,21 @@ in {
   services.openssh.settings.PasswordAuthentication = lib.mkForce true;
   services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
 
-  environment.systemPackages = with pkgs; [ alsa-utils wlr-randr ];
   hardware.opengl.enable = true;
 
   # diet
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
+  environment.systemPackages = with pkgs; lib.mkForce [ coreutils zsh bashInteractive nix systemd gnugrep
+    (glibcLocales.override {
+      allLocales = false;
+      locales = [ "en_US.UTF-8/UTF-8" "en_CA.UTF-8/UTF-8" "en_DK.UTF-8/UTF-8" ];
+    })
+  ];
+  programs.nix-index.enable = lib.mkForce false;
+  services.journald.extraConfig = ''
+    Storage=volatile
+  '';
+  systemd.coredump.enable = false;
   services.lvm.enable = lib.mkForce false;
   # strictly printer stuff below
   ## uncomment if you need manual config changes
