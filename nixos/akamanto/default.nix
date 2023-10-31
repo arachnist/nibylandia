@@ -345,6 +345,11 @@ in {
       };
       machine = { provider = "systemd_cli"; };
     };
+    package = (pkgs.moonraker.overrideAttrs (old: {
+      patches = (old.patches or []) ++ [
+        ./moonraker-remove-config-path-warning.patch
+      ];
+    }));
   };
 
   services.fluidd = {

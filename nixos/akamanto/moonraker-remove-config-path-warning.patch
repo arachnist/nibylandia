@@ -1,0 +1,14 @@
+diff --git a/moonraker/components/file_manager/file_manager.py b/moonraker/components/file_manager/file_manager.py
+index 731547d..bc5c14b 100644
+--- a/moonraker/components/file_manager/file_manager.py
++++ b/moonraker/components/file_manager/file_manager.py
+@@ -202,7 +202,8 @@ class FileManager:
+             par_path = pathlib.Path(cfg_parent)
+             if (
+                 par_path in cfg_path.parents or
+-                par_path.resolve() in cfg_path.resolve().parents
++                par_path.resolve() in cfg_path.resolve().parents or
++                cfg_path.samefile("/etc/klipper.cfg")
+             ):
+                 self.server.remove_warning("klipper_config")
+             else:
