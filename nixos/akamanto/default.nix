@@ -104,7 +104,7 @@ in {
   };
 
   users.users.root.hashedPassword =
-    "$y$j9T$MO1vp6hFuWqWDJCxyzR.E0$7jJDzeL.fMg64tzmW76HjBy49LC4rtTBHH3/ivGOGc.";
+    "$y$j9T$.1ogQkT5J95hEFkgp9esc0$rneVdOpPwPDsgAckJsXJmzgVEENPkFWHWKgca2mVz6D";
   users.mutableUsers = false;
   users.users.ar = { extraGroups = [ "video" "dialout" "plugdev" ]; };
 
@@ -116,6 +116,7 @@ in {
   }) [ "man" "info" "nixos" "doc" "dev" ]);
 
   services.openssh.settings.PasswordAuthentication = lib.mkForce true;
+  services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
 
   environment.systemPackages = with pkgs; [ alsa-utils wlr-randr ];
   hardware.opengl.enable = true;
