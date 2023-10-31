@@ -108,7 +108,6 @@ in {
     tcpdump
     traceroute
     jq
-    colmena
   ];
 
   documentation = {

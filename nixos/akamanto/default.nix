@@ -18,14 +18,50 @@ in {
   deployment.targetHost = "akamanto.local";
   deployment.buildOnTarget = lib.mkForce false;
 
-  age.secrets.nix-store.file = ../../secrets/nix-store.age;
+  imports = with inputs.self.nixosModules;
+    [
+      "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"
+      common
+      # inputs.impermanence.nixosModule
+    ];
 
-  imports = with inputs.self.nixosModules; [
-    "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-    common
-    # inputs.impermanence.nixosModule
-  ];
-  sdImage.compressImage = false;
+  # don't want to pull in all of installer stuff, so we need to copy some things from sd-image-aarch64.nix:
+  sdImage = {
+    compressImage = false;
+    imageName = "${config.sdImage.imageBaseName}-${pkgs.stdenv.hostPlatform.system}-${config.networking.hostName}.img";
+    populateFirmwareCommands = let
+      configTxt = pkgs.writeText "config.txt" ''
+        [pi3]
+        kernel=u-boot-rpi3.bin
+
+        [all]
+        # Boot in 64-bit mode.
+        arm_64bit=1
+
+        # U-Boot needs this to work, regardless of whether UART is actually used or not.
+        # Look in arch/arm/mach-bcm283x/Kconfig in the U-Boot tree to see if this is still
+        # a requirement in the future.
+        enable_uart=1
+
+        # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+        # when attempting to show low-voltage or overtemperature warnings.
+        avoid_warnings=1
+      '';
+      in ''
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+
+        # Add the config
+        cp ${configTxt} firmware/config.txt
+
+        # Add pi3 specific files
+        cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
+      '';
+    populateRootCommands = ''
+      mkdir -p ./files/boot
+      ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
+    '';
+  };
+
   hardware.enableRedistributableFirmware = lib.mkForce false;
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
   boot = {
@@ -36,6 +72,8 @@ in {
     # avoid building zfs
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
     kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:2" ];
+    loader.grub.enable = false;
+    loader.generic-extlinux-compatible.enable = true;
   };
 
   environment.etc."wifi-secrets".text = ci-secrets.wifi;
@@ -79,11 +117,12 @@ in {
 
   services.openssh.settings.PasswordAuthentication = lib.mkForce true;
 
-  # list inherited from common is too long
   environment.systemPackages = with pkgs; [ alsa-utils wlr-randr ];
-
   hardware.opengl.enable = true;
 
+  # diet
+  boot.binfmt.emulatedSystems = lib.mkForce [ ];
+  services.lvm.enable = lib.mkForce false;
   # strictly printer stuff below
   ## uncomment if you need manual config changes
   #systemd.services.klipper.serviceConfig = {
@@ -98,7 +137,7 @@ in {
     mutableConfig = false;
     firmwares = {
       mcu = {
-        enableKlipperFlash = true;
+        enableKlipperFlash = false;
         enable = true;
         configFile = ./klipper-smoothie.cfg;
         serial = "/dev/ttyACM0";
