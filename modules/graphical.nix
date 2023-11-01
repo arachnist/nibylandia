@@ -1,5 +1,19 @@
 { config, lib, pkgs, inputs, ... }:
 
+let
+# rfkill block 0; rmmod btusb btintel; systemctl restart bluetooth.service; modprobe btintel; modprobe btusb; systemctl restart bluetooth.service; rfkill unblock 0
+  bt-unfuck = with pkgs; writeScriptBin "bt-unfuck" ''
+    #!${runtimeShell}
+    ${util-linux}/bin/rfkill block 0
+    ${kmod}/bin/rmmod btusb btintel
+    ${systemd}/bin/systemctl restart bluetooth.service
+    for mod in btintel btusb; do
+      ${kmod}/bin/modprobe $mod
+    done
+    ${systemd}/bin/systemctl restart bluetooth.service
+    ${util-linux}/bin/rfkill unblock 0
+  '';
+in
 {
   imports = [ inputs.self.nixosModules.common ];
 
@@ -41,6 +55,13 @@
   hardware.opengl = {
     enable = true;
     driSupport32Bit = true;
+  };
+  
+  security.wrappers.bt-unfuck = {
+    setuid = true;
+    owner = "root";
+    group = "root";
+    source = "${bt-unfuck}/bin/bt-unfuck";
   };
 
   services.xserver = {
@@ -176,6 +197,10 @@
     freecad
 
     rnix-lsp
+    clang-tools
+    python3Packages.python-lsp-server
+    yaml-language-server
+
     (vscode-with-extensions.override {
       vscodeExtensions = with vscode-extensions; [
         bbenoist.nix
