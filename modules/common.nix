@@ -11,6 +11,8 @@ in {
     self.nixosModules.boot
   ];
 
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+
   deployment = {
     allowLocalDeployment = true;
     buildOnTarget = true;
