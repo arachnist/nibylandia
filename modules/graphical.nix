@@ -1,20 +1,20 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-# rfkill block 0; rmmod btusb btintel; systemctl restart bluetooth.service; modprobe btintel; modprobe btusb; systemctl restart bluetooth.service; rfkill unblock 0
-  bt-unfuck = with pkgs; writeScriptBin "bt-unfuck" ''
-    #!${runtimeShell}
-    ${util-linux}/bin/rfkill block 0
-    ${kmod}/bin/rmmod btusb btintel
-    ${systemd}/bin/systemctl restart bluetooth.service
-    for mod in btintel btusb; do
-      ${kmod}/bin/modprobe $mod
-    done
-    ${systemd}/bin/systemctl restart bluetooth.service
-    ${util-linux}/bin/rfkill unblock 0
-  '';
-in
-{
+  # rfkill block 0; rmmod btusb btintel; systemctl restart bluetooth.service; modprobe btintel; modprobe btusb; systemctl restart bluetooth.service; rfkill unblock 0
+  bt-unfuck = with pkgs;
+    writeScriptBin "bt-unfuck" ''
+      #!${runtimeShell}
+      ${util-linux}/bin/rfkill block 0
+      ${kmod}/bin/rmmod btusb btintel
+      ${systemd}/bin/systemctl restart bluetooth.service
+      for mod in btintel btusb; do
+        ${kmod}/bin/modprobe $mod
+      done
+      ${systemd}/bin/systemctl restart bluetooth.service
+      ${util-linux}/bin/rfkill unblock 0
+    '';
+in {
   imports = [ inputs.self.nixosModules.common ];
 
   boot = {
@@ -56,7 +56,7 @@ in
     enable = true;
     driSupport32Bit = true;
   };
-  
+
   security.wrappers.bt-unfuck = {
     setuid = true;
     owner = "root";
@@ -195,6 +195,8 @@ in
 
     glasgow
     freecad
+
+    easyeffects
 
     rnix-lsp
     clang-tools
