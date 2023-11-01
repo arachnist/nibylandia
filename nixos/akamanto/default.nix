@@ -12,23 +12,26 @@ let
     ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
   '';
+  klipperHostMcu = "${pkgs.klipper-firmware.override {
+    firmwareConfig = ./klipper-rpi.cfg;
+  }}/klipper.elf";
 in {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
   deployment.targetHost = "akamanto.local";
   deployment.buildOnTarget = lib.mkForce false;
 
-  imports = with inputs.self.nixosModules;
-    [
-      "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"
-      common
-      # inputs.impermanence.nixosModule
-    ];
+  imports = with inputs.self.nixosModules; [
+    "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"
+    common
+    # inputs.impermanence.nixosModule
+  ];
 
   # don't want to pull in all of installer stuff, so we need to copy some things from sd-image-aarch64.nix:
   sdImage = {
     compressImage = false;
-    imageName = "${config.sdImage.imageBaseName}-${pkgs.stdenv.hostPlatform.system}-${config.networking.hostName}.img";
+    imageName =
+      "${config.sdImage.imageBaseName}-${pkgs.stdenv.hostPlatform.system}-${config.networking.hostName}.img";
     populateFirmwareCommands = let
       configTxt = pkgs.writeText "config.txt" ''
         [pi3]
@@ -47,15 +50,15 @@ in {
         # when attempting to show low-voltage or overtemperature warnings.
         avoid_warnings=1
       '';
-      in ''
-        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+    in ''
+      (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
 
-        # Add the config
-        cp ${configTxt} firmware/config.txt
+      # Add the config
+      cp ${configTxt} firmware/config.txt
 
-        # Add pi3 specific files
-        cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
-      '';
+      # Add pi3 specific files
+      cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
+    '';
     populateRootCommands = ''
       mkdir -p ./files/boot
       ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
@@ -122,12 +125,21 @@ in {
 
   # diet
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
-  environment.systemPackages = with pkgs; lib.mkForce [ coreutils zsh bashInteractive nix systemd gnugrep
-    (glibcLocales.override {
-      allLocales = false;
-      locales = [ "en_US.UTF-8/UTF-8" "en_CA.UTF-8/UTF-8" "en_DK.UTF-8/UTF-8" ];
-    })
-  ];
+  environment.systemPackages = with pkgs;
+    lib.mkForce [
+      coreutils
+      zsh
+      bashInteractive
+      nix
+      systemd
+      gnugrep
+      openssh
+      (glibcLocales.override {
+        allLocales = false;
+        locales =
+          [ "en_US.UTF-8/UTF-8" "en_CA.UTF-8/UTF-8" "en_DK.UTF-8/UTF-8" ];
+      })
+    ];
   programs.nix-index.enable = lib.mkForce false;
   services.journald.extraConfig = ''
     Storage=volatile
@@ -135,6 +147,25 @@ in {
   systemd.coredump.enable = false;
   services.lvm.enable = lib.mkForce false;
   # strictly printer stuff below
+
+  systemd.services.klipper-mcu-rpi = {
+    serviceConfig = {
+      DynamicUser = true;
+      User = "klipper";
+      RuntimeDirectory = "klipper";
+      StateDirectory = "klipper";
+      SupplementaryGroups = [ "dialout" ];
+      OOMScoreAdjust = "-999";
+      CPUSchedulingPolicy = "rr";
+      CPUSchedulingPriority = 99;
+      IOSchedulingClass = "realtime";
+      IOSchedulingPriority = 0;
+      ExecStart = "${klipperHostMcu} -r -I /run/klipper/mcu-rpi";
+    };
+    unitConfig = {
+      Before = [ "klipper.service" ];
+    };
+  };
   ## uncomment if you need manual config changes
   #systemd.services.klipper.serviceConfig = {
   #  ExecStart = lib.mkForce [
@@ -184,7 +215,7 @@ in {
         max_z_velocity = "5";
       };
       mcu = { serial = "/dev/ttyACM0"; };
-      # "mcu rpi" = { serial = "/run/klipper/host-mcu"; };
+      "mcu rpi" = { serial = "/run/klipper/mcu-rpi"; };
       virtual_sdcard = { path = "/var/lib/moonraker/gcodes"; };
 
       pause_resume = { };
@@ -356,11 +387,10 @@ in {
       };
       machine = { provider = "systemd_cli"; };
     };
-    package = (pkgs.moonraker.overrideAttrs (old: {
-      patches = (old.patches or []) ++ [
-        ./moonraker-remove-config-path-warning.patch
-      ];
-    }));
+    package = pkgs.moonraker.overrideAttrs (old: {
+      patches = (old.patches or [ ])
+        ++ [ ./moonraker-remove-config-path-warning.patch ];
+    });
   };
 
   services.fluidd = {
