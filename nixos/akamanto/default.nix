@@ -10,7 +10,8 @@ let
   cageScript = pkgs.writeScriptBin "klipperCageScript" ''
     #!${pkgs.runtimeShell}
     ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
-    ${pkgs.mpv}/bin/mpv /home/ar/life-in-plastic.wav &
+    sounds=( /home/ar/startup-sounds/* )
+    ${pkgs.mpv}/bin/mpv /home/ar/life-in-plastic.wav ''${sounds[ $RANDOM % ''${#sounds[@]}]} &
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
   '';
   klipperHostMcu = "${
@@ -140,6 +141,10 @@ in {
     enable = true;
     package = pkgs.bluez;
   };
+  services.udisks2 = {
+    enable = true;
+    mountOnMedia = true;
+  };
 
   # diet
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
@@ -165,6 +170,8 @@ in {
       # nice-to-haves
       procps
       openssh
+      findutils
+      iproute2
 
       # strictly unnecessary
       mpv
@@ -199,8 +206,10 @@ in {
       ReadWritePaths = "/dev/gpiochip0";
     };
   };
-  systemd.services.klipper.serviceConfig.SupplementaryGroups =
-    [ "dialout" "pipewire" ];
+  systemd.services.klipper.serviceConfig = {
+    SupplementaryGroups = [ "dialout" "pipewire" ];
+    ReadWritePaths = "/var/lib/moonraker/config";
+  };
   ## uncomment if you need manual config changes
   #systemd.services.klipper.serviceConfig = {
   #  ExecStart = lib.mkForce [
@@ -246,6 +255,15 @@ in {
       exclude_object = { };
       force_move = { enable_force_move = "true"; };
 
+      idle_timeout = {
+        timeout = 1800;
+        gcode = [ "TURN_OFF_HEATERS" ];
+      };
+
+      save_variables = {
+        filename = "/var/lib/moonraker/config/variables.cfg";
+      };
+
       bed_mesh = {
         horizontal_move_z = "5";
         mesh_max = "210, 200";
@@ -286,8 +304,15 @@ in {
         sensor_type = "ATC Semitec 104GT-2";
       };
 
+      "temperature_sensor rpi" = { sensor_type = "temperature_host"; };
+
       fan = { pin = "P2.4"; };
       "fan_generic exhaust" = { pin = "P2.6"; };
+
+      firmware_retraction = {
+        retract_length = "5.5";
+        retract_speed = "45";
+      };
 
       heater_bed = {
         control = "watermark";
@@ -421,9 +446,7 @@ in {
         trusted_clients = [ "127.0.0.1/32" "10.8.0.0/23" ];
       };
       # causes issues for some reason
-      zeroconf = {
-        mdns_hostname = "barbie-girl";
-      };
+      zeroconf = { mdns_hostname = "barbie-girl"; };
       machine = { provider = "systemd_cli"; };
       "webcam rpi" = {
         enabled = "True";
@@ -431,6 +454,7 @@ in {
         stream_url = "/webcam/stream";
         snapshot_url = "/webcam/snapshot";
         target_fps = "30";
+        target_fps_idle = "30";
         aspect_ratio = "4:3";
       };
     };
@@ -446,6 +470,7 @@ in {
   };
 
   services.nginx.clientMaxBodySize = "1000m";
+  services.nginx.recommendedProxySettings = true;
 
   systemd.services.ustreamer = {
     wantedBy = [ "multi-user.target" ];

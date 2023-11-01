@@ -6,7 +6,7 @@ G92 E0.0              ; Reset the extruder so that it thinks it is at position z
 {% endfor %}
 ; faster
 {% for n in range(5) %}
-  G1 E-50 F1000
+  G1 E-50 F700
 {% endfor %}
 G92 E0.0
 M82                   ; Put the extruder back into absolute mode.
