@@ -10,6 +10,7 @@ let
   cageScript = pkgs.writeScriptBin "klipperCageScript" ''
     #!${pkgs.runtimeShell}
     ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
+    ${pkgs.mpv}/bin/mpv /home/ar/life-in-plastic.wav &
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
   '';
   klipperHostMcu = "${
@@ -109,7 +110,9 @@ in {
   users.users.root.hashedPassword =
     "$y$j9T$.1ogQkT5J95hEFkgp9esc0$rneVdOpPwPDsgAckJsXJmzgVEENPkFWHWKgca2mVz6D";
   users.mutableUsers = false;
-  users.users.ar = { extraGroups = [ "video" "dialout" "plugdev" ]; };
+  users.users.ar = {
+    extraGroups = [ "video" "dialout" "plugdev" "pipewire" ];
+  };
 
   documentation = {
     enable = lib.mkForce false;
@@ -122,6 +125,21 @@ in {
   services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
 
   hardware.opengl.enable = true;
+
+  # strictly for shits and giggles
+  sound.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    systemWide = true;
+    alsa.enable = true;
+    pulse.enable = true;
+    jack.enable = true;
+  };
+  hardware.bluetooth = {
+    enable = true;
+    package = pkgs.bluez;
+  };
 
   # diet
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
@@ -147,6 +165,12 @@ in {
       # nice-to-haves
       procps
       openssh
+
+      # strictly unnecessary
+      mpv
+      alsa-utils
+      bluez
+      pipewire
     ];
   programs.nix-index.enable = lib.mkForce false;
   services.journald.extraConfig = ''
@@ -165,7 +189,7 @@ in {
       User = "klipper";
       RuntimeDirectory = "klipper-mcu";
       StateDirectory = "klipper";
-      SupplementaryGroups = [ "dialout" ];
+      SupplementaryGroups = [ "dialout" "pipewire" ];
       OOMScoreAdjust = "-999";
       CPUSchedulingPolicy = "rr";
       CPUSchedulingPriority = 99;
@@ -175,6 +199,8 @@ in {
       ReadWritePaths = "/dev/gpiochip0";
     };
   };
+  systemd.services.klipper.serviceConfig.SupplementaryGroups =
+    [ "dialout" "pipewire" ];
   ## uncomment if you need manual config changes
   #systemd.services.klipper.serviceConfig = {
   #  ExecStart = lib.mkForce [
@@ -354,6 +380,10 @@ in {
         blue_pin = "rpi:gpio22";
         hardware_pwm = false;
         cycle_time = "0.005";
+
+        initial_RED = "1.0";
+        initial_GREEN = "0.0";
+        initial_BLUE = "0.455";
       };
 
       "gcode_macro CANCEL_PRINT" = {
@@ -390,7 +420,19 @@ in {
         cors_domains = [ "*.local" "*.waw.hackerspace.pl" ];
         trusted_clients = [ "127.0.0.1/32" "10.8.0.0/23" ];
       };
+      # causes issues for some reason
+      zeroconf = {
+        mdns_hostname = "barbie-girl";
+      };
       machine = { provider = "systemd_cli"; };
+      "webcam rpi" = {
+        enabled = "True";
+        service = "mjpegstreamer-adaptive";
+        stream_url = "/webcam/stream";
+        snapshot_url = "/webcam/snapshot";
+        target_fps = "30";
+        aspect_ratio = "4:3";
+      };
     };
     package = pkgs.moonraker.overrideAttrs (old: {
       patches = (old.patches or [ ])
@@ -400,7 +442,7 @@ in {
 
   services.fluidd = {
     enable = true;
-    nginx.locations."/webcam".proxyPass = "http://127.0.0.1:8080/stream";
+    nginx.locations."/webcam/".proxyPass = "http://127.0.0.1:8080/";
   };
 
   services.nginx.clientMaxBodySize = "1000m";
@@ -411,7 +453,7 @@ in {
     serviceConfig = {
       Type = "simple";
       ExecStart =
-        "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --drop-same-frames=30";
+        "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --drop-same-frames=30 --rotate 90 --slowdown --desired-fps 30";
     };
   };
 
