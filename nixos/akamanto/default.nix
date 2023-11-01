@@ -12,9 +12,9 @@ let
     ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
   '';
-  klipperHostMcu = "${pkgs.klipper-firmware.override {
-    firmwareConfig = ./klipper-rpi.cfg;
-  }}/klipper.elf";
+  klipperHostMcu = "${
+      pkgs.klipper-firmware.override { firmwareConfig = ./klipper-rpi.cfg; }
+    }/klipper.elf";
 in {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
@@ -127,18 +127,26 @@ in {
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
   environment.systemPackages = with pkgs;
     lib.mkForce [
+      # strictly required
       coreutils
-      zsh
-      bashInteractive
       nix
       systemd
+
+      # shell's required and not automatically pulled in
+      zsh
+      bashInteractive
+
+      # avoid warnings
       gnugrep
-      openssh
       (glibcLocales.override {
         allLocales = false;
         locales =
           [ "en_US.UTF-8/UTF-8" "en_CA.UTF-8/UTF-8" "en_DK.UTF-8/UTF-8" ];
       })
+
+      # nice-to-haves
+      procps
+      openssh
     ];
   programs.nix-index.enable = lib.mkForce false;
   services.journald.extraConfig = ''
@@ -149,10 +157,13 @@ in {
   # strictly printer stuff below
 
   systemd.services.klipper-mcu-rpi = {
+    description = "Klipper 3D host mcu";
+    wantedBy = [ "multi-user.target" ];
+    before = [ "klipper.service" ];
     serviceConfig = {
       DynamicUser = true;
       User = "klipper";
-      RuntimeDirectory = "klipper";
+      RuntimeDirectory = "klipper-mcu";
       StateDirectory = "klipper";
       SupplementaryGroups = [ "dialout" ];
       OOMScoreAdjust = "-999";
@@ -160,10 +171,8 @@ in {
       CPUSchedulingPriority = 99;
       IOSchedulingClass = "realtime";
       IOSchedulingPriority = 0;
-      ExecStart = "${klipperHostMcu} -r -I /run/klipper/mcu-rpi";
-    };
-    unitConfig = {
-      Before = [ "klipper.service" ];
+      ExecStart = "${klipperHostMcu} -I /run/klipper-mcu/mcu-rpi";
+      ReadWritePaths = "/dev/gpiochip0";
     };
   };
   ## uncomment if you need manual config changes
@@ -182,25 +191,10 @@ in {
         enableKlipperFlash = false;
         enable = true;
         configFile = ./klipper-smoothie.cfg;
-        serial = "/dev/ttyACM0";
+        serial =
+          "/dev/serial/by-id/usb-Klipper_lpc1769_05E0FF0B27201CAF6CDBCA59C62000F5-if00";
         package = pkgs.klipper-firmware.override { };
       };
-      # this will be handled differently anyway
-      #rpi = {
-      #  enable = true;
-      #  configFile = ./klipper-rpi.cfg;
-      #  serial = "/run/klipper/host-mcu";
-      #  package = pkgs.klipper-firmware.overrideAttrs (old: {
-      #    postPatch = (old.postPatch or "") + ''
-      #      substituteInPlace ./Makefile \
-      #        --replace '-Isrc' '-iquote src'
-      #      substituteInPlace ./src/linux/gpio.c \
-      #        --replace '/usr/include/linux/gpio.h' 'linux/gpio.h'
-      #      substituteInPlace ./src/linux/main.c \
-      #        --replace '/usr/include/sched.h' 'sched.h'
-      #    '';
-      #  });
-      #};
     };
     # imported using:
     # sed -r -e 's/^([^:]*):/\1=/' -e 's/=(.{1,})$/="\1"/' -e '/^\[.*[ ]/s/\[(.*)\]/["\1"]/' klipper-printer.cfg > klipper-printer.toml
@@ -214,8 +208,11 @@ in {
         max_z_accel = "100";
         max_z_velocity = "5";
       };
-      mcu = { serial = "/dev/ttyACM0"; };
-      "mcu rpi" = { serial = "/run/klipper/mcu-rpi"; };
+      mcu = {
+        serial =
+          "/dev/serial/by-id/usb-Klipper_lpc1769_05E0FF0B27201CAF6CDBCA59C62000F5-if00";
+      };
+      "mcu rpi" = { serial = "/run/klipper-mcu/mcu-rpi"; };
       virtual_sdcard = { path = "/var/lib/moonraker/gcodes"; };
 
       pause_resume = { };
@@ -351,6 +348,14 @@ in {
         step_pin = "P2.8";
       };
 
+      "led caselight" = {
+        red_pin = "rpi:gpio17";
+        green_pin = "rpi:gpio27";
+        blue_pin = "rpi:gpio22";
+        hardware_pwm = false;
+        cycle_time = "0.005";
+      };
+
       "gcode_macro CANCEL_PRINT" = {
         description = "Cancel the actual running print";
         gcode = [ "TURN_OFF_HEATERS" "CANCEL_PRINT_BASE" ];
@@ -415,6 +420,7 @@ in {
   # sadly, this doesn't work for us here, for some unbeknownst reason
   services.udev.extraRules = ''
     SUBSYSTEM=="input", ATTRS{idVendor}=="0eef", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
+    KERNEL=="gpiochip0", GROUP="dialout", MODE="0660"
   '';
   services.cage = {
     enable = true;
