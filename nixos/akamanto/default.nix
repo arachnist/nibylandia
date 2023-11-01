@@ -11,7 +11,7 @@ let
     #!${pkgs.runtimeShell}
     ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
     sounds=( /home/ar/startup-sounds/* )
-    ${pkgs.mpv}/bin/mpv /home/ar/life-in-plastic.wav ''${sounds[ $RANDOM % ''${#sounds[@]}]} &
+    ${pkgs.mpv}/bin/mpv ''${sounds[ $RANDOM % ''${#sounds[@]}]} &
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
   '';
   klipperHostMcu = "${
@@ -95,8 +95,7 @@ in {
       networks."hackerspace.pl-guests-5G".psk = "@HSWAW_WIFI@";
     };
   };
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
-  networking.firewall.allowedUDPPorts = [ 80 443 ];
+  networking.firewall.enable = false;
 
   services.avahi = {
     enable = true;
@@ -443,7 +442,10 @@ in {
       authorization = {
         force_logins = false;
         cors_domains = [ "*.local" "*.waw.hackerspace.pl" ];
-        trusted_clients = [ "127.0.0.1/32" "10.8.0.0/23" ];
+        trusted_clients = [
+          "10.8.0.0/23"
+          "2a0d:eb00:4242::/64"
+        ];
       };
       # causes issues for some reason
       zeroconf = { mdns_hostname = "barbie-girl"; };
