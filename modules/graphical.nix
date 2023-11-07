@@ -159,10 +159,7 @@ in {
     okular
     paprefs
     pavucontrol
-    (signal-desktop.overrideAttrs (old: {
-      preFixup = (old.preFixup or "")
-        + "  gappsWrapperArgs+=(\n    --add-flags --use-tray-icon\n  )\n";
-    }))
+    signal-desktop
     solvespace
     spotify
     youtube-dl
