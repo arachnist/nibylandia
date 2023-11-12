@@ -298,6 +298,10 @@ in {
         pin = "P1.25";
         z_offset = "-0.300";
       };
+      safe_z_home = {
+        home_xy_position = "110, 110";
+      };
+
       "temperature_sensor ambient" = {
         sensor_pin = "P0.26";
         sensor_type = "ATC Semitec 104GT-2";
@@ -332,6 +336,7 @@ in {
         microsteps = "32";
         min_temp = "0";
         nozzle_diameter = "0.400";
+        max_extrude_cross_section = "2.56";
         pid_Kd = "160";
         pid_Ki = "2.318";
         pid_Kp = "38.5";
@@ -350,6 +355,7 @@ in {
         microsteps = "32";
         min_temp = "0";
         nozzle_diameter = "0.400";
+        max_extrude_cross_section = "2.56";
         pid_Kd = "160";
         pid_Ki = "2.318";
         pid_Kp = "38.5";
@@ -420,7 +426,7 @@ in {
         initial_duration = ".01";
       };
       "delayed_gcode t0_offset" = {
-        gcode = [ "SET_GCODE_OFFSET X=0 Y=0 Z=-0.1" ];
+        gcode = [ "SET_GCODE_OFFSET X=0 Y=0 Z=-0.0" ];
         initial_duration = ".02";
       };
     } // lib.mapAttrs' (name: value:
