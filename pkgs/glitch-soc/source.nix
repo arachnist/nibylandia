@@ -8,7 +8,7 @@ applyPatches {
   src = fetchFromGitHub {
     owner = "arachnist";
     repo = "mastodon";
-    rev = "v${version}";
+    rev = "161a19f3aa8d9fa40ae2a08fdb81e42939ae32dd";
     hash = "sha256-zPK7HEDYfKLlrFB9VwLxWJSCSbP4VPWzaO3H37hrGG0=";
   };
   patches = [./local-new-fixes.patch];
