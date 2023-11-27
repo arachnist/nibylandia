@@ -268,6 +268,7 @@
   services.mastodon = {
     enable = true;
     webProcesses = 4;
+    streamingProcesses = 4;
     localDomain = "is-a.cat";
     configureNginx = true;
     smtp = {
