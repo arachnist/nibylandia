@@ -21,7 +21,7 @@
   # disabling transparent hugepages should fix it
   nixpkgs.overlays = [ inputs.microvm.overlay ];
   microvm.vms = {
-    elementVm = { config = import ../../microvms/elementVm.nix; };
+    # elementVm = { config = import ../../microvms/elementVm.nix; };
   };
 
   age.secrets.ar-password.file = ../../secrets/khas-ar.age;
