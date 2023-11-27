@@ -146,6 +146,7 @@ in {
   nixpkgs.config = { joypixels.acceptLicense = true; };
 
   environment.systemPackages = with pkgs; [
+    krfb # for kdeconnect virtual display
     chromium
     # electrum
     ffmpeg-full
