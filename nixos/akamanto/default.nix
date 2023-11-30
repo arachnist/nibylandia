@@ -298,9 +298,7 @@ in {
         pin = "P1.25";
         z_offset = "-0.300";
       };
-      safe_z_home = {
-        home_xy_position = "110, 110";
-      };
+      safe_z_home = { home_xy_position = "110, 110"; };
 
       "temperature_sensor ambient" = {
         sensor_pin = "P0.26";
