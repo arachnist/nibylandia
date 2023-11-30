@@ -49,9 +49,16 @@ in {
       terminal = "screen256-color";
       clock24 = true;
     };
+    ssh.knownHosts = builtins.mapAttrs (name: value: {
+      inherit (value) publicKey;
+      extraHostNames = [ value.targetHost ];
+    }) secrets.hosts;
     bash.enableCompletion = true;
     mosh.enable = true;
   };
+
+  deployment.targetHost =
+    lib.mkDefault secrets.hosts.${config.networking.hostName}.targetHost;
 
   nix = {
     package = pkgs.nixUnstable;

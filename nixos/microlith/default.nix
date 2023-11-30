@@ -2,7 +2,6 @@
 
 {
   networking.hostName = "microlith";
-  deployment.targetHost = "microlith.nibylandia.lan";
 
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix
