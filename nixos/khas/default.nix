@@ -13,7 +13,7 @@
     gaming
   ];
 
-  boot.kernelParams = [ "nohz_full=1-15" ];
+  # boot.kernelParams = [ "nohz_full=1-15" ];
 
   boot.kernelPatches = with lib.kernel; [{
     name = "disable transparent hugepages for virtio-gpu";
