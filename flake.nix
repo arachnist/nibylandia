@@ -53,6 +53,7 @@
           ];
         });
       inherit (nixpkgs) lib;
+      meta = import ./meta.nix;
     in {
       formatter = forAllSystems (system:
         inputs.nix-formatter-pack.lib.mkFormatter {
@@ -80,11 +81,11 @@
 
       nixosConfigurations = builtins.mapAttrs (name: value:
         nixpkgs.lib.nixosSystem {
-          system = builtins.readFile (./nixos/. + "/${name}/system");
+          inherit (value) system;
           modules = [ (./nixos/. + "/${name}") ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
           specialArgs = { inherit inputs; };
-        }) (builtins.readDir ./nixos);
+        }) meta.hosts;
 
       deploy.nodes = builtins.mapAttrs (name: value: {
         fastConnection = false;
