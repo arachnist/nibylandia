@@ -20,7 +20,6 @@ let
 in {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
-  deployment.targetHost = "akamanto.local";
   deployment.buildOnTarget = lib.mkForce false;
 
   imports = with inputs.self.nixosModules; [
