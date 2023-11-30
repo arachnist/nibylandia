@@ -2,7 +2,7 @@
 
 let
   gitea-runner-directory = "/var/lib/gitea-runner";
-  secrets = import ../secrets.nix;
+  meta = import ../meta.nix;
 in {
   age.secrets = {
     gitea-runner-token.file =
@@ -56,6 +56,6 @@ in {
     protocol = "ssh";
     keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILeC/Nr7STpYEZ50p7X+XrFdeaIfib60tt2QN4Kvxscr"
-    ] ++ secrets.ar;
+    ] ++ meta.users.ar;
   };
 }
