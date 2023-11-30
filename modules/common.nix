@@ -1,6 +1,6 @@
 { config, lib, pkgs, inputs, ... }:
 
-let secrets = import ../secrets.nix;
+let meta = import ../meta.nix;
 in {
   imports = with inputs; [
     nix-index-database.nixosModules.nix-index
@@ -52,13 +52,13 @@ in {
     ssh.knownHosts = builtins.mapAttrs (name: value: {
       inherit (value) publicKey;
       extraHostNames = [ value.targetHost ];
-    }) secrets.hosts;
+    }) meta.hosts;
     bash.enableCompletion = true;
     mosh.enable = true;
   };
 
   deployment.targetHost =
-    lib.mkDefault secrets.hosts.${config.networking.hostName}.targetHost;
+    lib.mkDefault meta.hosts.${config.networking.hostName}.targetHost;
 
   nix = {
     package = pkgs.nixUnstable;
@@ -127,7 +127,7 @@ in {
     nixos.enable = true;
   };
 
-  users.users.root.openssh.authorizedKeys.keys = secrets.ar;
+  users.users.root.openssh.authorizedKeys.keys = meta.users.ar;
 
   users.mutableUsers = false;
 
@@ -154,7 +154,7 @@ in {
       "networkmanager"
     ];
     hashedPassword = lib.mkDefault null;
-    openssh.authorizedKeys.keys = secrets.ar;
+    openssh.authorizedKeys.keys = meta.users.ar;
   };
 
   console.keyMap = "us";
