@@ -1,17 +1,12 @@
-{ lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
-, yarn, callPackage, imagemagick, ffmpeg, file, ruby, writeShellScript
-, fetchYarnDeps, prefetch-yarn-deps
-, brotli
+{ lib, stdenv, nodejs-slim, bundlerEnv, nixosTests, yarn, callPackage
+, imagemagick, ffmpeg, file, ruby, writeShellScript, fetchYarnDeps
+, prefetch-yarn-deps, brotli
 
-  # Allow building a fork or custom version of Mastodon:
-, pname ? "mastodon"
-, version ? srcOverride.version
-, patches ? []
+# Allow building a fork or custom version of Mastodon:
+, pname ? "mastodon", version ? srcOverride.version, patches ? [ ]
   # src is a package
 , srcOverride ? callPackage ./source.nix { inherit patches; }
-, gemset ? ./. + "/gemset.nix"
-, yarnHash ? srcOverride.yarnHash
-}:
+, gemset ? ./. + "/gemset.nix", yarnHash ? srcOverride.yarnHash }:
 
 stdenv.mkDerivation rec {
   inherit pname version;
@@ -45,7 +40,14 @@ stdenv.mkDerivation rec {
       hash = yarnHash;
     };
 
-    nativeBuildInputs = [ prefetch-yarn-deps nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
+    nativeBuildInputs = [
+      prefetch-yarn-deps
+      nodejs-slim
+      yarn
+      mastodonGems
+      mastodonGems.wrappedRuby
+      brotli
+    ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -160,7 +162,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
+    description =
+      "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
