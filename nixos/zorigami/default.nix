@@ -315,7 +315,6 @@
 
   # need to figure out something fancy about network configuration
   networking.hostName = "zorigami";
-  deployment.targetHost = "is-a.cat";
 
   systemd.network.wait-online.enable = false;
   networking.useDHCP = false;

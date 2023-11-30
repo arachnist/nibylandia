@@ -2,7 +2,6 @@
 
 {
   networking.hostName = "khas";
-  deployment.targetHost = "khas.nibylandia.lan";
 
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix
