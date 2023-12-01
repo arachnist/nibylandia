@@ -20,13 +20,7 @@ $ echo -e "{ config, lib, pkgs, inputs, ... }:\n\n{\n}" > modules/new-module.nix
 ```
 $ mkdir nixos/newhost
 $ echo -e "{ config, lib, pkgs, inputs, ... }:\n\n{\n}" > nixos/newhost/default.nix
-$ echo -n aarch64-linux > nixos/newhost/system
-```
-
-Please remember about the `-n` flag. Otherwise you'll see Nix throw a funny
-error at you, like:
-```
-error: Unknown kernel: linux
+$ echo '{"publicKey": "…", "targetHost": "…", "system": "aarch64-linux"}' | jq -rM > nixos/newhost/meta.json
 ```
 
 ### Exploring generated configurations
