@@ -4,7 +4,9 @@
   networking.hostName = "stereolith";
   networking.hostId = "adcad022";
 
-  imports = with inputs.self.nixosModules; [ common secureboot ];
+  imports = with inputs.self.nixosModules; [ common ];
+
+  boot.uefi.enable = true;
 
   boot.initrd.availableKernelModules =
     [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
@@ -35,7 +37,6 @@
 
   environment.systemPackages = with pkgs; [
     git
-    mosh
     wget
     tmux
     tcpdump
@@ -51,6 +52,7 @@
       viAlias = true;
       defaultEditor = true;
     };
+    mosh.enable = true;
   };
 
   networking.useDHCP = false;
@@ -67,6 +69,7 @@
       via = "192.168.20.1";
     }];
   };
+  systemd.network.wait-online.enable = false;
 
   networking.firewall.allowedTCPPorts = [ 22 80 443 1688 2005 2582 3000 ]
     ++ (map (x: 9091 + x) (lib.range (0 - 2) 10))
@@ -134,22 +137,18 @@
           proxyPass = "http://127.0.0.1:5001";
           proxyWebsockets = true;
           extraConfig = ''
-                      satisfy any;
+            satisfy any;
 
-                      allow 192.168.20.0/24;
-                      allow 192.168.24.0/24;
-                      allow 10.255.255.0/24;
-                      deny all;
+            allow 192.168.20.0/24;
+            allow 192.168.24.0/24;
+            allow 10.255.255.0/24;
+            deny all;
 
-                      auth_basic "octoprint";
-                      auth_basic_user_file "/etc/nginx/auth/octoprint";
+            auth_basic "octoprint";
+            auth_basic_user_file "/etc/nginx/auth/octoprint";
 
-            	  client_max_body_size 0;
-
-            #	  auth_digest_user_file "/etc/nginx/auth/octoprint.digest";
-            #	  auth_digest "octoprint";
+            client_max_body_size 0;
           '';
-
         };
       };
 
