@@ -12,8 +12,10 @@
     [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
   boot.supportedFilesystems = [ "zfs" ];
+  boot.kernelPackages = pkgs.linuxPackages;
+  boot.zfs.package = pkgs.zfs_2_1;
+  boot.extraModulePackages = with config.boot.kernelPackages; [ zfs_2_1 ];
 
   boot.enableContainers = true;
   boot.zfs.extraPools = [ config.networking.hostName ];
