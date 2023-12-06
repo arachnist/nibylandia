@@ -1,6 +1,10 @@
 { config, lib, pkgs, inputs, ... }:
 
 let meta = import ../meta.nix;
+  flakes = lib.filterAttrs (name: value: value ? outputs) inputs;
+  nixRegistry = builtins.mapAttrs
+    (name: v: { flake = v; })
+    flakes;
 in {
   imports = with inputs; [
     nix-index-database.nixosModules.nix-index
@@ -12,6 +16,7 @@ in {
   ];
 
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  nix.registry = nixRegistry;
 
   deployment = {
     allowLocalDeployment = true;
