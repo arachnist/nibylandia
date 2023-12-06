@@ -117,6 +117,7 @@ in {
     tcpdump
     traceroute
     jq
+    dnsutils
   ];
 
   documentation = {
