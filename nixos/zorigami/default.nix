@@ -312,6 +312,24 @@
     };
     environmentFile = config.age.secrets.vaultwardenPlainMail.path;
   };
+  services.nginx.virtualHosts."vaultwarden.is-a.cat" = {
+    forceSSL = true;
+    enableACME = true;
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:${
+          toString config.services.vaultwarden.config.ROCKET_PORT
+        }";
+      proxyWebsockets = true;
+    };
+    locations."/notifications/hub" = {
+      proxyPass = "http://localhost:3012";
+      proxyWebsockets = true;
+    };
+    locations."/notifications/hub/negotiate" = {
+      proxyPass = "http://localhost:8812";
+      proxyWebsockets = true;
+    };
+  };
 
   # need to figure out something fancy about network configuration
   networking.hostName = "zorigami";
