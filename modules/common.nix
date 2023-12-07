@@ -1,10 +1,9 @@
 { config, lib, pkgs, inputs, ... }:
 
-let meta = import ../meta.nix;
+let
+  meta = import ../meta.nix;
   flakes = lib.filterAttrs (name: value: value ? outputs) inputs;
-  nixRegistry = builtins.mapAttrs
-    (name: v: { flake = v; })
-    flakes;
+  nixRegistry = builtins.mapAttrs (name: v: { flake = v; }) flakes;
 in {
   imports = with inputs; [
     nix-index-database.nixosModules.nix-index
