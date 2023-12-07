@@ -30,6 +30,10 @@
       url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    jovian-nixos = {
+      url = "github:Jovian-Experiments/Jovian-NixOS";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, deploy-rs, ... }@inputs:
