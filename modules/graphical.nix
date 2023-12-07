@@ -72,7 +72,7 @@ in {
     };
     displayManager = {
       sddm = {
-        enable = true;
+        enable = lib.mkDefault true;
         # sadly, not working correctly on khas?
         # wayland.enable = true;
         settings.Wayland.SessionDir =
