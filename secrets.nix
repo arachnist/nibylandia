@@ -18,6 +18,8 @@ in {
     ++ [ meta.hosts.khas.publicKey ];
   "secrets/microlith-ar.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.microlith.publicKey ];
+  "secrets/amanojaku-ar.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.amanojaku.publicKey ];
   "secrets/nix-store.age".publicKeys = meta.users.ar ++ (with meta.hosts; [
     zorigami.publicKey
     scylla.publicKey
@@ -25,6 +27,7 @@ in {
     khas.publicKey
     microlith.publicKey
     akamanto.publicKey
+    amanojaku.publicKey
   ]);
   "secrets/wg/nibylandia_scylla.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.scylla.publicKey ];
