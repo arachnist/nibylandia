@@ -11,15 +11,15 @@
   ];
 
   boot.uefi.enable = true;
+  boot.kernelPackages = lib.mkForce pkgs.linuxPackages_jovian;
+
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/34409a0d-48ac-4dcb-8fe2-ac553b5b27f1";
+    device = "/dev/disk/by-uuid/3ccaa83b-c3a3-478e-aa79-5310cf344c93";
     fsType = "ext4";
   };
 
-  boot.kernelPackages = lib.mkForce pkgs.linuxPackages_jovian;
-
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/3906-F639";
+    device = "/dev/disk/by-uuid/9C71-46C1";
     fsType = "vfat";
   };
 
@@ -30,6 +30,7 @@
   };
 
   hardware.pulseaudio.enable = lib.mkForce false;
+  jovian.devices.steamdeck.enable = true;
 
   jovian.steam = {
     enable = true;
@@ -40,5 +41,6 @@
 
   jovian.decky-loader.user = "ar";
 
-  jovian.devices.steamdeck.enable = true;
+  age.secrets.ar-password.file = ../../secrets/amanojaku-ar.age;
+  users.users.ar.hashedPasswordFile = config.age.secrets.ar-password.path;
 }

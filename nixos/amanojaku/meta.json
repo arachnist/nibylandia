@@ -1,5 +1,5 @@
 {
-  "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDghNuH/3G+0BXwrBZWZXX0V3K0tfu/Q/AKokLXY5zTD",
+  "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4rFVYs5t4uBpZK9kmDQkr9ONLDE41jOCP/tMmM+SMb",
   "targetHost": "amanojaku.nibylandia.lan",
   "system": "x86_64-linux"
 }
