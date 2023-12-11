@@ -2,6 +2,7 @@
 
 {
   networking.hostName = "khas";
+  deployment.tags = [ "reachable-everywhere" ];
 
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix

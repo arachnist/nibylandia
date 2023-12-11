@@ -2,6 +2,7 @@
 
 {
   networking.hostName = "amanojaku";
+  deployment.tags = [ "reachable-home" ];
 
   imports = with inputs.self.nixosModules; [
     graphical

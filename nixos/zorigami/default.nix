@@ -1,6 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
 {
+  deployment.tags = [ "reachable-everywhere" ];
+
   imports = with inputs.self.nixosModules; [
     common
     secureboot
