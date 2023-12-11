@@ -2,6 +2,7 @@
 
 {
   networking.hostName = "microlith";
+  deployment.tags = [ "reachable-home" ];
 
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix

@@ -21,6 +21,7 @@ in {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
   deployment.buildOnTarget = lib.mkForce false;
+  deployment.tags = [ "reachable-hs" ];
 
   imports = with inputs.self.nixosModules; [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"
