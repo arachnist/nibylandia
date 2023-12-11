@@ -89,7 +89,8 @@
       nixosConfigurations = builtins.mapAttrs (name: value:
         nixpkgs.lib.nixosSystem {
           inherit (value) system;
-          modules = [ (./nixos/. + "/${name}") ];
+          modules =
+            [ (./nixos/. + "/${name}") { nixpkgs.system = value.system; } ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
           specialArgs = { inherit inputs; };
         }) meta.hosts;
@@ -110,8 +111,6 @@
       colmena = {
         meta = {
           nixpkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
-          nodeNixpkgs =
-            builtins.mapAttrs (_: v: v.pkgs) self.nixosConfigurations;
           nodeSpecialArgs = builtins.mapAttrs (_: v: v._module.specialArgs)
             self.nixosConfigurations;
           specialArgs.lib = lib;
