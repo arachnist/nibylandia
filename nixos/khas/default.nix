@@ -15,17 +15,6 @@
 
   # boot.kernelParams = [ "nohz_full=1-15" ];
 
-  boot.kernelPatches = with lib.kernel; [{
-    name = "disable transparent hugepages for virtio-gpu";
-    patch = null;
-    extraStructuredConfig = { TRANSPARENT_HUGEPAGE = lib.mkForce no; };
-  }];
-  # disabling transparent hugepages should fix it
-  nixpkgs.overlays = [ inputs.microvm.overlay ];
-  microvm.vms = {
-    # elementVm = { config = import ../../microvms/elementVm.nix; };
-  };
-
   age.secrets.ar-password.file = ../../secrets/khas-ar.age;
 
   users.users.ar.hashedPasswordFile = config.age.secrets.ar-password.path;
