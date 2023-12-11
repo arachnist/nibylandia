@@ -89,8 +89,12 @@
       nixosConfigurations = builtins.mapAttrs (name: value:
         nixpkgs.lib.nixosSystem {
           inherit (value) system;
-          modules =
-            [ (./nixos/. + "/${name}") { nixpkgs.system = value.system; } ];
+          modules = [
+            (./nixos/. + "/${name}")
+            {
+              nixpkgs.system = value.system;
+            } # need to set this explicitly for colmena
+          ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
           specialArgs = { inherit inputs; };
         }) meta.hosts;
