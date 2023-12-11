@@ -8,11 +8,14 @@
       "github:arachnist/nixpkgs/ar-patchset-unstable";
     #  "git+file:/home/ar/scm/nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-colors.url = "github:misterio77/nix-colors";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
     nix-index-database.url = "github:Mic92/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     deploy-rs.url = "github:serokell/deploy-rs";
     microvm.url = "github:astro/microvm.nix";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
     impermanence.url = "github:nix-community/impermanence";
     colmena = {
       url = "github:zhaofengli/colmena/main";
@@ -32,7 +35,7 @@
     };
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
-      flake = false;
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
