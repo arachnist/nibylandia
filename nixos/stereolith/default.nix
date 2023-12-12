@@ -89,7 +89,6 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGfIRe1nH6vwjQTjqHNnkKAdr1VYqGEeQnqInmf3A6UN ar@khas"
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOHWPbzvwXTftY1r0dXcYZxT9QBnQkwepdMn8PCAPlYvYwUObEj3rgYrYRFrtCRWZVrKAdqBxnH9/6S9w631Zs7tgqEeDHJsotZNZV3qip7qGjn9IqUHXqF95MUDJV21AeBAqQ1xalefwCkwf/vYLFn8dSnsnlfO+mtlHZOuBED+SB2U1eNrWY2e45v8m7PqSyTCbCu0F3wVcHGwRFsxWA598wf85UBRVcSWVcUydE9F+PCS9sGETkXiRUDcHWnup8uygs4xLa9RADubhdGkUbQE6m6yOjvHJWZ4ov59zJh+hmpszCwfmUw/k39T2TM7tbwUWxgc68qDyaMGQr/Wzd x10a94@Celestia"
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDeJ+LSo3YXE6Jk6pGKL5om/VOi7XE5OvHA2U73V0pJXHa1bA4ityICeNqec2w8TSWSwTihJ4oAM7YLShkERNTcd1NWNHgUYova9nJ/nItFxrxDpTQsqK315u4d7nE+go09c85cyomHbDDcNVg9kJeCUjF+dr82N7JZfYVdQystOslOROYtl94GHuFHVOQyBRGeSztmakYvK1+3WV8dby6TfYG1l6uf6qLCg7q64zR4xDDP0KgfcrsusBQ6qYnKhop1fUTaW9NtEOQP/MhFLDp2YQmTsNJDiKAQpwwYLexWq4UcziXbnRfD56CHFHbW7Hu6Ltu35cHFKR2r9y4TBwTV crendgrim@gmx.de"
-        "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAgEAo6m9uCVY7aGJyOAIBt6kb/CmcHy4QXwGb4qoO7vNajJZTDg5lCuVT5hgap66a2HvYFgc4jO3g+ZVA3ogTa1DbhhFJdUmdJWu+4stcy++YASZlzH1gcUgfnXvlqAoNWygs8qnnj0sum87xGIE5EQaZ4LyRZKjwxkv/pvTjRS46eSNJfmyk7zcodF+akO8GtBhNmpEXI3CXnNWljfuQ8ZPvAsn+040I/Ro46E6RJvIqpTrnCDZMTvsCk2xrm+aIZZlqpdPj9RYyi94mZI6E5/2Dhdp5gqRKKQm+8PARHYLUR5naHW3sl5LzSU45s9vVu/9RTPwMBMDKdeNdIWOlkHlIhy8kVSGtTTQ4s5Pins2wJvz4RipnPoTWnNF8ugDOXbQ+F90GolHqnFhJOR5rloWFsuq2U/xrnXJXg7KbiNqUnW8osbuVZ9q9CJ6m8jBBwwhv/7kvI9Qe06SnrI3fm9RALp/zI4rudk866jcTqDt3wNQ1EqiJ8MrspyAWbQRL81jdTwghqSDDKMCKdWuYxXmo5ZOGo6D082IPk4MdPpRs9o9X6eJe8Ob1taZmyN69HDkZDX1NnXOp3zfNBSNNj3R8f8FBGgcyZ2PP3YgikCd5X+GlzkBByBIQCwZHdSoXl33xparX3GQeZgPVPjSCfHPTOcyDzzMMLPJh3sQS+Zawp8= dinnerbone-home-pc"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO6rEwERSm/Fj4KO4SxFIo0BUvi9YNyf8PSL1FteMcMt arachnist@monolith"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7WvV+4zRYrDoxXxLttLvIJkuzB3ZsHIUUmyc5Jp81F minecraft@orochi"
       ];
@@ -248,10 +247,9 @@
     settings = {
       rpc-port = 9091;
       peer-port = 51413;
-      rpc-bind-address = "192.168.20.31";
+      rpc-bind-address = "0.0.0.0";
       rpc-whitelist-enabled = false;
-      rpc-host-whitelist-enabled = true;
-      rpc-host-whitelist = "stereolith.nibylandia.lan";
+      rpc-host-whitelist-enabled = false;
       download-dir = "/stereolith/crap/transmission/Downloads";
       incomplete-dir = "/stereolith/crap/transmission/Downloads";
       dht-enabled = false;

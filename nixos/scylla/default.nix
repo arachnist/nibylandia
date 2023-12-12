@@ -432,6 +432,8 @@ in {
     before = [ "bird.service" ];
   };
 
+  services.tailscale.useRoutingFeatures = "both";
+
   systemd.services = {
     dn42-roa = {
       after = [ "network.target" ];
