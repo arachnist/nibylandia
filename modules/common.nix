@@ -60,6 +60,12 @@ in {
     bash.enableCompletion = true;
     mosh.enable = true;
   };
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
+    useRoutingFeatures = lib.mkDefault "client";
+    permitCertUid = "ar";
+  };
 
   deployment.targetHost =
     lib.mkDefault meta.hosts.${config.networking.hostName}.targetHost;
@@ -122,6 +128,7 @@ in {
     traceroute
     jq
     dnsutils
+    tailscale
   ];
 
   documentation = {
