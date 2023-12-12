@@ -180,6 +180,7 @@ in {
     element-desktop
     oneko
     cinny-desktop
+    neochat
     vagrant
     vokoscreen-ng
     appimage-run
