@@ -87,4 +87,10 @@
     fsType = "btrfs";
     options = [ "subvol=var_lib_tpm" ];
   };
+
+  fileSystems."/var/lib/tailscale" = {
+    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    fsType = "btrfs";
+    options = [ "subvol=var_lib_tailscale" ];
+  };
 }
