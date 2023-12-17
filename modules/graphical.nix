@@ -73,8 +73,7 @@ in {
     displayManager = {
       sddm = {
         enable = lib.mkDefault true;
-        # sadly, not working correctly on khas?
-        # wayland.enable = true;
+        wayland.enable = true;
         settings.Wayland.SessionDir =
           "/run/current-system/sw/share/wayland-sessions";
         settings.X11.SessionDir = lib.mkForce "";
