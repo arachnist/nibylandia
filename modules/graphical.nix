@@ -86,11 +86,6 @@ in {
     libinput.enable = true;
   };
 
-  services.kmscon = {
-    enable = true;
-    hwRender = true;
-  };
-
   boot = {
     loader.timeout = 0;
     consoleLogLevel = 0;
@@ -98,7 +93,13 @@ in {
     initrd.systemd.enable = true;
     plymouth.enable = true;
     plymouth.theme = "breeze";
-    kernelParams = [ "quiet" "splash" "rd.systemd.show_status=false" "rd.udev.log_level=3" "udev.log_priority=3" ];
+    kernelParams = [
+      "quiet"
+      "splash"
+      "rd.systemd.show_status=false"
+      "rd.udev.log_level=3"
+      "udev.log_priority=3"
+    ];
   };
 
   fonts = {
@@ -159,6 +160,8 @@ in {
 
   nixpkgs.config = { joypixels.acceptLicense = true; };
 
+  environment.sessionVariables = { MOZ_ENABLE_WAYLAND = "1"; };
+
   environment.systemPackages = with pkgs; [
     krfb # for kdeconnect virtual display
     chromium
@@ -174,7 +177,6 @@ in {
     okular
     paprefs
     pavucontrol
-    signal-desktop
     solvespace
     spotify
     youtube-dl
@@ -215,6 +217,15 @@ in {
     clang-tools
     python3Packages.python-lsp-server
     yaml-language-server
+
+    (signal-desktop.overrideAttrs (old: {
+      preFixup = ''
+        gappsWrapperArgs+=(
+          --add-flags "--enable-features=UseOzonePlatform"
+          --add-flags "--ozone-platform=wayland"
+        )
+      '' + old.preFixup;
+    }))
 
     (vscode-with-extensions.override {
       vscodeExtensions = with vscode-extensions; [
