@@ -34,7 +34,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     jovian-nixos = {
-      url = "github:Jovian-Experiments/Jovian-NixOS";
+      url = "github:Jovian-Experiments/Jovian-NixOS/fix-shutdown";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
