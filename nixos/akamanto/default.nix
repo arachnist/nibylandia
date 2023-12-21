@@ -465,13 +465,14 @@ in {
         aspect_ratio = "4:3";
       };
     };
-    package = pkgs.moonraker.overrideAttrs (old: {
-      patches = (old.patches or [ ])
-        ++ [ ./moonraker-remove-config-path-warning.patch ];
-    });
   };
 
   services.fluidd = {
+    enable = false;
+    nginx.locations."/webcam/".proxyPass = "http://127.0.0.1:8080/";
+  };
+
+  services.mainsail = {
     enable = true;
     nginx.locations."/webcam/".proxyPass = "http://127.0.0.1:8080/";
   };
