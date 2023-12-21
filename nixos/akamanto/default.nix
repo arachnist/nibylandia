@@ -219,7 +219,8 @@ in {
   #};
   services.klipper = {
     enable = true;
-    mutableConfig = false;
+    mutableConfig = true;
+    mutableConfigFolder = "/var/lib/moonraker/config";
     firmwares = {
       mcu = {
         enableKlipperFlash = false;
