@@ -57,8 +57,6 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/mail/apo.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
-  "secrets/mail/amie.age".publicKeys = meta.users.ar
-    ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/mail/mastodon.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/mail/mastodonPlain.age".publicKeys = meta.users.ar
