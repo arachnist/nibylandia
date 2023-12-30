@@ -34,6 +34,14 @@
   jovian.devices.steamdeck.enable = true;
 
   environment.systemPackages = with pkgs; [ maliit-keyboard maliit-framework ];
+  i18n.inputMethod.enabled = lib.mkForce "fcitx5";
+  i18n.inputMethod.fcitx5 = {
+    addons = with pkgs; [
+      fcitx5-chinese-addons
+      fcitx5-gtk
+      libsForQt5.fcitx5-qt
+    ];
+  };
 
   jovian.steam = {
     enable = true;
