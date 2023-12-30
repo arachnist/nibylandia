@@ -33,6 +33,8 @@
   hardware.pulseaudio.enable = lib.mkForce false;
   jovian.devices.steamdeck.enable = true;
 
+  environment.systemPackages = with pkgs; [ maliit-keyboard maliit-framework ];
+
   jovian.steam = {
     enable = true;
     autoStart = true;
