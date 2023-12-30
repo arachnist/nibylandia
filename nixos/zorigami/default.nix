@@ -170,7 +170,7 @@
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud27;
+    package = pkgs.nextcloud28;
     hostName = "cloud.is-a.cat";
     autoUpdateApps.enable = true;
     autoUpdateApps.startAt = "05:00:00";
