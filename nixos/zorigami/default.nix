@@ -30,7 +30,6 @@
   age.secrets.wgNibylandia.file = ../../secrets/wg/nibylandia_zorigami.age;
 
   age.secrets.arMail.file = ../../secrets/mail/ar.age;
-  age.secrets.amieMail.file = ../../secrets/mail/amie.age;
   age.secrets.apoMail.file = ../../secrets/mail/apo.age;
   age.secrets.madargonMail.file = ../../secrets/mail/madargon.age;
   age.secrets.enkiMail.file = ../../secrets/mail/enki.age;
@@ -233,11 +232,11 @@
           "gustaw.weldon@is-a.cat"
           "@rsg.enterprises"
           "@i.am-a.cat"
+          "ari@is-a.cat"
         ];
 
         hashedPasswordFile = config.age.secrets.arMail.path;
       };
-      "amie@is-a.cat".hashedPasswordFile = config.age.secrets.amieMail.path;
       "apo@is-a.cat".hashedPasswordFile = config.age.secrets.apoMail.path;
       "madargon@is-a.cat".hashedPasswordFile =
         config.age.secrets.madargonMail.path;
