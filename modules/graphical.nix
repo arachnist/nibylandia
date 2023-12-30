@@ -131,7 +131,7 @@ in {
   };
 
   i18n.inputMethod = {
-    enabled = "ibus";
+    enabled = lib.mkDefault "ibus";
     ibus.engines = with pkgs.ibus-engines; [ uniemoji ];
   };
 
