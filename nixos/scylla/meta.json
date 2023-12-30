@@ -1,5 +1,5 @@
 {
   "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1X7EaPNfLhWH32IAyaZj2dhJz+QLnyGuXPCZUYRTjg",
-  "targetHost": "i.am-a.cat",
+  "targetHost": "scylla.tail412c1.ts.net",
   "system": "aarch64-linux"
 }
