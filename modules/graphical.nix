@@ -15,7 +15,11 @@ let
       ${util-linux}/bin/rfkill unblock 0
     '';
 in {
-  imports = [ inputs.self.nixosModules.common inputs.home-manager.nixosModule ];
+  imports = [
+    inputs.self.nixosModules.common
+    inputs.home-manager.nixosModule
+    inputs.plasma6.nixosModules.default
+  ];
 
   home-manager.users.ar = {
     home.username = "ar";
@@ -77,7 +81,7 @@ in {
   services.xserver = {
     enable = true;
     desktopManager.plasma5 = {
-      enable = true;
+      enable = lib.mkDefault true;
       runUsingSystemd = true;
     };
     displayManager = {
