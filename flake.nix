@@ -37,6 +37,7 @@
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    plasma6.url = "github:nix-community/kde2nix";
   };
 
   outputs = { self, nixpkgs, deploy-rs, ... }@inputs:

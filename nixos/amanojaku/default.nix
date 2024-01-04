@@ -25,10 +25,8 @@
   };
 
   services.xserver.displayManager.sddm.enable = lib.mkForce false;
-  services.xserver.desktopManager.plasma5 = {
-    mobile.enable = true;
-    mobile.installRecommendedSoftware = true;
-  };
+  services.xserver.desktopManager.plasma5.enable = false;
+  services.xserver.desktopManager.plasma6.enable = true;
 
   hardware.pulseaudio.enable = lib.mkForce false;
   jovian.devices.steamdeck.enable = true;
@@ -46,7 +44,7 @@
   jovian.steam = {
     enable = true;
     autoStart = true;
-    desktopSession = "plasmawayland";
+    desktopSession = "plasma";
     user = "ar";
   };
 
