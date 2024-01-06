@@ -255,6 +255,7 @@
       dht-enabled = false;
       pex-enabled = false;
     };
+    webHome = pkgs.flood-for-transmission;
   };
 
   virtualisation.oci-containers.containers = {
