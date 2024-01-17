@@ -7,9 +7,9 @@ let
     moonraker_host: localhost
     moonraker_port: 7125
   '';
-  # ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
   cageScript = pkgs.writeScriptBin "klipperCageScript" ''
     #!${pkgs.runtimeShell}
+    ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
     sounds=( /home/ar/startup-sounds/* )
     ${pkgs.mpv}/bin/mpv ''${sounds[ $RANDOM % ''${#sounds[@]}]} &
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
@@ -76,7 +76,7 @@ in {
     kernelModules = [ "bcm2835-v4l2" ];
     # avoid building zfs
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
-    kernelParams = [ "console=ttyS1,115200n8" ]; # "fbcon=rotate:2"
+    kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:2" ];
     loader.grub.enable = false;
     loader.generic-extlinux-compatible.enable = true;
   };
@@ -496,7 +496,8 @@ in {
   # sadly, this doesn't work for us here, for some unbeknownst reason
   services.udev.extraRules = ''
     KERNEL=="gpiochip0", GROUP="dialout", MODE="0660"
-  ''; # SUBSYSTEM=="input", ATTRS{idVendor}=="0eef", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
+    SUBSYSTEM=="input", ATTRS{idVendor}=="0eef", ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
+  '';
   services.cage = {
     enable = true;
     user = "ar";
