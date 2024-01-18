@@ -264,6 +264,8 @@ in {
     })
 
     prusa-slicer
+    orca-slicer
+    super-slicer-beta
 
     mastodon-update-script
     deploy-rs
