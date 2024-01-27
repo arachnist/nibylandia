@@ -76,8 +76,6 @@ in {
   hardware.enableRedistributableFirmware = lib.mkForce false;
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
   boot = {
-    # revisit https://github.com/NixOS/nixpkgs/issues/154163 if actually needed
-    # kernelPackages = pkgs.linuxPackages_rpi3;
     # camera, kernel side
     kernelModules = [ "bcm2835-v4l2" ];
     # avoid building zfs
