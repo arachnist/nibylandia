@@ -51,6 +51,12 @@ in {
         # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
         # when attempting to show low-voltage or overtemperature warnings.
         avoid_warnings=1
+
+        # avoid display issues
+        hdmi_cvt=800 480 60 3 0 0 0
+        hdmi_force_hotplug=1
+        hdmi_group=2
+        hdmi_mode=87
       '';
     in ''
       (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
