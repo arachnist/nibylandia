@@ -432,7 +432,14 @@ in {
     before = [ "bird.service" ];
   };
 
-  services.tailscale.useRoutingFeatures = "both";
+  services.tailscale = {
+    useRoutingFeatures = "both";
+    extraUpFlags = [
+      "--advertise-exit-node"
+      "--advertise-routes=172.20.0.0/14"
+      "--advertise-routes=fd00::/8"
+    ];
+  };
 
   systemd.services = {
     dn42-roa = {
