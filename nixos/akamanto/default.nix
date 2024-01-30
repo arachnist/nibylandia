@@ -495,7 +495,7 @@ in {
     serviceConfig = {
       Type = "simple";
       ExecStart =
-        "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --drop-same-frames=30 --rotate 90 --slowdown --desired-fps 30";
+        "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --rotate 90 --slowdown --resolution 1296x972 --desired-fps 30";
     };
   };
 
