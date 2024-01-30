@@ -181,6 +181,9 @@ in {
       alsa-utils
       bluez
       pipewire
+      (v4l-utils.override {
+        withGUI = false;
+      })
     ];
   programs.nix-index.enable = lib.mkForce false;
   services.journald.extraConfig = ''
@@ -459,7 +462,7 @@ in {
         ];
       };
       # causes issues for some reason
-      zeroconf = { mdns_hostname = "barbie-girl"; };
+      # zeroconf = { mdns_hostname = "barbie-girl"; };
       machine = { provider = "systemd_cli"; };
       "webcam rpi" = {
         enabled = "True";
