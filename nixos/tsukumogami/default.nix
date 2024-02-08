@@ -128,6 +128,7 @@ in {
     "$y$j9T$yzZnq2/mg6OawoGAbzb0f0$yOyJmpjmFWfm7GF7eRriCO5wwjCWaJWZOH.6f9gVZ3/";
   users.mutableUsers = false;
   users.users.inventory = {
+    group = "inventory";
     extraGroups = [ "video" "dialout" "plugdev" "pipewire" ];
   };
 
@@ -167,6 +168,10 @@ in {
       # shell's required and not automatically pulled in
       zsh
       bashInteractive
+
+      # reaaaaally useful (on-screen keyboard)
+      maliit-keyboard
+      maliit-framework
 
       # avoid warnings
       gnugrep
