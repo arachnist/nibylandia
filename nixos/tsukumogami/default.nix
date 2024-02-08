@@ -92,7 +92,7 @@ in {
     # kernelModules = [ "bcm2835-v4l2" ];
     # avoid building zfs
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
-    kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:1" ];
+    kernelParams = [ "verbose" "loglevel=7" "fbcon=rotate:1" ];
     loader.grub.enable = false;
     loader.generic-extlinux-compatible.enable = true;
   };
@@ -129,7 +129,7 @@ in {
   users.mutableUsers = false;
   users.users.inventory = {
     group = "inventory";
-    extraGroups = [ "video" "dialout" "plugdev" "pipewire" ];
+    extraGroups = [ "video" "dialout" "plugdev" "pipewire" "users" "wheel" ];
     isNormalUser = true;
   };
   users.groups.inventory = {};
@@ -174,6 +174,7 @@ in {
       # reaaaaally useful (on-screen keyboard)
       maliit-keyboard
       maliit-framework
+      squeekboard
 
       # avoid warnings
       gnugrep
