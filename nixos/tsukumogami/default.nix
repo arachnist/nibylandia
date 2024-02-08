@@ -130,7 +130,9 @@ in {
   users.users.inventory = {
     group = "inventory";
     extraGroups = [ "video" "dialout" "plugdev" "pipewire" ];
+    isNormalUser = true;
   };
+  users.groups.inventory = {};
 
   documentation = {
     enable = lib.mkForce false;
@@ -181,7 +183,7 @@ in {
           "en_US.UTF-8/UTF-8"
           "en_CA.UTF-8/UTF-8"
           "en_DK.UTF-8/UTF-8"
-          "pl_PL.UTF-8"
+          "pl_PL.UTF-8/UTF-8"
         ];
       })
 
