@@ -248,6 +248,7 @@
         config.age.secrets.vaultwardenMail.path;
     };
   };
+  services.dovecot2.sieve.extensions = [ "fileinto" ];
 
   services.matrix-synapse = {
     enable = true;
