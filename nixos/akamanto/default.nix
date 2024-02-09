@@ -175,6 +175,10 @@ in {
       openssh
       findutils
       iproute2
+      util-linux
+      usbutils
+      neovim
+      tmux
 
       # strictly unnecessary
       mpv
