@@ -77,7 +77,8 @@ in {
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
   boot = {
     # camera, kernel side
-    kernelModules = [ "bcm2835-v4l2" ];
+    kernelPackages = pkgs.linuxPackages_rpi3;
+    # kernelModules = [ "bcm2835-v4l2" ];
     # avoid building zfs
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
     kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:2" ];
@@ -152,7 +153,8 @@ in {
   # diet
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
   environment.systemPackages = with pkgs;
-    lib.mkForce [
+  # lib.mkForce
+    [
       # strictly required
       coreutils
       nix
@@ -179,6 +181,7 @@ in {
       usbutils
       neovim
       tmux
+      uhubctl
 
       # strictly unnecessary
       mpv
