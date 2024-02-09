@@ -24,6 +24,7 @@ in {
     imageName =
       "${config.sdImage.imageBaseName}-${pkgs.stdenv.hostPlatform.system}-${config.networking.hostName}.img";
     populateFirmwareCommands = let
+      # contents of these are used *only* for generating a microsd card image!
       configTxt = pkgs.writeText "config.txt" ''
         [pi3]
         kernel=u-boot-rpi3.bin
@@ -61,6 +62,17 @@ in {
         # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
         # when attempting to show low-voltage or overtemperature warnings.
         avoid_warnings=1
+
+        hdmi_enable_4kp60=1
+
+        # avoid display issues
+        hdmi_cvt=1920 1080 60 3 0 0 0
+        hdmi_force_hotplug=1
+        hdmi_group=2
+        hdmi_mode=87
+
+        hdmi_drive=1
+        hdmi_boost=7
       '';
     in ''
       (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
@@ -92,7 +104,7 @@ in {
     # kernelModules = [ "bcm2835-v4l2" ];
     # avoid building zfs
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
-    kernelParams = [ "verbose" "loglevel=7" "fbcon=rotate:1" ];
+    kernelParams = [ "verbose" "loglevel=7" "cma=256M" "fbcon=rotate:1" ];
     loader.grub.enable = false;
     loader.generic-extlinux-compatible.enable = true;
   };
@@ -131,8 +143,10 @@ in {
     group = "inventory";
     extraGroups = [ "video" "dialout" "plugdev" "pipewire" "users" "wheel" ];
     isNormalUser = true;
+    openssh.authorizedKeys.keys =
+      config.users.users.root.openssh.authorizedKeys.keys;
   };
-  users.groups.inventory = {};
+  users.groups.inventory = { };
 
   documentation = {
     enable = lib.mkForce false;
@@ -176,6 +190,10 @@ in {
       maliit-framework
       squeekboard
 
+      # we include these anyway
+      wlr-randr
+      chromium
+
       # avoid warnings
       gnugrep
       (glibcLocales.override {
@@ -195,6 +213,8 @@ in {
       iproute2
       util-linux
       usbutils
+      neovim
+      tmux
 
       # strictly unnecessary
       mpv
@@ -238,6 +258,7 @@ in {
     environment = {
       GDK_BACKEND = "wayland";
       QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+      WLR_LIBINPUT_NO_DEVICES = "1";
     };
     extraArguments = [ "-d" ];
   };
