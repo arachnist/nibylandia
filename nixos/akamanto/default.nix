@@ -181,9 +181,7 @@ in {
       alsa-utils
       bluez
       pipewire
-      (v4l-utils.override {
-        withGUI = false;
-      })
+      (v4l-utils.override { withGUI = false; })
     ];
   programs.nix-index.enable = lib.mkForce false;
   services.journald.extraConfig = ''
