@@ -77,7 +77,7 @@ in {
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
   boot = {
     # camera, kernel side
-    kernelPackages = pkgs.linuxPackages_rpi3;
+    # kernelPackages = pkgs.linuxPackages_rpi3;
     # kernelModules = [ "bcm2835-v4l2" ];
     # avoid building zfs
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
