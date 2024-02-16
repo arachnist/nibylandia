@@ -1,12 +1,17 @@
-{ lib, stdenv, nodejs-slim, bundlerEnv, nixosTests, yarn, callPackage
-, imagemagick, ffmpeg, file, ruby, writeShellScript, fetchYarnDeps
-, prefetch-yarn-deps, brotli
+{ lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
+, yarn, callPackage, ruby, writeShellScript
+, fetchYarnDeps, prefetch-yarn-deps
+, brotli
 
-# Allow building a fork or custom version of Mastodon:
-, pname ? "mastodon", version ? srcOverride.version, patches ? [ ]
+  # Allow building a fork or custom version of Mastodon:
+, pname ? "mastodon"
+, version ? srcOverride.version
+, patches ? []
   # src is a package
 , srcOverride ? callPackage ./source.nix { inherit patches; }
-, gemset ? ./. + "/gemset.nix", yarnHash ? srcOverride.yarnHash }:
+, gemset ? ./. + "/gemset.nix"
+, yarnHash ? srcOverride.yarnHash
+}:
 
 stdenv.mkDerivation rec {
   inherit pname version;
@@ -17,18 +22,6 @@ stdenv.mkDerivation rec {
     name = "${pname}-gems-${version}";
     inherit version gemset ruby;
     gemdir = src;
-    # This fix (copied from https://github.com/NixOS/nixpkgs/pull/76765) replaces the gem
-    # symlinks with directories, resolving this error when running rake:
-    #   /nix/store/451rhxkggw53h7253izpbq55nrhs7iv0-mastodon-gems-3.0.1/lib/ruby/gems/2.6.0/gems/bundler-1.17.3/lib/bundler/settings.rb:6:in `<module:Bundler>': uninitialized constant Bundler::Settings (NameError)
-    postBuild = ''
-      for gem in "$out"/lib/ruby/gems/*/gems/*; do
-        cp -a "$gem/" "$gem.new"
-        rm "$gem"
-        # needed on macOS, otherwise the mv yields permission denied
-        chmod +w "$gem.new"
-        mv "$gem.new" "$gem"
-      done
-    '';
   };
 
   mastodonModules = stdenv.mkDerivation {
@@ -40,14 +33,7 @@ stdenv.mkDerivation rec {
       hash = yarnHash;
     };
 
-    nativeBuildInputs = [
-      prefetch-yarn-deps
-      nodejs-slim
-      yarn
-      mastodonGems
-      mastodonGems.wrappedRuby
-      brotli
-    ];
+    nativeBuildInputs = [ prefetch-yarn-deps nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -98,7 +84,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  propagatedBuildInputs = [ imagemagick ffmpeg file mastodonGems.wrappedRuby ];
+  propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
+  nativeBuildInputs = [ brotli ];
   buildInputs = [ mastodonGems nodejs-slim ];
 
   buildPhase = ''
@@ -162,8 +149,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description =
-      "Self-hosted, globally interconnected microblogging software based on ActivityPub";
+    description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
