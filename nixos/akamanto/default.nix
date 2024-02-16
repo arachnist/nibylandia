@@ -145,9 +145,7 @@ in {
     enable = true;
     package = pkgs.bluez;
   };
-  services.udisks2 = {
-    enable = true;
-  };
+  services.udisks2 = { enable = true; };
 
   # diet
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
