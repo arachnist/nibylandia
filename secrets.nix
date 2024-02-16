@@ -28,6 +28,7 @@ in {
     microlith.publicKey
     akamanto.publicKey
     amanojaku.publicKey
+    tsukumogami.publicKey
   ]);
   "secrets/wg/nibylandia_scylla.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.scylla.publicKey ];
