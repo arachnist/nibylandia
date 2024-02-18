@@ -1,5 +1,4 @@
 {
   "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL/Cl0F5WUxDTaQAlb+bYpQ0sCRuFQlf3MHJ4+3/KfYi",
-  "targetHost": "tsukumogami.tail412c1.ts.net",
   "system": "aarch64-linux"
 }
