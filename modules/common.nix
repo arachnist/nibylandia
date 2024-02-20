@@ -119,6 +119,7 @@ in {
     jq
     dnsutils
     tailscale
+    nix-top
   ];
 
   documentation = {
