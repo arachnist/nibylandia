@@ -94,8 +94,8 @@ in {
       defaultSession = "plasmawayland";
     };
 
-    layout = "pl";
-    xkbOptions = "ctrl:nocaps";
+    xkb.layout = "pl";
+    xkb.options = "ctrl:nocaps";
     libinput.enable = true;
   };
 
