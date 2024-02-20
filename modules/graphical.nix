@@ -18,7 +18,6 @@ in {
   imports = [
     inputs.self.nixosModules.common
     inputs.home-manager.nixosModule
-    inputs.plasma6.nixosModules.default
   ];
 
   home-manager.users.ar = {
