@@ -183,7 +183,7 @@
   };
   services.samba = {
     enable = true;
-    package = pkgs.samba4;
+    package = pkgs.samba4Full;
     shares = {
       scan = {
         browseable = "yes";
