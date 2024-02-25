@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  get-x86_64-hosts:
+    runs-on: self-hosted-x86_64-linux
+    outputs:
+      matrix: ${{ steps.hosts_out.outputs.matrix }}
+    steps:
+      - name: repository checkout
+        uses: actions/checkout@v4
+      - id: hosts_out
+        name: set hosts var
+        run: |
+          {
+            echo -n "matrix="
+            nix eval -I nixpkgs=$(nix flake metadata nixpkgs --json | jq -r .path) --raw --impure --expr '
+              with import <nixpkgs> { };
+              builtins.toJSON (lib.mapAttrsToList (n: v: n)
+                (lib.attrsets.filterAttrs (n: v: v.pkgs.system == pkgs.system)
+                  (builtins.getFlake(builtins.toString ./.)).outputs.nixosConfigurations))'
+            echo ""
+          }  >> "$GITHUB_OUTPUT"
+
+  get-aarch64-hosts:
+    runs-on: self-hosted-aarch64-linux
+    outputs:
+      matrix: ${{ steps.hosts.outputs.matrix }}
+    steps:
+      - name: repository checkout
+        uses: actions/checkout@v4
+      - name: hosts
+        run: |
+          {
+            echo -n "matrix="
+            nix eval -I nixpkgs=$(nix flake metadata nixpkgs --json | jq -r .path) --raw --impure --expr '
+              with import <nixpkgs> { };
+              builtins.toJSON (lib.mapAttrsToList (n: v: n)
+                (lib.attrsets.filterAttrs (n: v: v.pkgs.system == pkgs.system)
+                  (builtins.getFlake(builtins.toString ./.)).outputs.nixosConfigurations))'
+          }  >> "$GITHUB_OUTPUT"
+
+  build-nixos-x86_64-linux:
+    runs-on: self-hosted-x86_64-linux
+    needs: [get-x86_64-hosts]
+    strategy:
+      fail-fast: false
+      matrix:
+        host: ${{ fromJson(needs.get-x86_64-hosts.outputs.matrix) }}
+    steps:
+      - name: repository checkout
+        uses: actions/checkout@v4
+      - name: build host configuration ${{ matrix.host }}
+        run: nixos-rebuild build --verbose --flake ".#${{ matrix.host }}"
+
+  build-nixos-aarch64-linux:
+    runs-on: self-hosted-aarch64-linux
+    needs: [get-aarch64-hosts]
+    strategy:
+      fail-fast: false
+      matrix:
+        host: ${{ fromJson(needs.get-aarch64-hosts.outputs.matrix) }}
+    steps:
+      - name: repository checkout
+        uses: actions/checkout@v4
+      - name: build host configuration ${{ matrix.host }}
+        run: nixos-rebuild build --verbose --flake ".#${{ matrix.host }}"
+ 
+ 

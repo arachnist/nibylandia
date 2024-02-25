@@ -84,6 +84,10 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/gitea-runner-token-scylla.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.scylla.publicKey ];
+  "secrets/github-runner-token-zorigami.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/github-runner-token-scylla.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.scylla.publicKey ];
   "secrets/ci-secrets.age".publicKeys = meta.users.ar ++ (with meta.hosts; [
     scylla.publicKey
     zorigami.publicKey
