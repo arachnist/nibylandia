@@ -15,10 +15,7 @@ let
       ${util-linux}/bin/rfkill unblock 0
     '';
 in {
-  imports = [
-    inputs.self.nixosModules.common
-    inputs.home-manager.nixosModule
-  ];
+  imports = [ inputs.self.nixosModules.common inputs.home-manager.nixosModule ];
 
   home-manager.users.ar = {
     home.username = "ar";
