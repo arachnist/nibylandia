@@ -74,12 +74,12 @@ in {
     source = "${bt-unfuck}/bin/bt-unfuck";
   };
 
+  services.desktopManager = {
+    plasma6.enable = true;
+  };
+
   services.xserver = {
     enable = true;
-    desktopManager.plasma5 = {
-      enable = lib.mkDefault true;
-      runUsingSystemd = true;
-    };
     displayManager = {
       sddm = {
         enable = lib.mkDefault true;
@@ -88,7 +88,7 @@ in {
           "/run/current-system/sw/share/wayland-sessions";
         settings.X11.SessionDir = lib.mkForce "";
       };
-      defaultSession = "plasmawayland";
+      defaultSession = "plasma";
     };
 
     xkb.layout = "pl";
