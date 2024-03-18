@@ -223,7 +223,7 @@ in {
 
     easyeffects
 
-    rnix-lsp
+    nixd
     clang-tools
     python3Packages.python-lsp-server
     yaml-language-server
