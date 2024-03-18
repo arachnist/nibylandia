@@ -260,7 +260,7 @@ in {
     })
 
     prusa-slicer
-    orca-slicer
+    # orca-slicer
     super-slicer-beta
 
     mastodon-update-script
