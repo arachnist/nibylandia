@@ -15,7 +15,10 @@ let
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
   '';
   klipperHostMcu = "${
-      pkgs.klipper-firmware.override { firmwareConfig = ./klipper-rpi.cfg; klipper = klipperOld; }
+      pkgs.klipper-firmware.override {
+        firmwareConfig = ./klipper-rpi.cfg;
+        klipper = klipperOld;
+      }
     }/klipper.elf";
   klipperOld = pkgs.klipper.overrideAttrs (old: {
     version = "unstable-dc6182f3";
@@ -23,7 +26,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "KevinOConnor";
       repo = "klipper";
-      rev = "dc6182f3b339b990c8a68940f02a210e332be269"; # 266e96621c0133e1192bbaec5addb6bcf443a203 broke shit in weird ways
+      rev =
+        "dc6182f3b339b990c8a68940f02a210e332be269"; # 266e96621c0133e1192bbaec5addb6bcf443a203 broke shit in weird ways
       sha256 = "sha256-0uoq5bvL/4L9oa/JY54qHMRw5vE7V//HxLFMOEqGUjA=";
     };
   });
@@ -511,7 +515,7 @@ in {
     serviceConfig = {
       Type = "simple";
       ExecStart =
-        "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --rotate 90 --slowdown --resolution 1296x972 --desired-fps 30";
+        "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --rotate 180 --resolution 1296x972 --desired-fps 30";
     };
   };
 
