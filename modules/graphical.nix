@@ -260,8 +260,9 @@ in {
     })
 
     prusa-slicer
+    # TODO: investigate later
     # orca-slicer
-    super-slicer-beta
+    # super-slicer-beta
 
     mastodon-update-script
     deploy-rs
