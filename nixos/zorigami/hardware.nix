@@ -6,7 +6,7 @@
   boot.initrd.availableKernelModules =
     [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.zfs.extraPools = [ "tank" ];
-  boot.zfs.enableUnstable = true;
+  boot.zfs.package = pkgs.zfs_unstable;
   boot.supportedFilesystems = [ "zfs" ];
 
   boot.ryzen.enable = true;
