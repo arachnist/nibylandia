@@ -197,15 +197,15 @@
   services.postgresql.ensureUsers = [
     {
       name = "nextcloud";
-      ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
+      ensureDBOwnership = true;
     }
     {
       name = "matrix-synapse";
-      ensurePermissions."DATABASE \"matrix-synapse\"" = "ALL PRIVILEGES";
+      ensureDBOwnership = true;
     }
     {
       name = "mastodon";
-      ensurePermissions."DATABASE mastodon" = "ALL PRIVILEGES";
+      ensureDBOwnership = true;
     }
   ];
 
