@@ -73,7 +73,7 @@ in {
     services.postgresql.ensureDatabases = [ "grafana" ];
     services.postgresql.ensureUsers = [{
       name = "grafana";
-      ensurePermissions."DATABASE grafana" = "ALL PRIVILEGES";
+      ensureDBOwnership = true;
     }];
 
     services.prometheus.exporters = {
