@@ -144,6 +144,11 @@
     timerConfig = { OnCalendar = "daily"; };
   };
 
+  systemd.timers.minecraft-backup = {
+    wantedBy = [ "multi-user.target" ];
+    timerConfig = { OnCalendar = "*:0/15"; };
+  };
+
   users.users.minecraft = {
     isNormalUser = true;
     group = "users";
