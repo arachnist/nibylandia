@@ -197,4 +197,6 @@ in {
       networkConfig.Bridge = "virbr0";
     };
   };
+  
+  nixpkgs.config.permittedInsecurePackages = [ "nix-2.16.2" ];
 }
