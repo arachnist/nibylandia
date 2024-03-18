@@ -28,11 +28,12 @@ jobs:
   get-aarch64-hosts:
     runs-on: self-hosted-aarch64-linux
     outputs:
-      matrix: ${{ steps.hosts.outputs.matrix }}
+      matrix: ${{ steps.hosts_out.outputs.matrix }}
     steps:
       - name: repository checkout
         uses: actions/checkout@v4
-      - name: hosts
+      - id: hosts_out
+        name: set hosts var
         run: |
           {
             echo -n "matrix="
@@ -41,6 +42,7 @@ jobs:
               builtins.toJSON (lib.mapAttrsToList (n: v: n)
                 (lib.attrsets.filterAttrs (n: v: v.pkgs.system == pkgs.system)
                   (builtins.getFlake(builtins.toString ./.)).outputs.nixosConfigurations))'
+            echo ""
           }  >> "$GITHUB_OUTPUT"
 
   build-nixos-x86_64-linux:
