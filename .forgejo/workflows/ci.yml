@@ -5,50 +5,18 @@ on:
     branches: [main]
 
 jobs:
-  get-hosts:
-    runs-on: self-hosted-x86_64-linux
-    outputs:
-      matrix: ${{ steps.hosts_out.outputs.matrix }}
-    steps:
-      - name: repository checkout
-        uses: actions/checkout@v4
-      - id: hosts_out
-        name: set hosts var
-        run: |
-          {
-            echo -n "matrix="
-            nix eval --raw --impure --expr '
-                let
-                    f = configs: builtins.groupBy (n: configs.${n}.pkgs.system) (builtins.attrNames configs);
-                in
-                    builtins.toJSON (f (builtins.getFlake(builtins.toString ./.)).outputs.nixosConfigurations)'
-            echo ""
-          }  >> "$GITHUB_OUTPUT"
-
   x86_64-linux:
     runs-on: self-hosted-x86_64-linux
-    needs: [get-hosts]
-    strategy:
-      fail-fast: false
-      matrix:
-        host: ${{ fromJson(needs.get-hosts.outputs.matrix).x86_64-linux }}
     steps:
-      - run: echo ${{ matrix.host }}
       - name: repository checkout
         uses: actions/checkout@v4
-      - name: build host configuration ${{ matrix.host }}
-        run: nixos-rebuild build --verbose --flake ".#${{ matrix.host }}"
+      - name: build hosts configuration
+        run: ./.ci.sh
 
   aarch64-linux:
     runs-on: self-hosted-aarch64-linux
-    needs: [get-hosts]
-    strategy:
-      fail-fast: false
-      matrix:
-        host: ${{ fromJson(needs.get-hosts.outputs.matrix).aarch64-linux }}
     steps:
-      - run: echo ${{ matrix.host }}
       - name: repository checkout
         uses: actions/checkout@v4
-      - name: build host configuration ${{ matrix.host }}
-        run: nixos-rebuild build --verbose --flake ".#${{ matrix.host }}"
+      - name: build hosts configuration
+        run: ./.ci.sh
