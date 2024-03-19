@@ -50,5 +50,3 @@ jobs:
         uses: actions/checkout@v4
       - name: build host configuration ${{ matrix.host }}
         run: nixos-rebuild build --verbose --flake ".#${{ matrix.host }}"
- 
- 
