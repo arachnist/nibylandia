@@ -33,6 +33,7 @@ jobs:
       matrix:
         host: ${{ fromJson(needs.get-hosts.outputs.matrix).x86_64-linux }}
     steps:
+      - run: echo ${{ matrix.host }}
       - name: repository checkout
         uses: actions/checkout@v4
       - name: build host configuration ${{ matrix.host }}
@@ -46,6 +47,7 @@ jobs:
       matrix:
         host: ${{ fromJson(needs.get-hosts.outputs.matrix).aarch64-linux }}
     steps:
+      - run: echo ${{ matrix.host }}
       - name: repository checkout
         uses: actions/checkout@v4
       - name: build host configuration ${{ matrix.host }}
