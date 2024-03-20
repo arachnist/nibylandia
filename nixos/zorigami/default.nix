@@ -178,7 +178,7 @@
     hostName = "cloud.is-a.cat";
     autoUpdateApps.enable = true;
     autoUpdateApps.startAt = "05:00:00";
-    
+
     settings.overwriteprotocol = "https";
 
     config = {

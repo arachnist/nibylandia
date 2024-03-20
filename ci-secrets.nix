@@ -1,3 +1,1 @@
-{
-  wifi = "$__SECRET_wifi_secrets";
-}
+{ wifi = "$__SECRET_wifi_secrets"; }
