@@ -74,9 +74,7 @@ in {
     source = "${bt-unfuck}/bin/bt-unfuck";
   };
 
-  services.desktopManager = {
-    plasma6.enable = true;
-  };
+  services.desktopManager.plasma6.enable = true;
 
   services.xserver = {
     enable = true;
