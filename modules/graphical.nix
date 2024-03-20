@@ -149,6 +149,7 @@ in {
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
+      pinentryPackage = pkgs.pinentry-qt;
     };
     adb.enable = true;
     fuse.userAllowOther = true;
