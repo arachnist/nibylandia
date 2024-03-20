@@ -197,6 +197,9 @@ in {
       networkConfig.Bridge = "virbr0";
     };
   };
-  
+
   nixpkgs.config.permittedInsecurePackages = [ "nix-2.16.2" ];
+
+  services.chrony.enable = true;
+  services.timesyncd.enable = false;
 }
