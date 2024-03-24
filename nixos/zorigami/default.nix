@@ -132,8 +132,8 @@
 
   systemd.services.minecraft-overviewer = {
     script = ''
-      ${pkgs.python3Packages.minecraft-overviewer}/bin/overviewer.py -p 8 -c "/srv/minecraft-overviewer/survival/config.py"
-      ${pkgs.python3Packages.minecraft-overviewer}/bin/overviewer.py -p 8 -c "/srv/minecraft-overviewer/survival/config.py" --genpoi
+      ${pkgs.python3Packages.minecraft-overviewer}/bin/overviewer.py -p 12 -c "/srv/minecraft-overviewer/survival/config.py"
+      ${pkgs.python3Packages.minecraft-overviewer}/bin/overviewer.py -p 12 -c "/srv/minecraft-overviewer/survival/config.py" --genpoi
     '';
     serviceConfig = {
       User = "minecraft";
