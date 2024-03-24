@@ -84,6 +84,9 @@
   networking.firewall.allowedUDPPorts = [ 80 443 ]
     ++ [ 19132 19133 25565 25566 ] ++ [ 51315 ];
 
+  nix.settings.max-jobs = 1;
+  nix.settings.cores = 24;
+
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_13;
