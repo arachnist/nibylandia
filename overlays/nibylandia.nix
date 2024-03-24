@@ -6,7 +6,7 @@ self: super: {
 
   python3 = super.python3.override {
     packageOverrides = self: super: {
-      pillow-with-headers =
+      pillow_with_headers =
         self.callPackage ../pkgs/pillow-with-headers.nix { };
       minecraft-overviewer =
         self.callPackage ../pkgs/minecraft-overviewer.nix { };
