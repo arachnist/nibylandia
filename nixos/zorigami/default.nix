@@ -144,7 +144,7 @@
 
   systemd.timers.minecraft-overviewer = {
     wantedBy = [ "multi-user.target" ];
-    timerConfig = { OnCalendar = "daily"; };
+    timerConfig = { OnCalendar = "hourly"; };
   };
 
   systemd.timers.minecraft-backup = {
