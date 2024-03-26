@@ -90,10 +90,7 @@ in {
   hardware.enableRedistributableFirmware = lib.mkForce false;
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
   boot = {
-    # camera, kernel side
-    # kernelPackages = pkgs.linuxPackages_rpi3;
-    # kernelModules = [ "bcm2835-v4l2" ];
-    # avoid building zfs
+    kernelPackages = pkgs.linuxPackages_rpi5;
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
     kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:2" ];
     loader.grub.enable = false;
