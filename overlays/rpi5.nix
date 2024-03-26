@@ -1,4 +1,4 @@
-self: super: {
+self: super: rec {
   linux_rpi5 = self.callPackage ../pkgs/linux_rpi/linux-rpi.nix {
     kernelPatches = with self.kernelPatches; [
       bridge_stp_helper

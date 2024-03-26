@@ -42,6 +42,8 @@ in {
     common
     # inputs.impermanence.nixosModule
   ];
+  
+  nixpkgs.overlays = [ inputs.self.overlays.rpi5 ];
 
   # don't want to pull in all of installer stuff, so we need to copy some things from sd-image-aarch64.nix:
   sdImage = {
