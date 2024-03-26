@@ -6,6 +6,7 @@ on:
 
 jobs:
   x86_64-linux:
+    if: "!contains(github.event.head_commit.message, '[skip-ci x64]')"
     runs-on: self-hosted-x86_64-linux
     steps:
       - name: repository checkout
@@ -14,6 +15,7 @@ jobs:
         run: ./.ci.sh
 
   aarch64-linux:
+    if: "!contains(github.event.head_commit.message, '[skip-ci arm64]')"
     runs-on: self-hosted-aarch64-linux
     steps:
       - name: repository checkout
