@@ -92,11 +92,16 @@ in {
   hardware.enableRedistributableFirmware = lib.mkForce false;
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
   boot = {
-    kernelPackages = pkgs.linuxPackages_rpi5;
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
     kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:2" ];
     loader.grub.enable = false;
     loader.generic-extlinux-compatible.enable = true;
+
+    kernelPackages = pkgs.linuxPackages_rpi5;
+    # rpi5 defconfig is missing some modules
+    initrd.availableKernelModules = lib.mkForce [
+      "ahci" "ata_piix" "sata_inic162x" "sata_nv" "sata_promise" "sata_qstor""sata_sil" "sata_sil24" "sata_sis" "sata_svw" "sata_sx4" "sata_uli" "sata_via" "sata_vsc" "pata_ali" "pata_amd" "pata_artop" "pata_atiixp" "pata_efar" "pata_hpt366" "pata_hpt37x" "pata_hpt3x2n" "pata_hpt3x3" "pata_it8213" "pata_it821x" "pata_jmicron" "pata_marvell" "pata_mpiix" "pata_netcell" "pata_ns87410" "pata_oldpiix" "pata_pcmcia" "pata_pdc2027x" "pata_rz1000" "pata_serverworks" "pata_sil680" "pata_sis" "pata_sl82c105" "pata_triflex" "pata_via" "3w-9xxx" "3w-xxxx" "aic79xx" "aic7xxx" "arcmsr" "hpsa" "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console" "mptspi" "vmxnet3" "vsock" "vc4" "dw-hdmi" "panel-simple" "pinctrl-axp209" "mp8859" "xhci-pci-renesas" "analogix-anx6345" "ext2" "ahci" "sata_nv" "sata_via" "sata_sis" "sata_uli" "ata_piix" "pata_marvell" "sr_mod"
+    ];
   };
 
   environment.etc."wifi-secrets".text = ci-secrets.wifi;
