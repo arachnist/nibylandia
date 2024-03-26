@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "88aa085bfa1a4650e1ccd88896f8343c22a24055";
+      rev = "3db4164cfd89e6d9afb7ebc87607b792651512df";
       hash = "sha256-Yynww79LPPkau4YDSLI6IMOjH64nMpHUdGjnCfIR2+M=";
     })
   ];
