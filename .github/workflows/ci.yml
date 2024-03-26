@@ -6,6 +6,7 @@ on:
 
 jobs:
   get-hosts:
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
     runs-on: self-hosted-x86_64-linux
     outputs:
       matrix: ${{ steps.hosts_out.outputs.matrix }}
@@ -26,6 +27,7 @@ jobs:
           }  >> "$GITHUB_OUTPUT"
 
   x86_64-linux:
+    if: "!contains(github.event.head_commit.message, '[skip-ci x64]')"
     runs-on: self-hosted-x86_64-linux
     needs: [get-hosts]
     strategy:
@@ -39,6 +41,7 @@ jobs:
         run: nixos-rebuild build --verbose --flake ".#${{ matrix.host }}"
 
   aarch64-linux:
+    if: "!contains(github.event.head_commit.message, '[skip-ci arm64]')"
     runs-on: self-hosted-aarch64-linux
     needs: [get-hosts]
     strategy:
