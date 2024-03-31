@@ -1,6 +1,8 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
+  flakes = lib.filterAttrs (name: value: value ? outputs) inputs;
+  nixRegistry = builtins.mapAttrs (name: v: { flake = v; }) flakes;
   # rfkill block 0; rmmod btusb btintel; systemctl restart bluetooth.service; modprobe btintel; modprobe btusb; systemctl restart bluetooth.service; rfkill unblock 0
   bt-unfuck = with pkgs;
     writeScriptBin "bt-unfuck" ''
@@ -16,6 +18,8 @@ let
     '';
 in {
   imports = [ inputs.self.nixosModules.common inputs.home-manager.nixosModule ];
+
+  nix.registry = nixRegistry;
 
   home-manager.users.ar = {
     home.username = "ar";
