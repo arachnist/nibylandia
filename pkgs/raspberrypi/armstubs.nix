@@ -1,9 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
-let
-  inherit (lib) optionals;
-in
-stdenv.mkDerivation {
+let inherit (lib) optionals;
+in stdenv.mkDerivation {
   pname = "raspberrypi-armstubs";
   version = "unstable-2022-07-11";
 
@@ -11,12 +9,11 @@ stdenv.mkDerivation {
     owner = "raspberrypi";
     repo = "tools";
     rev = "439b6198a9b340de5998dd14a26a0d9d38a6bcac";
-    hash = "sha512-KMHgj73eXHT++IE8DbCsFeJ87ngc9R3XxMUJy4Z3s4/MtMeB9zblADHkyJqz9oyeugeJTrDtuVETPBRo7M4Y8A==";
+    hash =
+      "sha512-KMHgj73eXHT++IE8DbCsFeJ87ngc9R3XxMUJy4Z3s4/MtMeB9zblADHkyJqz9oyeugeJTrDtuVETPBRo7M4Y8A==";
   };
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-march=armv8-a+crc"
-  ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-march=armv8-a+crc" ];
 
   preConfigure = ''
     cd armstubs
@@ -31,10 +28,12 @@ stdenv.mkDerivation {
     "LD7=${stdenv.cc.targetPrefix}ld"
     "OBJCOPY7=${stdenv.cc.targetPrefix}objcopy"
     "OBJDUMP7=${stdenv.cc.targetPrefix}objdump"
-  ]
-  ++ optionals (stdenv.isAarch64) [ "armstub8.bin" "armstub8-gic.bin" ]
-  ++ optionals (stdenv.isAarch32) [ "armstub7.bin" "armstub8-32.bin" "armstub8-32-gic.bin" ]
-  ;
+  ] ++ optionals stdenv.isAarch64 [ "armstub8.bin" "armstub8-gic.bin" ]
+    ++ optionals stdenv.isAarch32 [
+      "armstub7.bin"
+      "armstub8-32.bin"
+      "armstub8-32-gic.bin"
+    ];
 
   installPhase = ''
     runHook preInstall

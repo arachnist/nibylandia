@@ -40,7 +40,6 @@ in {
   imports = with inputs.self.nixosModules; [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"
     common
-    # inputs.impermanence.nixosModule
   ];
   
   nixpkgs.overlays = [ inputs.self.overlays.rpi5 ];
