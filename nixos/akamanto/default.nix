@@ -40,10 +40,9 @@ in {
   imports = with inputs.self.nixosModules; [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"
     common
+    inputs.nixos-hardware.nixosModules.raspberry-pi-4
   ];
   
-  nixpkgs.overlays = [ inputs.self.overlays.rpi5 ];
-
   # don't want to pull in all of installer stuff, so we need to copy some things from sd-image-aarch64.nix:
   sdImage = {
     compressImage = false;
@@ -53,6 +52,27 @@ in {
       configTxt = pkgs.writeText "config.txt" ''
         [pi3]
         kernel=u-boot-rpi3.bin
+
+        [pi02]
+        kernel=u-boot-rpi3.bin
+
+        [pi4]
+        kernel=u-boot-rpi4.bin
+        enable_gic=1
+        armstub=armstub8-gic.bin
+
+        # Otherwise the resolution will be weird in most cases, compared to
+        # what the pi3 firmware does by default.
+        disable_overscan=1
+
+        # Supported in newer board revisions
+        arm_boost=1
+
+        [cm4]
+        # Enable host mode on the 2711 built-in XHCI USB controller.
+        # This line should be removed if the legacy DWC2 controller is required
+        # (e.g. for USB device mode) or if USB support is not required.
+        otg_mode=1
 
         [all]
         # Boot in 64-bit mode.
@@ -66,22 +86,24 @@ in {
         # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
         # when attempting to show low-voltage or overtemperature warnings.
         avoid_warnings=1
-
-        # avoid display issues
-        hdmi_cvt=800 480 60 3 0 0 0
-        hdmi_force_hotplug=1
-        hdmi_group=2
-        hdmi_mode=87
       '';
-    in ''
-      (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+      in ''
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
 
-      # Add the config
-      cp ${configTxt} firmware/config.txt
+        # Add the config
+        cp ${configTxt} firmware/config.txt
 
-      # Add pi3 specific files
-      cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
-    '';
+        # Add pi3 specific files
+        cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
+
+        # Add pi4 specific files
+        cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
+        cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-400.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4s.dtb firmware/
+      '';
     populateRootCommands = ''
       mkdir -p ./files/boot
       ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
@@ -90,16 +112,26 @@ in {
 
   hardware.enableRedistributableFirmware = lib.mkForce false;
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
+
+  hardware = {
+    raspberry-pi."4".apply-overlays-dtmerge.enable = true;
+    deviceTree = {
+      enable = true;
+      filter = "*rpi-4-*.dtb";
+    };
+  };
   boot = {
+    kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_rpi4;
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
     kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:2" ];
     loader.grub.enable = false;
     loader.generic-extlinux-compatible.enable = true;
-
-    kernelPackages = pkgs.linuxPackages_rpi5;
-    # rpi5 defconfig is missing some modules
     initrd.availableKernelModules = lib.mkForce [
-      "ahci" "ata_piix" "sata_inic162x" "sata_nv" "sata_promise" "sata_qstor""sata_sil" "sata_sil24" "sata_sis" "sata_svw" "sata_sx4" "sata_uli" "sata_via" "sata_vsc" "pata_ali" "pata_amd" "pata_artop" "pata_atiixp" "pata_efar" "pata_hpt366" "pata_hpt37x" "pata_hpt3x2n" "pata_hpt3x3" "pata_it8213" "pata_it821x" "pata_jmicron" "pata_marvell" "pata_mpiix" "pata_netcell" "pata_ns87410" "pata_oldpiix" "pata_pcmcia" "pata_pdc2027x" "pata_rz1000" "pata_serverworks" "pata_sil680" "pata_sis" "pata_sl82c105" "pata_triflex" "pata_via" "3w-9xxx" "3w-xxxx" "aic79xx" "aic7xxx" "arcmsr" "hpsa" "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console" "mptspi" "vmxnet3" "vsock" "vc4" "dw-hdmi" "panel-simple" "pinctrl-axp209" "mp8859" "xhci-pci-renesas" "analogix-anx6345" "ext2" "ahci" "sata_nv" "sata_via" "sata_sis" "sata_uli" "ata_piix" "pata_marvell" "sr_mod"
+      "usbhid"
+      "usb_storage"
+      "vc4"
+      "pcie_brcmstb" # required for the pcie bus to work
+      "reset-raspberrypi" # required for vl805 firmware to load
     ];
   };
 
@@ -196,6 +228,8 @@ in {
       neovim
       tmux
       uhubctl
+      libraspberrypi
+      raspberrypi-eeprom
 
       # strictly unnecessary
       mpv
