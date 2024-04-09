@@ -31,6 +31,7 @@ let
       sha256 = "sha256-0uoq5bvL/4L9oa/JY54qHMRw5vE7V//HxLFMOEqGUjA=";
     };
   });
+  rootfsBuilder = import "${inputs.nixpkgs}/nixos/modules/system/boot/loader/generic-extlinux-compatible/extlinux-conf-builder.nix" { pkgs = pkgs.buildPackages; };
 in {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
@@ -40,92 +41,73 @@ in {
   imports = with inputs.self.nixosModules; [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"
     common
-    inputs.nixos-hardware.nixosModules.raspberry-pi-4
   ];
+
+  nixpkgs.overlays = [ inputs.self.overlays.rpi5 ];
   
-  # don't want to pull in all of installer stuff, so we need to copy some things from sd-image-aarch64.nix:
   sdImage = {
     compressImage = false;
+    firmwareSize = 1024;
     imageName =
       "${config.sdImage.imageBaseName}-${pkgs.stdenv.hostPlatform.system}-${config.networking.hostName}.img";
-    populateFirmwareCommands = let
-      configTxt = pkgs.writeText "config.txt" ''
-        [pi3]
-        kernel=u-boot-rpi3.bin
+    populateFirmwareCommands = ''
+      storePath() {
+        local path="$1"
+        echo ''${path/\/nix\/store\/}
+      }
 
-        [pi02]
-        kernel=u-boot-rpi3.bin
+      cp ${pkgs.rpi5-uefi}/boot/* firmware
 
-        [pi4]
-        kernel=u-boot-rpi4.bin
-        enable_gic=1
-        armstub=armstub8-gic.bin
+      mkdir -p firmware/EFI/nixos
+      touch firmware/EFI/nixos-sd-system-image
 
-        # Otherwise the resolution will be weird in most cases, compared to
-        # what the pi3 firmware does by default.
-        disable_overscan=1
+      kernelFile=$(storePath ${config.boot.kernelPackages.kernel})-${config.system.boot.loader.kernelFile}
+      initrdFile=$(storePath ${config.system.build.initialRamdisk})-${config.system.boot.loader.initrdFile}
 
-        # Supported in newer board revisions
-        arm_boost=1
+      cp ${config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile} \
+        firmware/EFI/nixos/$kernelFile
 
-        [cm4]
-        # Enable host mode on the 2711 built-in XHCI USB controller.
-        # This line should be removed if the legacy DWC2 controller is required
-        # (e.g. for USB device mode) or if USB support is not required.
-        otg_mode=1
+      cp ${config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile} \
+        firmware/EFI/nixos/$initrdFile
 
-        [all]
-        # Boot in 64-bit mode.
-        arm_64bit=1
+      mkdir -p firmware/EFI/boot
 
-        # U-Boot needs this to work, regardless of whether UART is actually used or not.
-        # Look in arch/arm/mach-bcm283x/Kconfig in the U-Boot tree to see if this is still
-        # a requirement in the future.
-        enable_uart=1
+      # making our own efi program; grub-install tries to probe for things
+      MODULES=( fat part_gpt part_msdos normal boot linux configfile efifwsetup
+        ls search search_label search_fs_uuid search_fs_file echo serial test
+        loadenv ext2 reboot help cat )
+      ${pkgs.grub2_efi}/bin/grub-mkimage --directory=${pkgs.grub2_efi}/lib/grub/arm64-efi \
+        -o firmware/EFI/boot/bootaa64.efi \
+        -p /EFI/boot -O arm64-efi ''${MODULES[@]}
+      
+      cat <<EOF > firmware/EFI/boot/grub.cfg
+      search --set=root --file /EFI/nixos-sd-system-image
 
-        # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
-        # when attempting to show low-voltage or overtemperature warnings.
-        avoid_warnings=1
-      '';
-      in ''
-        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+      serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1
+      terminal_output console serial
 
-        # Add the config
-        cp ${configTxt} firmware/config.txt
+      timeout 10
+      set default="0"
 
-        # Add pi3 specific files
-        cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
-
-        # Add pi4 specific files
-        cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
-        cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
-        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
-        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-400.dtb firmware/
-        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4.dtb firmware/
-        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4s.dtb firmware/
-      '';
+      menuentry '${config.system.nixos.distroName} ${config.system.nixos.label}' {
+        linux /EFI/nixos/$kernelFile init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+        initrd /EFI/nixos/$initrdFile
+        devicetree /bcm2712-rpi-5-b.dtb
+      }
+      EOF
+    '';
     populateRootCommands = ''
       mkdir -p ./files/boot
-      ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
     '';
   };
 
   hardware.enableRedistributableFirmware = lib.mkForce false;
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
 
-  hardware = {
-    raspberry-pi."4".apply-overlays-dtmerge.enable = true;
-    deviceTree = {
-      enable = true;
-      filter = "*rpi-4-*.dtb";
-    };
-  };
   boot = {
-    kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_rpi4;
+    kernelPackages = lib.mkForce pkgs.linuxPackages_rpi5;
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
-    kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:2" ];
-    loader.grub.enable = false;
-    loader.generic-extlinux-compatible.enable = true;
+    kernelParams = [ "fbcon=rotate:2" "8250.nr_uarts=11" "console=ttyAMA10,115200" "console=tty0" ];
     initrd.availableKernelModules = lib.mkForce [
       "usbhid"
       "usb_storage"
@@ -133,6 +115,24 @@ in {
       "pcie_brcmstb" # required for the pcie bus to work
       "reset-raspberrypi" # required for vl805 firmware to load
     ];
+    loader.grub = {
+      enable = true;
+      efiSupport = true;
+      efiInstallAsRemovable = true;
+      device = "nodev";
+    };
+  };
+  
+  fileSystems = lib.mkForce {
+    "/" = {
+      device = "/dev/disk/by-label/NIXOS_SD";
+      options = [ "x-initrd.mount" ];
+      fsType = "ext4";
+    };
+    "/boot" = {
+      device = "/dev/disk/by-label/FIRMWARE";
+      fsType = "vfat";
+    };
   };
 
   environment.etc."wifi-secrets".text = ci-secrets.wifi;

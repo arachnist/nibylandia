@@ -8,4 +8,6 @@ self: super: rec {
   };
 
   linuxPackages_rpi5 = self.linuxPackagesFor linux_rpi5;
+  
+  rpi5-uefi = self.callPackage ../pkgs/rpi5-uefi.nix { };
 }
