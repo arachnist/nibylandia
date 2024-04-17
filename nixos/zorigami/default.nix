@@ -496,6 +496,13 @@
         };
       };
     };
+    "rower.zajeba.li" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        return = "301 https://pl.wikipedia.org/wiki/Praga-Po%C5%82udnie";
+      };
+    };
   };
 
   services.oidentd.enable = true;
