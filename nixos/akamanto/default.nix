@@ -31,7 +31,6 @@ let
       sha256 = "sha256-0uoq5bvL/4L9oa/JY54qHMRw5vE7V//HxLFMOEqGUjA=";
     };
   });
-  rootfsBuilder = import "${inputs.nixpkgs}/nixos/modules/system/boot/loader/generic-extlinux-compatible/extlinux-conf-builder.nix" { pkgs = pkgs.buildPackages; };
 in {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
@@ -44,7 +43,7 @@ in {
   ];
 
   nixpkgs.overlays = [ inputs.self.overlays.rpi5 ];
-  
+
   sdImage = {
     compressImage = false;
     firmwareSize = 1024;
@@ -64,10 +63,16 @@ in {
       kernelFile=$(storePath ${config.boot.kernelPackages.kernel})-${config.system.boot.loader.kernelFile}
       initrdFile=$(storePath ${config.system.build.initialRamdisk})-${config.system.boot.loader.initrdFile}
 
-      cp ${config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile} \
+      cp ${
+        config.boot.kernelPackages.kernel + "/"
+        + config.system.boot.loader.kernelFile
+      } \
         firmware/EFI/nixos/$kernelFile
 
-      cp ${config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile} \
+      cp ${
+        config.system.build.initialRamdisk + "/"
+        + config.system.boot.loader.initrdFile
+      } \
         firmware/EFI/nixos/$initrdFile
 
       mkdir -p firmware/EFI/boot
@@ -79,7 +84,7 @@ in {
       ${pkgs.grub2_efi}/bin/grub-mkimage --directory=${pkgs.grub2_efi}/lib/grub/arm64-efi \
         -o firmware/EFI/boot/bootaa64.efi \
         -p /EFI/boot -O arm64-efi ''${MODULES[@]}
-      
+
       cat <<EOF > firmware/EFI/boot/grub.cfg
       search --set=root --file /EFI/nixos-sd-system-image
 
@@ -90,7 +95,9 @@ in {
       set default="0"
 
       menuentry '${config.system.nixos.distroName} ${config.system.nixos.label}' {
-        linux /EFI/nixos/$kernelFile init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+        linux /EFI/nixos/$kernelFile init=${config.system.build.toplevel}/init ${
+          toString config.boot.kernelParams
+        }
         initrd /EFI/nixos/$initrdFile
         devicetree /bcm2712-rpi-5-b.dtb
       }
@@ -107,7 +114,12 @@ in {
   boot = {
     kernelPackages = lib.mkForce pkgs.linuxPackages_rpi5;
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
-    kernelParams = [ "fbcon=rotate:2" "8250.nr_uarts=11" "console=ttyAMA10,115200" "console=tty0" ];
+    kernelParams = [
+      "fbcon=rotate:2"
+      "8250.nr_uarts=11"
+      "console=ttyAMA10,115200"
+      "console=tty0"
+    ];
     initrd.availableKernelModules = lib.mkForce [
       "usbhid"
       "usb_storage"
@@ -122,7 +134,7 @@ in {
       device = "nodev";
     };
   };
-  
+
   fileSystems = lib.mkForce {
     "/" = {
       device = "/dev/disk/by-label/NIXOS_SD";
@@ -237,7 +249,7 @@ in {
       bluez
       pipewire
       (v4l-utils.override { withGUI = false; })
-      
+
       rpi5-arm-tf
     ];
   programs.nix-index.enable = lib.mkForce false;

@@ -1,7 +1,6 @@
 { config, lib, pkgs, inputs, ... }:
 
-let
-  meta = import ../meta.nix;
+let meta = import ../meta.nix;
 in {
   imports = with inputs; [
     nix-index-database.nixosModules.nix-index

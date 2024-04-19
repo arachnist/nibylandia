@@ -469,7 +469,7 @@
       forceSSL = true;
       enableACME = true;
     };
-    ${config.services.matrix-synapse.settings.server_name} = {
+    "${config.services.matrix-synapse.settings.server_name}" = {
       enableACME = true;
       forceSSL = true;
 

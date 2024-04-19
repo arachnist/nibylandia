@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "arm-trusted-firmware-rpi5";
   version = "20240316";
-  
+
   # src = fetchFromGitHub {
   #   owner = "worproject";
   #   repo = "rpi5-uefi";
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   #   fetchSubmodules = true;
   #   hash = "sha256-mGMqgJXsEFq79aHes8HUGcKrfbGjeAHTA/xzbq5qURs=";
   # };
-  
+
   src = fetchFromGitHub {
     owner = "worproject";
     repo = "arm-trusted-firmware";
     rev = "682607fbd775e37fb5631508434dab9e60220c9a";
     hash = "sha256-Kdn9xJtHhwxvqpzC6osW2xWdZrlOmowaxBLPYGmtHYQ=";
   };
-  
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
 
@@ -36,17 +36,15 @@ stdenv.mkDerivation rec {
     "SUPPORT_VFP=1"
     "SMC_PCI_SUPPORT=1"
   ];
-  
-  filesToInstall = [
-    "build/rpi5/release"
-  ];
-  
+
+  filesToInstall = [ "build/rpi5/release" ];
+
   installPhase = ''
     runHook preInstall
-    
+
     mkdir -p $out
     cp -r ${lib.concatStringsSep " " filesToInstall} $out
-    
+
     runHook postInstall
   '';
 

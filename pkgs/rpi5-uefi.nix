@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchFromGitLab, openssl, pkgsCross, buildPackages }:
+{ lib, stdenv, fetchFromGitHub, fetchFromGitLab, openssl, pkgsCross
+, buildPackages }:
 
-let
-in
-stdenv.mkDerivation {
-}
+stdenv.mkDerivation { }
