@@ -250,7 +250,7 @@ in {
       pipewire
       (v4l-utils.override { withGUI = false; })
 
-      rpi5-arm-tf
+      rpi5-edk2
     ];
   programs.nix-index.enable = lib.mkForce false;
   services.journald.extraConfig = ''

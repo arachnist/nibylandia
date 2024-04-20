@@ -4,14 +4,6 @@ stdenv.mkDerivation rec {
   name = "arm-trusted-firmware-rpi5";
   version = "20240316";
 
-  # src = fetchFromGitHub {
-  #   owner = "worproject";
-  #   repo = "rpi5-uefi";
-  #   rev = "c1ca184c608dca75a346cc56b8eaf42648d83e86";
-  #   fetchSubmodules = true;
-  #   hash = "sha256-mGMqgJXsEFq79aHes8HUGcKrfbGjeAHTA/xzbq5qURs=";
-  # };
-
   src = fetchFromGitHub {
     owner = "worproject";
     repo = "arm-trusted-firmware";
@@ -24,6 +16,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "HOSTCC=$(CC_FOR_BUILD)"
+    "AS=$(CC_FOR_BUILD)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     # binutils 2.39 regression
     # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
@@ -37,7 +30,7 @@ stdenv.mkDerivation rec {
     "SMC_PCI_SUPPORT=1"
   ];
 
-  filesToInstall = [ "build/rpi5/release" ];
+  filesToInstall = [ "build/rpi5/release/*" ];
 
   installPhase = ''
     runHook preInstall
