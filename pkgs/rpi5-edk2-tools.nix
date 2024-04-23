@@ -1,6 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, openssl
-, buildPackages, runCommand, clangStdenv, fetchpatch, libuuid
-, python3 }:
+{ lib, stdenv, fetchFromGitHub, openssl, buildPackages, runCommand, clangStdenv
+, fetchpatch, libuuid, python3 }:
 
 let
   srcWithVendoring = fetchFromGitHub {
@@ -38,7 +37,7 @@ in stdenv.mkDerivation {
   # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
   GCC5_AARCH64_PREFIX = stdenv.cc.targetPrefix;
 
-  makeFlags = [ "-C edk2/BaseTools" ];
+  makeFlags = [ "-C edk2/BaseTools" "-j 14" ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-return-type"
     + lib.optionalString stdenv.cc.isGNU " -Wno-error=stringop-truncation"

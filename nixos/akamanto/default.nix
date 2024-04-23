@@ -55,7 +55,7 @@ in {
         echo ''${path/\/nix\/store\/}
       }
 
-      cp ${pkgs.rpi5-uefi-bin}/boot/* firmware
+      cp ${pkgs.rpi5-uefi}/* firmware
 
       mkdir -p firmware/EFI/nixos
       touch firmware/EFI/nixos-sd-system-image
@@ -249,8 +249,6 @@ in {
       bluez
       pipewire
       (v4l-utils.override { withGUI = false; })
-
-      rpi5-edk2
     ];
   programs.nix-index.enable = lib.mkForce false;
   services.journald.extraConfig = ''
