@@ -2,7 +2,7 @@
 
 let version = "v0.3";
 in stdenv.mkDerivation {
-  pname = "rpi5-uefi";
+  pname = "rpi5-uefi-bin";
   inherit version;
 
   src = fetchzip {

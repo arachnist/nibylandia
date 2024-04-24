@@ -55,7 +55,8 @@ in {
         echo ''${path/\/nix\/store\/}
       }
 
-      cp ${pkgs.rpi5-uefi}/* firmware
+      cp -v ${pkgs.rpi5-uefi}/* firmware
+      cp -v ${pkgs.rpi5-dtb}/* firmware
 
       mkdir -p firmware/EFI/nixos
       touch firmware/EFI/nixos-sd-system-image
@@ -91,7 +92,7 @@ in {
       serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1
       terminal_output console serial
 
-      timeout 10
+      set timeout=10
       set default="0"
 
       menuentry '${config.system.nixos.distroName} ${config.system.nixos.label}' {
@@ -99,7 +100,6 @@ in {
           toString config.boot.kernelParams
         }
         initrd /EFI/nixos/$initrdFile
-        devicetree /bcm2712-rpi-5-b.dtb
       }
       EOF
     '';

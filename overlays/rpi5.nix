@@ -13,4 +13,5 @@ self: super: rec {
   rpi5-edk2-tools = self.callPackage ../pkgs/rpi5-edk2-tools.nix { };
   rpi5-uefi = self.callPackage ../pkgs/rpi5-uefi.nix { };
   rpi5-uefi-bin = self.callPackage ../pkgs/rpi5-uefi-bin.nix { };
+  rpi5-dtb = self.callPackage ../pkgs/rpi5-dtb.nix { };
 }

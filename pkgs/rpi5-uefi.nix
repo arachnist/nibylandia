@@ -3,10 +3,9 @@
 
 let pythonEnv = buildPackages.python3.withPackages (ps: [ ps.tkinter ]);
 in stdenv.mkDerivation rec {
-  name = "rpi5-uefi";
-  version = "20240316";
+  pname = "rpi5-uefi";
 
-  inherit (rpi5-edk2-tools) src;
+  inherit (rpi5-edk2-tools) src version;
 
   nativeBuildInputs = [ bc pythonEnv util-linux nasm acpica-tools ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -22,7 +21,8 @@ in stdenv.mkDerivation rec {
     ln -sv ${rpi5-edk2-tools}/BaseTools edk2/BaseTools
     
     sed -i -e '/ACPI_SD_LIMIT_UHS_DEFAULT/s/TRUE/FALSE/' edk2-platforms/Platform/RaspberryPi/RPi5/Drivers/RpiPlatformDxe/ConfigTable.h
-    sed -i -e '/default\s*= SYSTEM_TABLE_MODE_ACPI/s/SYSTEM_TABLE_MODE_ACPI/SYSTEM_TABLE_MODE_BOTH/' ./edk2-platforms/Platform/RaspberryPi/RPi5/Drivers/RpiPlatformDxe/RpiPlatformDxeHii.vfr
+    sed -i -e '/default\s*= SYSTEM_TABLE_MODE_ACPI/s/SYSTEM_TABLE_MODE_ACPI/SYSTEM_TABLE_MODE_BOTH/' edk2-platforms/Platform/RaspberryPi/RPi5/Drivers/RpiPlatformDxe/RpiPlatformDxeHii.vfr
+    sed -i -e '/"SystemTableMode"/s/0$/1/' edk2-platforms/Platform/RaspberryPi/RPi5/RPi5.dsc
   '';
 
   configurePhase = ''
