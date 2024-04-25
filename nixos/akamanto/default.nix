@@ -58,8 +58,8 @@ in {
       cp -v ${pkgs.rpi5-uefi}/* firmware
       cp -v ${pkgs.rpi5-dtb}/* firmware
 
-      mkdir -p firmware/EFI/nixos
-      touch firmware/EFI/nixos-sd-system-image
+      mkdir -p firmware/kernels
+      touch firmware/nixos-sd-system-image
 
       kernelFile=$(storePath ${config.boot.kernelPackages.kernel})-${config.system.boot.loader.kernelFile}
       initrdFile=$(storePath ${config.system.build.initialRamdisk})-${config.system.boot.loader.initrdFile}
@@ -68,13 +68,13 @@ in {
         config.boot.kernelPackages.kernel + "/"
         + config.system.boot.loader.kernelFile
       } \
-        firmware/EFI/nixos/$kernelFile
+        firmware/kernels/$kernelFile
 
       cp ${
         config.system.build.initialRamdisk + "/"
         + config.system.boot.loader.initrdFile
       } \
-        firmware/EFI/nixos/$initrdFile
+        firmware/kernels/$initrdFile
 
       mkdir -p firmware/EFI/boot
 
@@ -87,19 +87,16 @@ in {
         -p /EFI/boot -O arm64-efi ''${MODULES[@]}
 
       cat <<EOF > firmware/EFI/boot/grub.cfg
-      search --set=root --file /EFI/nixos-sd-system-image
-
-      serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1
-      terminal_output console serial
+      search --set=drive1 --file /nixos-sd-system-image
 
       set timeout=10
       set default="0"
 
       menuentry '${config.system.nixos.distroName} ${config.system.nixos.label}' {
-        linux /EFI/nixos/$kernelFile init=${config.system.build.toplevel}/init ${
+        linux (\$drive1)/kernels/$kernelFile init=${config.system.build.toplevel}/init ${
           toString config.boot.kernelParams
         }
-        initrd /EFI/nixos/$initrdFile
+        initrd (\$drive1)/kernels/$initrdFile
       }
       EOF
     '';
