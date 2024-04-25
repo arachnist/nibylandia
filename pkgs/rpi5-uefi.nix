@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   prePatch = ''
     rm -rf edk2/BaseTools
     ln -sv ${rpi5-edk2-tools}/BaseTools edk2/BaseTools
-    
+
     sed -i -e '/ACPI_SD_LIMIT_UHS_DEFAULT/s/TRUE/FALSE/' edk2-platforms/Platform/RaspberryPi/RPi5/Drivers/RpiPlatformDxe/ConfigTable.h
     sed -i -e '/default\s*= SYSTEM_TABLE_MODE_ACPI/s/SYSTEM_TABLE_MODE_ACPI/SYSTEM_TABLE_MODE_BOTH/' edk2-platforms/Platform/RaspberryPi/RPi5/Drivers/RpiPlatformDxe/RpiPlatformDxeHii.vfr
     sed -i -e '/"SystemTableMode"/s/0$/1/' edk2-platforms/Platform/RaspberryPi/RPi5/RPi5.dsc
