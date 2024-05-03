@@ -1,5 +1,5 @@
 { lib, stdenv, nodejs-slim, bundlerEnv, nixosTests, yarn, callPackage, ruby
-, writeShellScript, fetchYarnDeps, prefetch-yarn-deps, brotli
+, writeShellScript, fetchYarnDeps, prefetch-yarn-deps, brotli, fixup-yarn-lock
 
 # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon", version ? srcOverride.version, patches ? [ ]
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
       prefetch-yarn-deps
       nodejs-slim
       yarn
+      fixup-yarn-lock
       mastodonGems
       mastodonGems.wrappedRuby
       brotli
