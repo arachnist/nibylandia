@@ -9,7 +9,7 @@ let
   '';
   cageScript = pkgs.writeScriptBin "klipperCageScript" ''
     #!${pkgs.runtimeShell}
-    ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
+    ${pkgs.wlr-randr}/bin/wlr-randr --output Unknown-1 --transform 180
     sounds=( /home/ar/startup-sounds/* )
     ${pkgs.mpv}/bin/mpv ''${sounds[ $RANDOM % ''${#sounds[@]}]} &
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
@@ -296,7 +296,7 @@ in {
         enable = true;
         configFile = ./klipper-smoothie.cfg;
         serial =
-          "/dev/serial/by-id/usb-Klipper_lpc1769_05E0FF0B27201CAF6CDBCA59C62000F5-if00";
+          "/dev/serial/by-id/usb-Klipper_stm32f429xx_400048000251313133383438-if00";
         package = pkgs.klipper-firmware.override {
           gcc-arm-embedded = pkgs.gcc-arm-embedded-11;
           klipper = klipperOld;
@@ -317,7 +317,7 @@ in {
       };
       mcu = {
         serial =
-          "/dev/serial/by-id/usb-Klipper_lpc1769_05E0FF0B27201CAF6CDBCA59C62000F5-if00";
+          "/dev/serial/by-id/usb-Klipper_stm32f429xx_400048000251313133383438-if00";
       };
       "mcu rpi" = { serial = "/run/klipper-mcu/mcu-rpi"; };
       virtual_sdcard = { path = "/var/lib/moonraker/gcodes"; };
