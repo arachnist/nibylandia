@@ -294,7 +294,7 @@ in {
       mcu = {
         enableKlipperFlash = false;
         enable = true;
-        configFile = ./klipper-smoothie.cfg;
+        configFile = ./klipper-octopus.cfg;
         serial =
           "/dev/serial/by-id/usb-Klipper_stm32f429xx_400048000251313133383438-if00";
         package = pkgs.klipper-firmware.override {
