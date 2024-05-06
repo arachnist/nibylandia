@@ -82,22 +82,21 @@ in {
 
   services.xserver = {
     enable = true;
-
     xkb.layout = "pl";
     xkb.options = "ctrl:nocaps";
-    libinput.enable = true;
   };
 
+  services.libinput.enable = true;
   services.displayManager = {
-      sddm = {
-        enable = lib.mkDefault true;
-        wayland.enable = true;
-        settings.Wayland.SessionDir =
-          "/run/current-system/sw/share/wayland-sessions";
-        settings.X11.SessionDir = lib.mkForce "";
-      };
-      defaultSession = "plasma";
+    sddm = {
+      enable = lib.mkDefault true;
+      wayland.enable = true;
+      settings.Wayland.SessionDir =
+        "/run/current-system/sw/share/wayland-sessions";
+      settings.X11.SessionDir = lib.mkForce "";
     };
+    defaultSession = "plasma";
+  };
 
   boot = {
     loader.timeout = 0;
@@ -187,7 +186,7 @@ in {
     kate
     keybase-gui
     kolourpaint
-    nixfmt
+    nixfmt-classic
     okular
     paprefs
     pavucontrol
