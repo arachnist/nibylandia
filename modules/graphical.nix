@@ -82,7 +82,13 @@ in {
 
   services.xserver = {
     enable = true;
-    displayManager = {
+
+    xkb.layout = "pl";
+    xkb.options = "ctrl:nocaps";
+    libinput.enable = true;
+  };
+
+  services.displayManager = {
       sddm = {
         enable = lib.mkDefault true;
         wayland.enable = true;
@@ -92,11 +98,6 @@ in {
       };
       defaultSession = "plasma";
     };
-
-    xkb.layout = "pl";
-    xkb.options = "ctrl:nocaps";
-    libinput.enable = true;
-  };
 
   boot = {
     loader.timeout = 0;
