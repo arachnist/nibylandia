@@ -80,6 +80,8 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/synapseExtraConfig.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/mastodon-activerecord.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/gitea-runner-token-zorigami.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/gitea-runner-token-scylla.age".publicKeys = meta.users.ar

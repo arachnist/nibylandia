@@ -53,6 +53,8 @@
     mode = "440";
   };
   age.secrets.keycloak.file = ../../secrets/mail/keycloak.age;
+  age.secrets.mastodonActiveRecordSecrets.file =
+    ../../secrets/mastodon-activerecord.age;
 
   age.secrets.notbotEnvironment.file = ../../secrets/notbotEnvironment.age;
 
@@ -301,7 +303,8 @@
       ALLOWED_PRIVATE_ADDRESSES = "127.1.33.7";
       GITHUB_REPOSITORY = "arachnist/mastodon/tree/meow";
     };
-    package = pkgs.glitchSoc;
+    extraEnvFiles = [ config.age.secrets.mastodonActiveRecordSecrets.path ];
+    package = pkgs.glitch-soc;
   };
 
   services.vaultwarden = {

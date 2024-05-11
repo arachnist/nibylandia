@@ -217,7 +217,6 @@ in {
     scrcpy
     krita
     vlc
-    # mastodon-update-script
     libreoffice-qt
     tokodon
 
@@ -267,7 +266,6 @@ in {
     # orca-slicer
     # super-slicer-beta
 
-    mastodon-update-script
     deploy-rs
     go
     pry

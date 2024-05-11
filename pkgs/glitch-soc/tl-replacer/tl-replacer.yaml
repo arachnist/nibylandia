@@ -1,0 +1,50 @@
+paths:
+  - "app/javascript/flavours/glitch/locales"
+  - "app/javascript/mastodon/locales"
+  - "config/locales-glitch"
+  - "config/locales"
+types:
+  "yaml":
+    - ".yml"
+    - ".yaml"
+  "json":
+    - ".json"
+replacements:
+  en:
+    filename-patterns:
+      - "*/en*.*"
+      - "*/*.en*.*"
+    strings:
+      "posts": "meows"
+      "post": "meow"
+      "Posts": "Meows"
+      "Post": "Meow"
+  pl:
+    filename-patterns:
+      - "*/pl.*"
+      - "*/*.pl.*"
+    strings:
+      "Ostatni post": "Ostatnie miauknięcie"
+      "Ten wpis nie będzie widoczny pod podanymi hasztagami, ponieważ jest oznaczony jako niepubliczny.": "To miauknięcie nie będzie widoczne pod podanymi hasztagami, ponieważ jest oznaczone jako niepubliczne."
+      "ten wpis": "to miauknięcie"
+      "Ten wpis": "To miauknięcie"
+      "Twój wpis": "Twoje miauknięcie"
+      "Twój post został podbity": "Twoje miauknięcie zostało podbite"
+      "nowy wpis": "nowe miauknięcie"
+      "swój pierwszy post": "swoje pierwsze miauknięcie"
+      "Ten wpis nie może zostać podbity": "To miauknięcie nie może zostać podbite"
+      "Post": "Miauknięcie"
+      "post": "miauknięcie"
+      "Posty": "Miauknięcia"
+      "posty": "miauknięcia"
+      "postów": "miauknięć"
+      "Wpis": "Miauknięcie"
+      "Wpisy": "Miauknięcia"
+      "wpis": "miauknięcie"
+      "wpisy": "miauknięcia"
+      "wpisach": "miauknięciach"
+      "wpisów": "miauknięć"
+      "wpisu": "miauknięcia"
+      "wpisie": "miauknięciu"
+      "Opublikuj": "Miauknij"
+      "wzmianki": "miauknięcia"
