@@ -12,8 +12,8 @@ types:
 replacements:
   en:
     filename-patterns:
-      - "*/en*.*"
-      - "*/*.en*.*"
+      - "en*.*"
+      - "*.en*.*"
     strings:
       "posts": "meows"
       "post": "meow"
@@ -21,8 +21,8 @@ replacements:
       "Post": "Meow"
   pl:
     filename-patterns:
-      - "*/pl.*"
-      - "*/*.pl.*"
+      - "pl.*"
+      - "*.pl.*"
     strings:
       "Ostatni post": "Ostatnie miauknięcie"
       "Ten wpis nie będzie widoczny pod podanymi hasztagami, ponieważ jest oznaczony jako niepubliczny.": "To miauknięcie nie będzie widoczne pod podanymi hasztagami, ponieważ jest oznaczone jako niepubliczne."

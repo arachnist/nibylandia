@@ -11,7 +11,6 @@ def update_translations(hash, replacements)
         elsif value.is_a?(String)
             replacements.to_a.sort_by do |x| 0-x[0].length end.each do |from, to|
                 if value.match?(from) then
-                    puts "updating #{key} from #{value} with #{to}"
                     value.gsub!(from, to)
                 end
             end
@@ -22,53 +21,36 @@ def update_translations(hash, replacements)
 end
 
 config["paths"].each do |dir|
-    yaml = []
     Dir.entries(dir).each do |fname|
-        config["types"]["yaml"].each do |type_ext|
-            yaml += [File.join(dir, fname)] if File.extname(fname) == type_ext
-        end
-    end
-
-    json = []
-    Dir.entries(dir).each do |fname|
-        config["types"]["json"].each do |type_ext|
-            json += [File.join(dir, fname)] if File.extname(fname) == type_ext
-        end
-    end
-
-    config["replacements"].each do |lang, conf|
-        yaml_files = []
-        json_files = []
-
-        yaml.each do |fname|
+        config["replacements"].each do |lang, conf|
             conf["filename-patterns"].each do |pattern|
-                yaml_files += [fname] if File.fnmatch?(pattern, fname)
-            end
-        end
+                if File.fnmatch?(pattern, fname) then
+                    config["types"]["yaml"].each do |type_ext|
+                        if File.extname(fname) == type_ext then
+                            fpath = File.join(dir, fname)
+                            puts " .... updating #{fpath}"
+                            tl = YAML.load_file(fpath)
+                            tl = update_translations(tl, conf["strings"])
 
-        yaml_files.each do |fname|
-            puts "modifying #{fname}"
-            tl = YAML.load_file(fname)
-            tl = update_translations(tl, conf["strings"])
+                            File.open(fpath, 'w') do |file|
+                                file.write(tl.to_yaml(options = {:line_width => -1}))
+                            end
+                        end
+                    end
 
-            File.open(fname, 'w') do |file|
-                file.write(tl.to_yaml(options = {:line_width => -1}))
-            end
-        end
+                    config["types"]["json"].each do |type_ext|
+                        if File.extname(fname) == type_ext then
+                            fpath = File.join(dir, fname)
+                            puts " .... updating #{fpath}"
+                            tl = JSON.load_file(fpath)
+                            tl = update_translations(tl, conf["strings"])
 
-        json.each do |fname|
-            conf["filename-patterns"].each do |pattern|
-                json_files += [fname] if File.fnmatch?(pattern, fname)
-            end
-        end
-
-        json_files.each do |fname|
-            puts "modifying #{fname}"
-            tl = JSON.load_file(fname)
-            tl = update_translations(tl, conf["strings"])
-
-            File.open(fname, 'w') do |file|
-                file.write(JSON.pretty_generate(tl))
+                            File.open(fpath, 'w') do |file|
+                                file.write(JSON.pretty_generate(tl))
+                            end
+                        end
+                    end
+                end
             end
         end
     end

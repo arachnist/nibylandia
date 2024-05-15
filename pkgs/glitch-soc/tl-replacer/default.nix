@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "tl-replacer";
-  version = "0.1";
+  version = "0.2";
   src = ./.;
 
   buildInputs = [ ruby ];
