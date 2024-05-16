@@ -24,7 +24,7 @@
     fsType = "vfat";
   };
 
-  services.xserver.displayManager.sddm.enable = lib.mkForce false;
+  services.displayManager.sddm.enable = lib.mkForce false;
 
   hardware.pulseaudio.enable = lib.mkForce false;
   jovian.devices.steamdeck.enable = true;
