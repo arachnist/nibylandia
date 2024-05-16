@@ -277,6 +277,7 @@ in {
     bind
     nmap
     colmena
+    waypipe
     inputs.agenix.packages.${pkgs.system}.default
   ];
 }
