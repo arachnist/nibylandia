@@ -63,6 +63,7 @@
     mode = "440";
     file = ../../secrets/synapseExtraConfig.age;
   };
+  age.secrets.acmeZorigamiZajebaLi.file = ../../secrets/acme-zorigami-zajeba.li.age;
 
   nibylandia.monitoring-server = { domain = "monitoring.is-a.cat"; };
 
@@ -505,6 +506,22 @@
       locations."/" = {
         return = "301 https://pl.wikipedia.org/wiki/Praga-Po%C5%82udnie";
       };
+    };
+    "wildcard.zajeba.li" = {
+      enableACME = true;
+      forceSSL = true;
+
+      serverAliases = [ "~^(.*)\.zajeba\.li$" ];
+      root = "/srv/www/wildcard_zajeba.li/$1";
+    };
+  };
+  security.acme.certs."wildcard.zajeba.li" = {
+    extraDomainNames = lib.mkForce [ ];
+    domain = "*.zajeba.li";
+    dnsProvider = "cloudflare";
+    webroot = lib.mkForce null;
+    credentialFiles = {
+      CLOUDFLARE_DNS_API_TOKEN_FILE = config.age.secrets.acmeZorigamiZajebaLi.path;
     };
   };
 

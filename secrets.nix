@@ -94,4 +94,6 @@ in {
     scylla.publicKey
     zorigami.publicKey
   ]); # TODO: we're not getting ssh keys for the generated disk image, so we need to embed it at disk image build time
+  "secrets/acme-zorigami-zajeba.li.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
 }
