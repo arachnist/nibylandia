@@ -452,6 +452,11 @@ in {
 
   security.polkit.enable = true;
   virtualisation.libvirtd.enable = true;
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat =  true;
+    dockerSocket.enable = true;
+  };
 
   services.avahi = {
     enable = true;
