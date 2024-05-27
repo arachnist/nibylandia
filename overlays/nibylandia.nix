@@ -13,8 +13,9 @@ in {
     '') emoji-reactions.files;
     tl-replacer = super.callPackage ../pkgs/glitch-soc/tl-replacer { };
   in self.callPackage ../pkgs/glitch-soc {
-    srcPostPatch = ''${file-post-patch}
-      ${tl-replacer}/tl-replacer ${tl-replacer}/tl-replacer.yaml
+    srcPostPatch = ''
+      ${file-post-patch}
+            ${tl-replacer}/tl-replacer ${tl-replacer}/tl-replacer.yaml
     '';
     inherit (emoji-reactions) patches;
   };

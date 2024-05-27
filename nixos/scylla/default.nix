@@ -454,7 +454,7 @@ in {
   virtualisation.libvirtd.enable = true;
   virtualisation.podman = {
     enable = true;
-    dockerCompat =  true;
+    dockerCompat = true;
     dockerSocket.enable = true;
   };
 
