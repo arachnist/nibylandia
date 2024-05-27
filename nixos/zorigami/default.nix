@@ -351,36 +351,52 @@
 
   systemd.network.wait-online.enable = false;
   networking.useDHCP = false;
-  networking.interfaces.enp36s0f1.useDHCP = false;
-  networking.interfaces.enp38s0.useDHCP = false;
-  networking.interfaces.enp39s0.useDHCP = false;
-  networking.interfaces.enp42s0f3u5u3c2.useDHCP = false;
   networking.tempAddresses = "disabled";
-  networking.interfaces.enp36s0f0 = {
-    useDHCP = false;
-    ipv4 = {
-      addresses = [{
-        address = "185.236.240.137";
-        prefixLength = 31;
-      }];
-      routes = [{
-        address = "0.0.0.0";
-        prefixLength = 0;
-        via = "185.236.240.136";
+  networking.interfaces = {
+    enp38s0.useDHCP = false;
+    enp42s0f3u5u3c2.useDHCP = false;
+    enp36s0f0 = {
+      useDHCP = false;
+      ipv4 = {
+        addresses = [{
+          address = "185.236.240.137";
+          prefixLength = 31;
+        }];
+        routes = [{
+          address = "0.0.0.0";
+          prefixLength = 0;
+          via = "185.236.240.136";
+        }];
+      };
+      ipv6 = {
+        addresses = [{
+          address = "2a0d:eb00:8007::10";
+          prefixLength = 64;
+        }];
+        routes = [{
+          address = "::";
+          prefixLength = 0;
+          via = "2a0d:eb00:8007::1";
+        }];
+      };
+    };
+    # funky crossconnects
+    enp36s0f1 = {
+      useDHCP = false;
+      ipv4.addresses = [{
+        address = "10.21.37.1";
+        prefixLength = 27;
       }];
     };
-    ipv6 = {
-      addresses = [{
-        address = "2a0d:eb00:8007::10";
-        prefixLength = 64;
-      }];
-      routes = [{
-        address = "::";
-        prefixLength = 0;
-        via = "2a0d:eb00:8007::1";
+    enp39s0 = {
+      useDHCP = false;
+      ipv4.addresses = [{
+        address = "10.21.37.33";
+        prefixLength = 27;
       }];
     };
   };
+
   networking.nameservers = [
     "8.8.8.8"
     "8.8.4.4"
@@ -417,6 +433,30 @@
           publicKey = "tVH3q1AJZKsitYmASdaogMCBwhMCd8oSuDY2POpiUiY=";
           allowedIPs = [ "10.255.255.4/32" ];
           persistentKeepalive = 15;
+        }
+      ];
+    };
+  };
+
+  services.kea.dhcp4 = {
+    enable = true;
+    settings = {
+      interfaces-config = {
+        interfaces = [ "enp36s0f1/10.21.37.1" "enp39s0/10.21.37.33" ];
+      };
+
+      subnet4 = [
+        {
+          subnet = "10.21.37.0/27";
+          pools = [{ pool = "10.21.37.5 - 10.21.37.25"; }];
+          reservations-out-of-pool = true;
+          reservations-in-subnet = true;
+        }
+        {
+          subnet = "10.21.37.32/27";
+          pools = [{ pool = "10.21.37.37 - 10.21.37.57"; }];
+          reservations-out-of-pool = true;
+          reservations-in-subnet = true;
         }
       ];
     };
