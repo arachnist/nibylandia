@@ -4,8 +4,8 @@
   src = fetchFromGitHub {
     owner = "glitch-soc";
     repo = "mastodon";
-    rev = "7c81666f7f8d7c0321d12899680f6e0b5bf3757a";
-    hash = "sha256-myxCbzi6mDwSzlRULW2695ggPUGOEAn6K2PWQ/tuov4=";
+    rev = "e7aeacccb147174f5fb527c02036a2cd5f82cef6";
+    hash = "sha256-nnIjDDWZPBeMB6ezpsOZgdxtb+f8LRhx6X0RNTRMDB8=";
   };
   inherit patches;
   nativeBuildInputs = [ gawk gnused ];
@@ -18,6 +18,6 @@
       sed -i -Ee 's|^  checksum: ([^/]*)$|  checksum: '$cacheKey'/\1|g;' yarn.lock
     '';
 }) // {
-  version = "unstable-2024-05-14";
-  yarnHash = "sha256-tw5EiPWNpzGjjLkTx++W82bA5ZZiJCzU1BELgXU+d1M=";
+  version = "unstable-2024-05-29";
+  yarnHash = "sha256-haLT8KnJr1r4VPjeXfR5nm0yUbAbeB+D9reOXrdfwCY=";
 }
