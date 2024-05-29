@@ -65,6 +65,10 @@
   };
   age.secrets.acmeZorigamiZajebaLi.file =
     ../../secrets/acme-zorigami-zajeba.li.age;
+  age.secrets.automataDendritePrivateKey.file =
+    ../../secrets/automata.of-a.cat-matrix_key.pem.age;
+  age.secrets.automataDendriteEnv.file =
+    ../../secrets/automata.of-a.cat-matrix_env.age;
 
   nibylandia.monitoring-server = { domain = "monitoring.is-a.cat"; };
 
@@ -200,7 +204,7 @@
   };
 
   services.postgresql.ensureDatabases =
-    [ "nextcloud" "matrix-synapse" "mastodon" ];
+    [ "nextcloud" "matrix-synapse" "mastodon" "dendrite" ];
   services.postgresql.ensureUsers = [
     {
       name = "nextcloud";
@@ -212,6 +216,10 @@
     }
     {
       name = "mastodon";
+      ensureDBOwnership = true;
+    }
+    {
+      name = "dendrite";
       ensureDBOwnership = true;
     }
   ];
@@ -262,6 +270,48 @@
   };
   services.dovecot2.sieve.extensions = [ "fileinto" ];
 
+  # automata.of-a.cat
+  services.dendrite = {
+    enable = true;
+    httpPort = 8108;
+    loadCredential = [
+      "matrix-server-key:${config.age.secrets.automataDendritePrivateKey.path}"
+    ];
+    environmentFile = config.age.secrets.automataDendriteEnv.path;
+
+    settings = let
+      database_config = {
+        connection_string = "postgresql:///dendrite?host=/run/postgresql";
+        max_open_conns = 10;
+        max_idle_conns = 5;
+      };
+    in {
+      global = {
+        server_name = "automata.of-a.cat";
+        private_key = "$CREDENTIALS_DIRECTORY/matrix-server-key";
+        jetstream.storage_path = "/var/lib/dendrite/";
+      };
+
+      client_api = {
+        registration_disabled = true;
+        rate_limiting.enabled = false;
+        registration_shared_secret = ''''${REGISTRATION_SHARED_SECRET}'';
+      };
+
+      app_service_api.database = database_config;
+      federation_api.database = database_config;
+      key_server.database = database_config;
+      media_api.database = database_config;
+      mscs.database = database_config;
+      room_server.database = database_config;
+      sync_api.database = database_config;
+      user_api.account_database = database_config;
+      user_api.device_database = database_config;
+      relay_api.device_database = database_config;
+    };
+  };
+
+  # is-a.cat
   services.matrix-synapse = {
     enable = true;
     settings = {
@@ -539,6 +589,30 @@
             defaultHomeserver = 0;
           };
         };
+      };
+    };
+    ${config.services.dendrite.settings.global.server_name} = {
+      enableACME = true;
+      forceSSL = true;
+      locations = {
+        "/.well-known/matrix/server".return = ''
+          200 "{\"m.server\":\"matrix.${config.services.dendrite.settings.global.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
+        '';
+        "/.well-known/matrix/client".return = ''
+          200 "{\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
+        '';
+      };
+    };
+    "matrix.${config.services.dendrite.settings.global.server_name}" = {
+      enableACME = true;
+      forceSSL = true;
+      locations = {
+        "/_matrix".proxyPass =
+          "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
+        "/_dendrite".proxyPass =
+          "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
+        "/_synapse".proxyPass =
+          "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
       };
     };
     "rower.zajeba.li" = {

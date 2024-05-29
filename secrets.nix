@@ -96,4 +96,8 @@ in {
   ]); # TODO: we're not getting ssh keys for the generated disk image, so we need to embed it at disk image build time
   "secrets/acme-zorigami-zajeba.li.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/automata.of-a.cat-matrix_key.pem.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/automata.of-a.cat-matrix_env.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
 }
