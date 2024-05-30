@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 let
   gitea-runner-directory = "/var/lib/gitea-runner";

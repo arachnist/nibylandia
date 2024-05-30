@@ -3,16 +3,15 @@
 {
   deployment.tags = [ "reachable-everywhere" ];
 
-  imports = with inputs.self.nixosModules; [
-    common
-    secureboot
-    monitoring
-    ci-runners
+  imports = [ inputs.simple-nixos-mailserver.nixosModule ]
+    ++ (with inputs.self.nixosModules; [
+      common
+      secureboot
+      monitoring
+      ci-runners
 
-    inputs.simple-nixos-mailserver.nixosModule
-
-    ./hardware.nix
-  ];
+      ./hardware.nix
+    ]);
 
   boot.kernelPackages = pkgs.linuxPackages;
 
@@ -295,7 +294,7 @@
       client_api = {
         registration_disabled = true;
         rate_limiting.enabled = false;
-        registration_shared_secret = ''''${REGISTRATION_SHARED_SECRET}'';
+        registration_shared_secret = "\${REGISTRATION_SHARED_SECRET}";
       };
 
       app_service_api.database = database_config;

@@ -175,7 +175,9 @@ in {
 
   environment.sessionVariables = { MOZ_ENABLE_WAYLAND = "1"; };
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = [
+    inputs.agenix.packages.${pkgs.system}.default
+  ] ++ (with pkgs; [
     krfb # for kdeconnect virtual display
     chromium
     # electrum
@@ -278,6 +280,5 @@ in {
     nmap
     colmena
     waypipe
-    inputs.agenix.packages.${pkgs.system}.default
-  ];
+  ]);
 }
