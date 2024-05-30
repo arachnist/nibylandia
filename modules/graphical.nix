@@ -177,6 +177,7 @@ in {
 
   environment.systemPackages = [
     inputs.agenix.packages.${pkgs.system}.default
+    inputs.nixpkgs.legacyPackages.${pkgs.system}.colmena
   ] ++ (with pkgs; [
     krfb # for kdeconnect virtual display
     chromium
@@ -220,7 +221,7 @@ in {
     krita
     vlc
     libreoffice-qt
-    tokodon
+    kdePackages.tokodon
 
     glasgow
     freecad
@@ -278,7 +279,6 @@ in {
     gomuks
     bind
     nmap
-    colmena
     waypipe
   ]);
 }
