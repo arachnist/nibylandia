@@ -276,6 +276,7 @@ in {
 
         subnet4 = [
           {
+            id = 1;
             subnet = "192.168.24.0/24";
             pools = [{ pool = "192.168.24.40 - 192.168.24.240"; }];
             reservations-out-of-pool = true;
@@ -299,6 +300,7 @@ in {
             }];
           }
           {
+            id = 2;
             subnet = "192.168.20.0/24";
             pools = [{ pool = "192.168.20.40 - 192.168.20.240"; }];
             reservations-out-of-pool = true;

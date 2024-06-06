@@ -496,12 +496,14 @@
 
       subnet4 = [
         {
+          id = 1;
           subnet = "10.21.37.0/27";
           pools = [{ pool = "10.21.37.5 - 10.21.37.25"; }];
           reservations-out-of-pool = true;
           reservations-in-subnet = true;
         }
         {
+          id = 2;
           subnet = "10.21.37.32/27";
           pools = [{ pool = "10.21.37.37 - 10.21.37.57"; }];
           reservations-out-of-pool = true;
