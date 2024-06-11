@@ -163,7 +163,17 @@
       };
 
       "picture.cat" = {
-        locations."/" = { root = "/stereolith/photo/_build"; };
+        forceSSL = true;
+        enableACME = true;
+        locations = {
+          "/" = { root = "/stereolith/photo/_build"; };
+          "/jp-unsorted/" = {
+            alias = "/stereolith/photo/unsorted-old/";
+            extraConfig = ''
+              autoindex on;
+            '';
+          };
+        };
       };
 
     };
