@@ -565,6 +565,36 @@
       forceSSL = true;
       enableACME = true;
     };
+    "akkoma-fe.is-a.cat" = let
+      proxyConf = {
+        proxyPass = "https://is-a.cat";
+        recommendedProxySettings = false;
+        extraConfig = ''
+          proxy_set_header Host is-a.cat;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        '';
+      };
+      akkoma-fe-patched = pkgs.akkoma-frontends.akkoma-fe.overrideAttrs (old: {
+        postPatch = old.postPatch + ''
+          sed -e 's/read write follow push admin/read write follow push/g' -i src/services/new_api/oauth.js
+        '';
+      });
+    in {
+      enableACME = true;
+      forceSSL = true;
+      locations = {
+        "/" = {
+          root = akkoma-fe-patched;
+          tryFiles = "$uri $uri/ /index.html";
+        };
+        "/api" = proxyConf;
+        "/instance" = proxyConf;
+        "/nodeinfo" = proxyConf;
+        "/oauth/" = proxyConf;
+      };
+    };
     "${config.services.matrix-synapse.settings.server_name}" = {
       enableACME = true;
       forceSSL = true;
