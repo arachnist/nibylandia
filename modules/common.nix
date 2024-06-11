@@ -184,10 +184,8 @@ in {
         DHCPServer = true;
         IPv6SendRA = true;
       };
-      addresses = [
-        { Address = "10.0.0.1/24"; }
-        { Address = "fd12:3456:789a::1/64"; }
-      ];
+      addresses =
+        [ { Address = "10.0.0.1/24"; } { Address = "fd12:3456:789a::1/64"; } ];
       ipv6Prefixes = [{ Prefix = "fd12:3456:789a::/64"; }];
     };
     networks.microvm-eth0 = {
