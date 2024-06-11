@@ -160,8 +160,6 @@ in {
     dconf.enable = true;
     mosh.enable = true;
     kdeconnect.enable = true;
-    sway.enable = true;
-    hyprland.enable = true;
     firefox = {
       enable = true;
       #nativeMessagingHosts.packages = with pkgs; [
