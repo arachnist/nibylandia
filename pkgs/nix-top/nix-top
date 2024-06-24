@@ -1,0 +1,166 @@
+#!/nix/store/c4bdx4dja3h06xg1ksv3f51alp5a44li-ruby-3.1.5/bin/ruby
+
+require "shellwords"
+require "optparse"
+require "io/wait"
+
+DEFAULTS = {
+  delay: 0.5,
+  once: false,
+}.freeze
+
+options = DEFAULTS.dup
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: nix-top [options]"
+
+  opts.on("-d", "--delay [seconds]", Numeric, "In seconds (default: #{DEFAULTS[:delay]})") do |v|
+    options[:delay] = v
+  end
+  opts.on("-1", "--once", "Only run once (generates one screen)") do |v|
+    options[:once] = v;
+  end
+end.parse!
+
+VT_CLEAR_LINE=`tput el`
+VT_CLEAR_REST=`tput ed`
+VT_HOME=`tput cup 0 0`
+
+def stty(*flags)
+  `#{["stty", *flags].shelljoin}`
+end
+
+# Returns [width, height] of the terminal.
+def size
+  `echo 'cols\nlines' | tput -S`.strip.split("\n").map(&:to_i)
+end
+
+def build_users
+  `getent group nixbld`.strip.split(":").last.split(",")
+end
+
+def active_build_users()
+  build_users.select do |name|
+    `pgrep -fu #{name.shellescape}`
+    $? == 0
+  end
+end
+
+# Returns a mostly correct snapshot of the PIDs for processes building
+# things, in a Hash indexed by build user.
+def get_processes()
+  active_build_users.map do |user|
+    pids = `pgrep -u #{user.shellescape}`
+        .strip.split("\n")
+        .map(&:to_i)
+        .sort
+    path = get_out_path(user, pids.first)
+
+    [
+      user,
+      [path, pids]
+    ]
+  end
+end
+
+# Gets either the out path, or an approximation, depending whether
+# or not it can peek into processes.
+def get_out_path(user, pid)
+  begin
+  # whew!
+  build_dir = `find -L /tmp -maxdepth 1 -user #{user.shellescape} -exec stat --printf '%Z:%n\\n' '{}' ';' | sort -n`
+    .strip
+    .split("\n")
+    .last
+    .split(":")
+    .last
+  rescue
+    "(unknown)"
+  end
+  begin
+    file = "#{build_dir}/env-vars"
+    # This can fail if the process disappears while trying to read.
+    # This is why we rescue everything
+    # (This also could fail due to missing `out=` and we get free rescue)
+    File.read(file)                          # Reads process' environment
+      .split("\n")                           # (which is a null-delimited list)
+      .grep(/^declare -x out=/)              # Keep out paths
+      .first                                 # Keep the only result
+      .split("\"").last                      # Keep only the value
+  rescue
+    build_dir
+  end
+end
+
+def per_output_infos(user, pids, path)
+  [
+    ":: (%s) → %s" % [user, path],
+    `ps -o uid,pid,ppid,stime,time,command -U "#{user.shellescape}"`
+  ]
+end
+
+# A "screenful" of information
+# Does not trim output to fit in one terminal screen.
+def print_screen()
+  processes = get_processes()
+
+  lines = []
+  sep = [
+    "",
+    " * * * ",
+    "",
+  ]
+
+  lines << "Summary per output"
+  lines.concat(processes.map do |user, (path, pids)|
+    "    %4d → %s" % [pids.length, path]
+  end)
+  lines.concat(sep)
+  lines.concat(processes.map do |user, (path, pids)|
+    per_output_infos(user, pids, path)
+  end)
+
+  # This is hacky and round-about...
+  # but the consumers will assume this gives *lines*.
+  # I don't want to ensure everything is already a line.
+  # So, uh, joining everything and re-splitting is done for now.
+  # TODO : better API for writing a screen.
+  lines.flatten.join("\n").split("\n")
+end
+
+# Trims the "screenful" to fit into the screen.
+def display(screen)
+  width, height = size
+  screen = screen[0...height].map do |line|
+    line[0...width] + VT_CLEAR_LINE
+  end.join("\n").strip
+
+  print VT_HOME + screen + VT_CLEAR_REST
+end
+
+# ------------------------------------------------------------------------------
+
+# Ensures no backtrace on ^C
+Signal.trap("INT") do
+  exit
+end
+
+at_exit {
+  stty($saved_stty)
+  puts ""
+  exit
+}
+$saved_stty = stty("-g").strip
+stty("-echo", "-icanon")
+
+display(print_screen)
+
+exit if options[:once]
+
+while true do
+  if $stdin.wait_readable(options[:delay]) then
+    exit if $stdin.readpartial(4096).include? "q"
+  end
+
+  display(print_screen)
+end
