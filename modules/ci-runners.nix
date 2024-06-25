@@ -45,6 +45,7 @@ in {
     extraPackages = ci-packages;
   };
 
+  services.gitea-actions-runner.package = pkgs.forgejo-runner;
   services.gitea-actions-runner.instances.nix = {
     enable = true;
     name = config.networking.hostName;
