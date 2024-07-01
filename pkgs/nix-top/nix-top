@@ -1,4 +1,4 @@
-#!/nix/store/c4bdx4dja3h06xg1ksv3f51alp5a44li-ruby-3.1.5/bin/ruby
+#!/usr/bin/env ruby
 
 require "shellwords"
 require "optparse"
