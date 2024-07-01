@@ -155,7 +155,7 @@ in {
   services.openssh.settings.PasswordAuthentication = lib.mkForce true;
   services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
 
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
 
   # strictly for shits and giggles
   sound.enable = true;

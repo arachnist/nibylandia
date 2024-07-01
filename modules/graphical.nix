@@ -66,9 +66,9 @@ in {
     enable = true;
     package = pkgs.bluez;
   };
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   security.wrappers.bt-unfuck = {
