@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, runCommand, buildPackages, pkgsCross, openssl }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, pkgsCross }:
 
 stdenv.mkDerivation rec {
   name = "arm-trusted-firmware-rpi5";

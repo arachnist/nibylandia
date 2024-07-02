@@ -37,9 +37,9 @@ in {
   deployment.buildOnTarget = lib.mkForce false;
   deployment.tags = [ "reachable-home" ];
 
-  imports = with inputs.self.nixosModules; [
+  imports = [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"
-    common
+    inputs.self.nixosModules.common
   ];
 
   # don't want to pull in all of installer stuff, so we need to copy some things from sd-image-aarch64.nix:

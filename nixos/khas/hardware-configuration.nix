@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+_:
 
 {
   hardware.enableAllFirmware = true;

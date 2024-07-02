@@ -1,28 +1,27 @@
 { fetchFromGitHub, pkgs, buildPythonPackage, python3Packages, python3, ... }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "Minecraft-Overviewer";
   version = "2024-03-15";
   format = "other";
 
-  propagatedBuildInputs = with pkgs;
-    [ pipreqs ] ++ (with python3Packages; [
-      pillow_with_headers
-      altgraph
-      certifi
-      charset-normalizer
-      docopt
-      idna
-      importlib-metadata
-      nbtlib
-      numpy
-      packaging
-      pefile
-      requests
-      urllib3
-      yarg
-      zipp
-    ]);
+  propagatedBuildInputs = [ pkgs.pipreqs ] ++ (with python3Packages; [
+    pillow_with_headers
+    altgraph
+    certifi
+    charset-normalizer
+    docopt
+    idna
+    importlib-metadata
+    nbtlib
+    numpy
+    packaging
+    pefile
+    requests
+    urllib3
+    yarg
+    zipp
+  ]);
 
   buildInputs = with python3Packages; [ setuptools ];
 

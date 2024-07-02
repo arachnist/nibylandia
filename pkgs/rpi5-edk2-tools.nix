@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, buildPackages, runCommand, clangStdenv
-, fetchpatch, libuuid, python3 }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, runCommand, libuuid }:
 
 let
   srcWithVendoring = fetchFromGitHub {

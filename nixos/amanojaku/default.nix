@@ -4,12 +4,8 @@
   networking.hostName = "amanojaku";
   deployment.tags = [ "reachable-home" ];
 
-  imports = with inputs.self.nixosModules; [
-    graphical
-    laptop
-
-    inputs.jovian-nixos.nixosModules.default
-  ];
+  imports = [ inputs.jovian-nixos.nixosModules.default ]
+    ++ (with inputs.self.nixosModules; [ graphical laptop ]);
 
   boot.uefi.enable = true;
   boot.kernelPackages = lib.mkForce pkgs.linuxPackages_jovian;

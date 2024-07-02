@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip }:
+{ stdenv, fetchzip }:
 
 let version = "v0.3";
 in stdenv.mkDerivation {
@@ -21,5 +21,5 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; { description = "EDK2 port for raspberry pi 5"; };
+  meta = { description = "EDK2 port for raspberry pi 5"; };
 }

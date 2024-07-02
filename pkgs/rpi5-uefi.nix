@@ -1,5 +1,5 @@
-{ lib, stdenv, openssl, pkgsCross, buildPackages, runCommand, rpi5-arm-tf
-, rpi5-edk2-tools, libuuid, python3, bc, util-linux, nasm, acpica-tools }:
+{ stdenv, buildPackages, rpi5-arm-tf, rpi5-edk2-tools, bc, util-linux, nasm
+, acpica-tools }:
 
 let pythonEnv = buildPackages.python3.withPackages (ps: [ ps.tkinter ]);
 in stdenv.mkDerivation rec {

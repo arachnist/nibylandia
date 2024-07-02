@@ -13,9 +13,9 @@ in {
   deployment.buildOnTarget = lib.mkForce false;
   deployment.tags = [ "reachable-hs" ];
 
-  imports = with inputs.self.nixosModules; [
+  imports = [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"
-    common
+    inputs.self.nixosModules.common
   ];
 
   # don't want to pull in all of installer stuff, so we need to copy some things from sd-image-aarch64.nix:
@@ -172,8 +172,18 @@ in {
 
   # diet
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
-  environment.systemPackages = with pkgs;
-    lib.mkForce [
+  environment.systemPackages = [
+    # avoid warnings
+    (pkgs.glibcLocales.override {
+      allLocales = false;
+      locales = [ "en_US.UTF-8/UTF-8" "en_CA.UTF-8/UTF-8" "en_DK.UTF-8/UTF-8" ];
+    })
+
+    # strictly unnecessary
+    (pkgs.v4l-utils.override { withGUI = false; })
+  ] ++ (with pkgs;
+  # lib.mkForce
+    [
       # strictly required
       coreutils
       nix
@@ -183,26 +193,8 @@ in {
       zsh
       bashInteractive
 
-      # reaaaaally useful (on-screen keyboard)
-      maliit-keyboard
-      maliit-framework
-      squeekboard
-
-      # we include these anyway
-      wlr-randr
-      chromium
-
       # avoid warnings
       gnugrep
-      (glibcLocales.override {
-        allLocales = false;
-        locales = [
-          "en_US.UTF-8/UTF-8"
-          "en_CA.UTF-8/UTF-8"
-          "en_DK.UTF-8/UTF-8"
-          "pl_PL.UTF-8/UTF-8"
-        ];
-      })
 
       # nice-to-haves
       procps
@@ -213,13 +205,16 @@ in {
       usbutils
       neovim
       tmux
+      uhubctl
+      libraspberrypi
+      raspberrypi-eeprom
 
       # strictly unnecessary
       mpv
       alsa-utils
+      bluez
       pipewire
-      (v4l-utils.override { withGUI = false; })
-    ];
+    ]);
   programs.nix-index.enable = lib.mkForce false;
   services.journald.extraConfig = ''
     Storage=volatile

@@ -1,5 +1,4 @@
-{ stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ...
-}@args:
+{ stdenv, lib, fetchFromGitHub, buildLinux, rpiVersion, ... }@args:
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
