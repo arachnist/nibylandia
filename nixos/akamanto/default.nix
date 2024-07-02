@@ -144,8 +144,6 @@ in {
 
   environment.etc."wifi-secrets".text = ci-secrets.wifi;
 
-  microvm.host.enable = false;
-
   systemd.network.enable = lib.mkForce false;
   networking = {
     useDHCP = true;

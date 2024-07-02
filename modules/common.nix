@@ -3,10 +3,7 @@
 let meta = import ../meta.nix;
 in {
   imports = with inputs; [
-    nix-index-database.nixosModules.nix-index
     agenix.nixosModules.default
-
-    microvm.nixosModules.host
 
     self.nixosModules.boot
   ];
@@ -187,10 +184,6 @@ in {
       addresses =
         [ { Address = "10.0.0.1/24"; } { Address = "fd12:3456:789a::1/64"; } ];
       ipv6Prefixes = [{ Prefix = "fd12:3456:789a::/64"; }];
-    };
-    networks.microvm-eth0 = {
-      matchConfig.Name = "vm-*";
-      networkConfig.Bridge = "virbr0";
     };
   };
 

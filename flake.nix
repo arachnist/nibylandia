@@ -3,15 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:arachnist/nixpkgs/ar-patchset-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nix-colors.url = "github:misterio77/nix-colors";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
-    nix-index-database.url = "github:Mic92/nix-index-database";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     deploy-rs.url = "github:serokell/deploy-rs";
-    microvm.url = "github:astro/microvm.nix";
-    microvm.inputs.nixpkgs.follows = "nixpkgs";
     impermanence.url = "github:nix-community/impermanence";
     colmena = {
       url = "github:zhaofengli/colmena/main";
@@ -33,7 +26,6 @@
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     lix = {
       url =
         "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90.0-rc1";

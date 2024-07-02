@@ -17,17 +17,9 @@ let
       ${util-linux}/bin/rfkill unblock 0
     '';
 in {
-  imports = [ inputs.self.nixosModules.common inputs.home-manager.nixosModule ];
+  imports = [ inputs.self.nixosModules.common ];
 
   nix.registry = nixRegistry;
-
-  home-manager.users.ar = {
-    home.username = "ar";
-    home.homeDirectory = "/home/ar";
-    home.stateVersion = config.system.stateVersion;
-  };
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
 
   boot = {
     extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
@@ -50,8 +42,6 @@ in {
     jack.enable = true;
     pulse.enable = true;
   };
-
-  home-manager.users.ar.services.easyeffects.enable = true;
 
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.backend = "wpa_supplicant";
