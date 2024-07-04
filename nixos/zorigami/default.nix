@@ -353,6 +353,7 @@
       MAX_VIDEO_SIZE = "167772160";
       ALLOWED_PRIVATE_ADDRESSES = "127.1.33.7";
       GITHUB_REPOSITORY = "arachnist/mastodon/tree/meow";
+      MAX_REACTIONS = "10";
     };
     extraEnvFiles = [ config.age.secrets.mastodonActiveRecordSecrets.path ];
     package = pkgs.glitch-soc;

@@ -2,10 +2,10 @@
 , gawk, gnused, }:
 (applyPatches {
   src = fetchFromGitHub {
-    owner = "glitch-soc";
+    owner = "arachnist";
     repo = "mastodon";
-    rev = "87415f21e49b057f5c20652b458fdf81e5ecc2d7";
-    hash = "sha256-+Chyg+jtit5Q4atYNWaQOcVs7ADXovmsWyw3yT99pzU=";
+    rev = "f8a515e0c3d481a391cc2f5168c75fc9e4b118ae";
+    hash = "sha256-Saypmw7eLXAa6xEwl09FbkqHP96g91EUKBlbCknHcCk=";
   };
   inherit patches;
   nativeBuildInputs = [ gawk gnused ];
