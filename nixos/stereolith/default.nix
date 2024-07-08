@@ -4,8 +4,6 @@
   networking.hostName = "stereolith";
   networking.hostId = "adcad022";
 
-  deployment.tags = [ "reachable-home" ];
-
   imports = with inputs.self.nixosModules; [ common ];
 
   boot.uefi.enable = true;

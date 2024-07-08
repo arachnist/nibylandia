@@ -1,8 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 
 {
-  deployment.tags = [ "reachable-everywhere" ];
-
   imports = [ inputs.simple-nixos-mailserver.nixosModule ]
     ++ (with inputs.self.nixosModules; [
       common

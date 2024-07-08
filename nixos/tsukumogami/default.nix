@@ -11,7 +11,6 @@ in {
   # https://en.wikipedia.org/wiki/Tsukumogami
   networking.hostName = "tsukumogami";
   deployment.buildOnTarget = lib.mkForce false;
-  deployment.tags = [ "reachable-hs" ];
 
   imports = [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"

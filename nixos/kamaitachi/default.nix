@@ -35,7 +35,6 @@ in {
   # https://en.wikipedia.org/wiki/Kamaitachi
   networking.hostName = "kamaitachi";
   deployment.buildOnTarget = lib.mkForce false;
-  deployment.tags = [ "reachable-home" ];
 
   imports = [
     "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"

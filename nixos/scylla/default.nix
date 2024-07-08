@@ -20,8 +20,6 @@ let
     ${pkgs.bird2}/bin/birdc reload in all
   '';
 in {
-  deployment.tags = [ "reachable-everywhere" ];
-
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix
 

@@ -2,7 +2,6 @@
 
 {
   networking.hostName = "amanojaku";
-  deployment.tags = [ "reachable-home" ];
 
   imports = [ inputs.jovian-nixos.nixosModules.default ]
     ++ (with inputs.self.nixosModules; [ graphical laptop ]);
