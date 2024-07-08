@@ -8,10 +8,10 @@ _:
     [ "nvme" "ehci_pci" "xhci_pci" "rtsx_pci_sdmmc" ];
 
   boot.initrd.luks.devices."nixos".device =
-    "/dev/disk/by-uuid/f676b705-5ae7-4f71-abf9-b1aac0ac2363";
+    "/dev/disk/by-uuid/069a58b9-d8c1-4ab1-8a68-c45928045f9b";
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/1FA4-9D1F";
+    device = "/dev/disk/by-uuid/12CE-A600";
     fsType = "vfat";
   };
 
@@ -22,74 +22,74 @@ _:
   };
 
   fileSystems."/tmp" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=tmp" ];
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=nix" ];
   };
 
   fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=home" ];
   };
 
   fileSystems."/etc/ssh" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=etc_ssh" ];
     neededForBoot = true;
   };
 
   fileSystems."/etc/NetworkManager" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=etc_NetworkManager" ];
   };
 
   fileSystems."/var/log" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=var_log" ];
   };
 
   fileSystems."/var/lib/NetworkManager" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=var_lib_NetworkManager" ];
   };
 
   fileSystems."/var/lib/bluetooth" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=var_lib_bluetooth" ];
   };
 
   fileSystems."/var/lib/libvirt" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=var_lib_libvirt" ];
   };
 
   fileSystems."/var/lib/flatpak" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=var_lib_flatpak" ];
   };
 
   fileSystems."/var/lib/tpm" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=var_lib_tpm" ];
   };
 
   fileSystems."/var/lib/tailscale" = {
-    device = "/dev/disk/by-uuid/364a4679-1512-4b57-9f31-a4dc4fd192b1";
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
     options = [ "subvol=var_lib_tailscale" ];
   };
