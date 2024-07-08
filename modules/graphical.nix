@@ -208,7 +208,7 @@ in {
     scrcpy
     krita
     vlc
-    libreoffice-qt
+    libreoffice-qt6
     kdePackages.tokodon
 
     glasgow
