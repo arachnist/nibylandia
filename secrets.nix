@@ -20,6 +20,8 @@ in {
     ++ [ meta.hosts.microlith.publicKey ];
   "secrets/amanojaku-ar.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.amanojaku.publicKey ];
+  "secrets/kyorinrin-ar.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.kyorinrin.publicKey ];
   "secrets/nix-store.age".publicKeys = meta.users.ar ++ (with meta.hosts; [
     zorigami.publicKey
     scylla.publicKey
