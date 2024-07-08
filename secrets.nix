@@ -6,6 +6,7 @@ in {
     microlith.publicKey
     zorigami.publicKey
     scylla.publicKey
+    kyorinrin.publicKey
   ]);
   "secrets/secureboot-cert.age".publicKeys = meta.users.ar
     ++ (with meta.hosts; [
@@ -13,6 +14,7 @@ in {
       microlith.publicKey
       zorigami.publicKey
       scylla.publicKey
+      kyorinrin.publicKey
     ]);
   "secrets/khas-ar.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.khas.publicKey ];
@@ -31,6 +33,7 @@ in {
     akamanto.publicKey
     amanojaku.publicKey
     tsukumogami.publicKey
+    kyorinrin.publicKey
   ]);
   "secrets/wg/nibylandia_scylla.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.scylla.publicKey ];
