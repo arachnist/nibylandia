@@ -489,6 +489,22 @@
         "type": "github"
       }
     },
+    "nixpkgsOlder": {
+      "locked": {
+        "lastModified": 1719918800,
+        "narHash": "sha256-9UoMK9d1PiJZJrInbMONscA7QN8C6kZIX9FUyHp6UqQ=",
+        "owner": "arachnist",
+        "repo": "nixpkgs",
+        "rev": "02e10f7e99522cef9909f78312ffbbd2d96e59c3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arachnist",
+        "repo": "nixpkgs",
+        "rev": "02e10f7e99522cef9909f78312ffbbd2d96e59c3",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1702272962,
@@ -523,11 +539,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1720516678,
-        "narHash": "sha256-8cRCodATGFhup7ivASjOqekIgAUY8d2tX0XzvYPuCGU=",
+        "lastModified": 1720542264,
+        "narHash": "sha256-5DaslaU9rl6nJyRzZlVwTVvN8tMA8ec6AM1NDWDSJS8=",
         "owner": "arachnist",
         "repo": "nixpkgs",
-        "rev": "72ee32ccaebb8f666582930972940345d93f37ac",
+        "rev": "8eb7f26d11fd482370287f2960d09076029a19a0",
         "type": "github"
       },
       "original": {
@@ -608,6 +624,7 @@
         "lix-module": "lix-module",
         "nix-formatter-pack": "nix-formatter-pack",
         "nixpkgs": "nixpkgs_4",
+        "nixpkgsOlder": "nixpkgsOlder",
         "simple-nixos-mailserver": "simple-nixos-mailserver"
       }
     },
