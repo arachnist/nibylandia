@@ -166,17 +166,19 @@ in {
   environment.systemPackages = [
     inputs.agenix.packages.${pkgs.system}.default
     inputs.nixpkgs.legacyPackages.${pkgs.system}.colmena
-  ] ++ (with pkgs; [
+  ] ++ (with pkgs.kdePackages; [
+    tokodon
+    neochat
+    kate
+    kolourpaint
+    okular
+  ]) ++ (with pkgs; [
     chromium
     ffmpeg-full
     firefox
     imagemagick
     inkscape
-    kate
-    keybase-gui
-    kolourpaint
     nixfmt-classic
-    okular
     paprefs
     pavucontrol
     solvespace
@@ -196,8 +198,6 @@ in {
     krita
     vlc
     libreoffice-qt6
-    kdePackages.tokodon
-    kdePackages.neochat
 
     glasgow
     # freecad
