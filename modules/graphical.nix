@@ -107,7 +107,7 @@ in {
   fonts = {
     enableDefaultPackages = true;
     packages = with pkgs; [
-      nerdfonts
+      font-awesome
       terminus_font
       terminus_font_ttf
       noto-fonts-cjk
