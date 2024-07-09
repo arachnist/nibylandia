@@ -17,6 +17,7 @@
   users.users.ar.hashedPasswordFile = config.age.secrets.ar-password.path;
 
   virtualisation.docker.enable = true;
+  virtualisation.waydroid.enable = true;
 
   networking.firewall.allowedTCPPorts = [ 8000 8080 ];
 
