@@ -199,7 +199,6 @@ in {
     element-desktop
     oneko
     cinny-desktop
-    neochat
     vagrant
     vokoscreen-ng
     appimage-run
@@ -209,6 +208,7 @@ in {
     vlc
     libreoffice-qt6
     kdePackages.tokodon
+    kdePackages.neochat
 
     glasgow
     # freecad
