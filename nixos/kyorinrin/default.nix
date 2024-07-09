@@ -23,6 +23,8 @@
   environment.systemPackages = with pkgs; [
     maliit-keyboard
     maliit-framework
+
     iio-sensor-proxy
+    xournalpp
   ];
 }
