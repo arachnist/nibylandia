@@ -20,14 +20,7 @@ in
   boot.initrd.unl0kr.enable = false;
   boot.plymouth.enable = true;
 
-  services.fprintd = {
-    enable = true;
-    tod = {
-      enable = true;
-      driver = pkgsOlder.libfprint-2-tod1-goodix;
-    };
-    package = pkgsOlder.fprintd-tod;
-  };
+  services.fprintd.enable = true;
 
   age.secrets.ar-password.file = ../../secrets/kyorinrin-ar.age;
 
