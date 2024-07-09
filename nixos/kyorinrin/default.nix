@@ -20,6 +20,7 @@
   virtualisation.waydroid.enable = true;
 
   networking.firewall.allowedTCPPorts = [ 8000 8080 ];
+  hardware.sensor.iio.enable = true;
 
   environment.systemPackages = with pkgs; [
     maliit-keyboard
