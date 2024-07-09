@@ -115,6 +115,7 @@ in {
     dnsutils
     tailscale
     nix-top
+    nix-tree
   ];
 
   documentation = {
