@@ -11,6 +11,7 @@
     secureboot
   ];
 
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
   boot.initrd.unl0kr.enable = false;
   boot.plymouth.enable = true;
 
