@@ -88,6 +88,12 @@ _:
     options = [ "subvol=var_lib_tpm" ];
   };
 
+  fileSystems."/var/lib/alsa" = {
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
+    fsType = "btrfs";
+    options = [ "subvol=var_lib_alsa" ];
+  };
+
   fileSystems."/var/lib/tailscale" = {
     device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
