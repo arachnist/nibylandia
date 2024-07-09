@@ -198,7 +198,6 @@ in {
     lsix
     element-desktop
     oneko
-    cinny-desktop
     vagrant
     vokoscreen-ng
     appimage-run
