@@ -167,9 +167,7 @@ in {
     inputs.agenix.packages.${pkgs.system}.default
     inputs.nixpkgs.legacyPackages.${pkgs.system}.colmena
   ] ++ (with pkgs; [
-    krfb # for kdeconnect virtual display
     chromium
-    # electrum
     ffmpeg-full
     firefox
     imagemagick
@@ -188,20 +186,13 @@ in {
     mpv
     gphoto2
     minicom
-    maim
     thunderbird
     feh
     virt-manager
     ncdu
     nixos-option
     yt-dlp
-    lsix
     element-desktop
-    oneko
-    vagrant
-    vokoscreen-ng
-    appimage-run
-    protonup-ng
     scrcpy
     krita
     vlc
@@ -228,28 +219,6 @@ in {
       '' + old.preFixup;
     }))
 
-    (vscode-with-extensions.override {
-      vscodeExtensions = with vscode-extensions; [
-        bbenoist.nix
-        bierner.emojisense
-        bierner.markdown-checkbox
-        bierner.markdown-emoji
-        bodil.file-browser
-        golang.go
-        ms-vscode.cpptools
-        ms-vscode.cmake-tools
-        ms-vscode.anycode
-        ms-toolsai.jupyter
-        ms-toolsai.jupyter-renderers
-        ms-vscode.makefile-tools
-        redhat.vscode-yaml
-        rust-lang.rust-analyzer
-        shardulm94.trailing-spaces
-        arrterian.nix-env-selector
-        jnoortheen.nix-ide
-      ];
-    })
-
     prusa-slicer
     # TODO: investigate later
     # orca-slicer
@@ -262,7 +231,6 @@ in {
     dig
     whois
     cfssl
-    gomuks
     bind
     nmap
     waypipe
