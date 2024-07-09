@@ -122,10 +122,10 @@ in {
     ];
   };
 
-  i18n.inputMethod = {
-    enabled = lib.mkDefault "ibus";
-    ibus.engines = with pkgs.ibus-engines; [ uniemoji ];
-  };
+  # i18n.inputMethod = {
+  #   enabled = lib.mkDefault "ibus";
+  #   ibus.engines = with pkgs.ibus-engines; [ uniemoji ];
+  # };
 
   services.printing = {
     enable = true;
