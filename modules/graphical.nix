@@ -211,7 +211,7 @@ in {
     kdePackages.tokodon
 
     glasgow
-    freecad
+    # freecad
 
     easyeffects
 
