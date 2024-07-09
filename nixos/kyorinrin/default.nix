@@ -9,11 +9,10 @@
     graphical
     laptop
     secureboot
-    gaming
   ];
 
-  boot.initrd.unl0kr.enable = true;
-  boot.plymouth.enable = false;
+  boot.initrd.unl0kr.enable = false;
+  boot.plymouth.enable = true;
 
   age.secrets.ar-password.file = ../../secrets/kyorinrin-ar.age;
 
