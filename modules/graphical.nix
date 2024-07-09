@@ -192,7 +192,6 @@ in {
     thunderbird
     feh
     virt-manager
-    cura
     ncdu
     nixos-option
     yt-dlp
