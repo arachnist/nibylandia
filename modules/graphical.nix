@@ -93,7 +93,7 @@ in {
     consoleLogLevel = 0;
     initrd.verbose = false;
     initrd.systemd.enable = true;
-    plymouth.enable = true;
+    plymouth.enable = lib.mkDefault true;
     plymouth.theme = "breeze";
     kernelParams = [
       "quiet"

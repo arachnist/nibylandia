@@ -13,6 +13,7 @@
   ];
 
   boot.initrd.unl0kr.enable = true;
+  boot.plymouth.enable = false;
 
   age.secrets.ar-password.file = ../../secrets/kyorinrin-ar.age;
 
