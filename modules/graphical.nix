@@ -182,7 +182,6 @@ in {
     solvespace
     spotify
     youtube-dl
-    morph
     mpv
     gphoto2
     minicom
