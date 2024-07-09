@@ -12,6 +12,8 @@
     gaming
   ];
 
+  boot.initrd.unl0kr.enable = true;
+
   age.secrets.ar-password.file = ../../secrets/kyorinrin-ar.age;
 
   users.users.ar.hashedPasswordFile = config.age.secrets.ar-password.path;
