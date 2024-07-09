@@ -99,4 +99,10 @@ _:
     fsType = "btrfs";
     options = [ "subvol=var_lib_tailscale" ];
   };
+
+  fileSystems."/var/lib/fprint" = {
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
+    fsType = "btrfs";
+    options = [ "subvol=var_lib_fprint" ];
+  };
 }

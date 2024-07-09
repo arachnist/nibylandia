@@ -1,5 +1,8 @@
 { config, inputs, pkgs, ... }:
 
+let
+  pkgsOlder = import inputs.nixpkgsOlder { system = pkgs.system; config.allowUnfree = true; };
+in
 {
   networking.hostName = "kyorinrin";
 
@@ -16,6 +19,15 @@
   # boot.initrd.kernelModules = [ "uhid" "hid_sensor_als" "hid_sensor_trigger" "industrialio_triggered_buffer" "hid_sensor_iio_common" "industrialio" "hid_sensor_hub" "hid_multitouch" "i2c_hid_acpi" "i2c_hid" "mac_hid" "hid_generic" "usbhid" "hid" ];
   boot.initrd.unl0kr.enable = false;
   boot.plymouth.enable = true;
+
+  services.fprintd = {
+    enable = true;
+    tod = {
+      enable = true;
+      driver = pkgsOlder.libfprint-2-tod1-goodix;
+    };
+    package = pkgsOlder.fprintd-tod;
+  };
 
   age.secrets.ar-password.file = ../../secrets/kyorinrin-ar.age;
 
