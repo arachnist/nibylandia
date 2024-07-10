@@ -39,6 +39,12 @@ _:
     options = [ "subvol=home" ];
   };
 
+  fileSystems."/steam" = {
+    device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
+    fsType = "btrfs";
+    options = [ "subvol=steam" ];
+  };
+
   fileSystems."/etc/ssh" = {
     device = "/dev/disk/by-uuid/82037b18-0f09-4383-8238-8e3396af30a3";
     fsType = "btrfs";
