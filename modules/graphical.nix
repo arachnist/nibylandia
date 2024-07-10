@@ -173,6 +173,7 @@ in {
     kate
     kolourpaint
     okular
+    discover
   ]) ++ (with pkgsOlder; [
     freecad
     neofetch
