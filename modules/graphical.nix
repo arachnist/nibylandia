@@ -188,7 +188,6 @@ in {
     pavucontrol
     solvespace
     spotify
-    youtube-dl
     mpv
     gphoto2
     minicom
