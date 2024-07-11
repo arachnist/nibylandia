@@ -1,12 +1,21 @@
-{ fetchFromGitHub, pkgs, buildPythonPackage, python3Packages, python3, ... }:
+{ callPackage, fetchFromGitHub, pkgs, buildPythonPackage, python311, pythonOlder, ... }:
 
+let
+  python3 = python311;
+  python3Packages = pkgs.python311Packages;
+  pillow_with_headers = callPackage ./pillow-with-headers.nix {
+    inherit python3Packages;
+  };
+in
 buildPythonPackage {
   pname = "Minecraft-Overviewer";
   version = "2024-03-15";
   format = "other";
 
-  propagatedBuildInputs = [ pkgs.pipreqs ] ++ (with python3Packages; [
+  propagatedBuildInputs = [
+    (pkgs.pipreqs.override { inherit python3; })
     pillow_with_headers
+  ] ++ (with python3Packages; [
     altgraph
     certifi
     charset-normalizer
@@ -26,13 +35,15 @@ buildPythonPackage {
   buildInputs = with python3Packages; [ setuptools ];
 
   buildPhase = ''
-    export CFLAGS="-I${python3Packages.pillow_with_headers}/include/libImaging"
+    export CFLAGS="-I${pillow_with_headers}/include/libImaging"
     ${python3.interpreter} setup.py build
   '';
 
   installPhase = ''
     ${python3.interpreter} setup.py install --prefix=$out --install-lib=$out/${python3.sitePackages}
   '';
+
+  doCheck = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "GregoryAM-SP";

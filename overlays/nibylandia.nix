@@ -21,7 +21,7 @@ in {
     inherit (emoji-reactions) patches;
   };
 
-  python3 = super.python3.override {
+  python311 = super.python311.override {
     packageOverrides = self: super: {
       pillow_with_headers =
         self.callPackage ../pkgs/pillow-with-headers.nix { };
@@ -29,5 +29,5 @@ in {
         self.callPackage ../pkgs/minecraft-overviewer.nix { };
     };
   };
-  python3Packages = self.python3.pkgs;
+  python311Packages = self.python311.pkgs;
 }
