@@ -35,4 +35,9 @@ in
     iio-sensor-proxy
     xournalpp
   ];
+
+  services.displayManager.sddm.settings.Fingerprintlogin = {
+    Session = "plasma";
+    User = "ar";
+  };
 }
