@@ -691,6 +691,21 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIImhJ+2pw5c1Tzx/g+S04on5bUXhwzloqRaiXti5UC7A domi@zork"
     ];
   };
+  users.groups.linus = { gid = 1005; };
+  users.users.linus = {
+    isNormalUser = true;
+    uid = 1005;
+    group = "linus";
+    extraGroups = [ "users" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIORvG6x/lWsQZA7ZAsnwBe1RBzzLwBeMoQCpOD0ig9R5 linus@linus-framework"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEowH/uY8eqQ+Q4G3oST9CM7my6uxicDr++7adqgrINP linus@linus-desktop"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOm/JXQzPnjZfxmuRZAypcp6Vosp+HJJiV1F/AyoniSu linus@linus.dev"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH4ssDo0VL6l16vj+SIjPx+bU2biCuhDCEJQqGPYvjT/ linus@sakamoto"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQdbF6qHTzdSXKiMTlmljw/UHXQ+M++JGMwT56844Ab ConnectBot@FP3"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICr7oqFHkwPMV67PhjdLomvcfdQfZ4W+KncQ86ywjtrt Termius@iPhone"
+    ];
+  };
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = [
