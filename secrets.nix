@@ -105,4 +105,6 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/automata.of-a.cat-matrix_env.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/github-runner-token-test262.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
 }

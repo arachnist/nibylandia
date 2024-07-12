@@ -691,4 +691,42 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIImhJ+2pw5c1Tzx/g+S04on5bUXhwzloqRaiXti5UC7A domi@zork"
     ];
   };
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = [
+    (lib.getLib pkgs.stdenv.cc.cc)
+  ];
+  age.secrets.github-runner-test262.file = ../../secrets/github-runner-token-test262.age;
+  services.github-runners."test262" = {
+    enable = true;
+    url = "https://github.com/arachnist/test262.fyi";
+    tokenFile = config.age.secrets.github-runner-token.path;
+
+    # list of debian packages from Linus
+    # git nodejs make build-essential unzip zip jq rsync python3 python3-pip python3-virtualenv python3-wheel cargo rustc liblttng-ust1 librust-openssl-dev npm openjdk-8-jre
+    extraPackages =  (with pkgs.python311Packages; [
+      pip
+      virtualenv
+      wheel
+    ]) ++ (with pkgs; [
+      python311
+      git
+      nodejs # also includes npm
+      gnumake
+      stdenv
+      unzip
+      zip
+      jq
+      rsync
+      cargo
+      rustc
+      lttng-ust
+      openssl # ?
+      openjdk8
+    ]);
+    extraEnvironment = {
+      NIX_LD = "/run/current-system/sw/share/nix-ld/lib/ld.so";
+      NIX_LD_LIBRARY_PATH = "/run/current-system/sw/share/nix-ld/lib";
+    };
+  };
 }
