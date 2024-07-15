@@ -244,7 +244,6 @@
     '';
   };
   systemd.tmpfiles.rules = [ "d /var/spool/samba 1777 root root -" ];
-  sound.enable = false;
   hardware.pulseaudio.enable = false;
   services.xserver.enable = false;
   systemd.services.mdmonitor.enable = false;

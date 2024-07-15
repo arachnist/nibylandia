@@ -155,7 +155,6 @@ in {
   hardware.graphics.enable = true;
 
   # strictly for shits and giggles
-  sound.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
