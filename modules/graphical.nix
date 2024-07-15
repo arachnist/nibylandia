@@ -208,6 +208,7 @@ in {
 
     nixd
     nil
+    nvd
     clang-tools
     python3Packages.python-lsp-server
     yaml-language-server
