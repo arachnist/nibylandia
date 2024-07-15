@@ -715,7 +715,7 @@
   services.github-runners."test262" = {
     enable = true;
     url = "https://github.com/arachnist/test262.fyi";
-    tokenFile = config.age.secrets.github-runner-token.path;
+    tokenFile = config.age.secrets.github-runner-test262.path;
 
     # list of debian packages from Linus
     # git nodejs make build-essential unzip zip jq rsync python3 python3-pip python3-virtualenv python3-wheel cargo rustc liblttng-ust1 librust-openssl-dev npm openjdk-8-jre
