@@ -32,7 +32,6 @@ in {
 
   zramSwap.enable = true;
 
-  sound.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -208,6 +207,7 @@ in {
     easyeffects
 
     nixd
+    nil
     clang-tools
     python3Packages.python-lsp-server
     yaml-language-server
