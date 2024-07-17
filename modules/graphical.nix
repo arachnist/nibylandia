@@ -201,6 +201,7 @@ in {
     krita
     vlc
     libreoffice-qt6
+    bitwarden
 
     glasgow
 
