@@ -5,13 +5,13 @@ set -e
 
 cd "$(dirname "$0")"
 
-commit="$(curl -SsL "$1")"
+commit="$(curl -SsL "${1:-https://api.github.com/repos/arachnist/mastodon/branches/meow}")"
 rev="$(jq -r '.commit.sha' <<<"$commit")"
 date="$(jq -r '.commit.commit.committer.date' <<<"$commit")"
 date="$(date --date="$date" --iso-8601=date)"
 echo "current commit is $rev, prefetching..."
 
-hash="$(nix-prefetch-github glitch-soc mastodon --rev "$rev" | jq -r '.hash')"
+hash="$(nix-prefetch-github arachnist mastodon --rev "$rev" | jq -r '.hash')"
 
 sed -i -Ee "s|^( *rev = )\".*\";|\\1\"$rev\";|g;" ./source.nix
 sed -i -Ee "s|^( *hash = )\".*\";|\\1\"$hash\";|g;" ./source.nix
