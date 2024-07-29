@@ -20,9 +20,13 @@ jobs:
             echo -n "matrix="
             nix eval --raw --impure --expr '
                 let
-                    f = configs: builtins.groupBy (n: configs.${n}.pkgs.system) (builtins.attrNames configs);
+                    groupHosts = hosts:
+                        builtins.groupBy (n: hosts.${n}.system)
+                            (builtins.filter (h: !hosts.${h}.ciSkip)
+                                (builtins.attrNames hosts));
+                    hosts = (import ./meta.nix).hosts;
                 in
-                    builtins.toJSON (f (builtins.getFlake(builtins.toString ./.)).outputs.nixosConfigurations)'
+                    builtins.toJSON (groupHosts hosts)'
             echo ""
           }  >> "$GITHUB_OUTPUT"
 

@@ -10,6 +10,7 @@ in {
   hosts = builtins.mapAttrs (name: value:
     {
       targetHost = name + "." + defaultDomain;
+      ciSkip = false;
     }
     // builtins.fromJSON (builtins.readFile (./nixos/. + "/${name}/meta.json")))
     (builtins.readDir ./nixos);
