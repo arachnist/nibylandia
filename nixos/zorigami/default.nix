@@ -619,6 +619,16 @@
             defaultHomeserver = 0;
           };
         };
+
+        extraConfig = ''
+          rewrite ^/config.json$ /config.json break;
+          rewrite ^/manifest.json$ /manifest.json break;
+          rewrite ^.*/olm.wasm$ /olm.wasm break;
+          rewrite ^/pdf.worker.min.js$ /pdf.worker.min.js break;
+          rewrite ^/public/(.*)$ /public/$1 break;
+          rewrite ^/assets/(.*)$ /assets/$1 break;
+          rewrite ^(.+)$ /index.html break;
+        '';
       };
     };
     ${config.services.dendrite.settings.global.server_name} = {
@@ -678,7 +688,7 @@
     package = pkgs.openjdk21;
   };
 
-  environment.systemPackages = with pkgs; [ john restic weechat ];
+  environment.systemPackages = (config.services.github-runners.test262.extraPackages) ++ (with pkgs; [ john restic weechat ]);
   users.groups.domi = { gid = 1004; };
   users.users.domi = {
     isNormalUser = true;
@@ -710,6 +720,7 @@
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = [
     (lib.getLib pkgs.stdenv.cc.cc)
+    (lib.getLib pkgs.openssl)
   ];
   age.secrets.github-runner-test262.file = ../../secrets/github-runner-token-test262.age;
   services.github-runners."test262" = {
@@ -733,15 +744,16 @@
       zip
       jq
       rsync
-      cargo
-      rustc
+      rustup
       lttng-ust
-      openssl # ?
       openjdk8
+      curl
+      stdenv
     ]);
     extraEnvironment = {
       NIX_LD = "/run/current-system/sw/share/nix-ld/lib/ld.so";
       NIX_LD_LIBRARY_PATH = "/run/current-system/sw/share/nix-ld/lib";
+      CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.gcc}/bin/cc";
     };
   };
 }
