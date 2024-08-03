@@ -1,36 +1,34 @@
-{ callPackage, fetchFromGitHub, pkgs, buildPythonPackage, python311, pythonOlder, ... }:
+{ callPackage, fetchFromGitHub, pkgs, buildPythonPackage, python311, pythonOlder
+, ... }:
 
 let
   python3 = python311;
   python3Packages = pkgs.python311Packages;
-  pillow_with_headers = callPackage ./pillow-with-headers.nix {
-    inherit python3Packages;
-  };
-in
-buildPythonPackage {
+  pillow_with_headers =
+    callPackage ./pillow-with-headers.nix { inherit python3Packages; };
+in buildPythonPackage {
   pname = "Minecraft-Overviewer";
   version = "2024-03-15";
   format = "other";
 
-  propagatedBuildInputs = [
-    (pkgs.pipreqs.override { inherit python3; })
-    pillow_with_headers
-  ] ++ (with python3Packages; [
-    altgraph
-    certifi
-    charset-normalizer
-    docopt
-    idna
-    importlib-metadata
-    nbtlib
-    numpy
-    packaging
-    pefile
-    requests
-    urllib3
-    yarg
-    zipp
-  ]);
+  propagatedBuildInputs =
+    [ (pkgs.pipreqs.override { inherit python3; }) pillow_with_headers ]
+    ++ (with python3Packages; [
+      altgraph
+      certifi
+      charset-normalizer
+      docopt
+      idna
+      importlib-metadata
+      nbtlib
+      numpy
+      packaging
+      pefile
+      requests
+      urllib3
+      yarg
+      zipp
+    ]);
 
   buildInputs = with python3Packages; [ setuptools ];
 

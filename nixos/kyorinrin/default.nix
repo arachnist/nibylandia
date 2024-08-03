@@ -1,8 +1,5 @@
 { config, inputs, pkgs, ... }:
 
-let
-  pkgsOlder = import inputs.nixpkgsOlder { system = pkgs.system; config.allowUnfree = true; };
-in
 {
   networking.hostName = "kyorinrin";
 

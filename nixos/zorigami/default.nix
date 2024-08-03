@@ -140,7 +140,7 @@
 
   systemd.services.fedifetcher = let
     # access token(s) from environment
-    fedifetcher = pkgs.fedifetcher.overrideAttrs(old: {
+    fedifetcher = pkgs.fedifetcher.overrideAttrs (old: {
       src = pkgs.fetchFromGitHub {
         owner = "arachnist";
         repo = "FediFetcher";
@@ -148,12 +148,11 @@
         hash = "sha256-gbYbolV+DeX4KUwX0ceruyzhMX0ZiN+0b1BISIdPzTg=";
       };
     });
-  in
-  {
+  in {
     path = [ fedifetcher ];
     description = "fetch fedi posts";
     script = let
-      fedifetcherConfig = (pkgs.formats.json {}).generate "fedifetcher.json" {
+      fedifetcherConfig = (pkgs.formats.json { }).generate "fedifetcher.json" {
         server = "is-a.cat";
         state-dir = "/var/lib/fedifetcher";
         lock-file = "/run/fedifetcher/fedifetcher.lock";
@@ -739,7 +738,9 @@
     package = pkgs.openjdk21;
   };
 
-  environment.systemPackages = (config.services.github-runners.test262.extraPackages) ++ (with pkgs; [ john restic weechat ]);
+  environment.systemPackages =
+    config.services.github-runners.test262.extraPackages
+    ++ (with pkgs; [ john restic weechat ]);
   users.groups.domi = { gid = 1004; };
   users.users.domi = {
     isNormalUser = true;
@@ -769,11 +770,10 @@
   };
 
   programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = [
-    (lib.getLib pkgs.stdenv.cc.cc)
-    (lib.getLib pkgs.openssl)
-  ];
-  age.secrets.github-runner-test262.file = ../../secrets/github-runner-token-test262.age;
+  programs.nix-ld.libraries =
+    [ (lib.getLib pkgs.stdenv.cc.cc) (lib.getLib pkgs.openssl) ];
+  age.secrets.github-runner-test262.file =
+    ../../secrets/github-runner-token-test262.age;
   services.github-runners."test262" = {
     enable = true;
     url = "https://github.com/arachnist/test262.fyi";
@@ -781,26 +781,23 @@
 
     # list of debian packages from Linus
     # git nodejs make build-essential unzip zip jq rsync python3 python3-pip python3-virtualenv python3-wheel cargo rustc liblttng-ust1 librust-openssl-dev npm openjdk-8-jre
-    extraPackages =  (with pkgs.python311Packages; [
-      pip
-      virtualenv
-      wheel
-    ]) ++ (with pkgs; [
-      python311
-      git
-      nodejs # also includes npm
-      gnumake
-      stdenv
-      unzip
-      zip
-      jq
-      rsync
-      rustup
-      lttng-ust
-      openjdk8
-      curl
-      stdenv
-    ]);
+    extraPackages = (with pkgs.python311Packages; [ pip virtualenv wheel ])
+      ++ (with pkgs; [
+        python311
+        git
+        nodejs # also includes npm
+        gnumake
+        stdenv
+        unzip
+        zip
+        jq
+        rsync
+        rustup
+        lttng-ust
+        openjdk8
+        curl
+        stdenv
+      ]);
     extraEnvironment = {
       NIX_LD = "/run/current-system/sw/share/nix-ld/lib/ld.so";
       NIX_LD_LIBRARY_PATH = "/run/current-system/sw/share/nix-ld/lib";

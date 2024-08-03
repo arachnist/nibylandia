@@ -330,11 +330,9 @@
     enable = true;
     package = pkgs.postgresql_16;
     ensureDatabases = [ "mastodon" ];
-    ensureUsers = [
-      {
-        name = "mastodon";
-        ensureDBOwnership = true;
-      }
-    ];
+    ensureUsers = [{
+      name = "mastodon";
+      ensureDBOwnership = true;
+    }];
   };
 }
