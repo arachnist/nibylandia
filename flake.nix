@@ -28,15 +28,6 @@
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    lix = {
-      url =
-        "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90.0";
-      flake = false;
-    };
-    lix-module = {
-      url = "git+https://git.lix.systems/lix-project/nixos-module";
-      inputs.lix.follows = "lix";
-    };
   };
 
   outputs = { self, nixpkgs, deploy-rs, ... }@inputs:
@@ -91,7 +82,6 @@
           inherit (value) system;
           modules = [
             (./nixos/. + "/${name}")
-            inputs.lix-module.nixosModules.default
             {
               nixpkgs.system = value.system;
             } # need to set this explicitly for colmena
