@@ -176,13 +176,13 @@
       RuntimeDirectoryPreserve = true;
       StateDirectory = "fedifetcher";
       UMask = "0077";
-      EnvironmentFile = config.age.secrets.fedifetcherAccessToken_ar.path;
+      EnvironmentFile = [ config.age.secrets.fedifetcherAccessToken_ar.path ];
     };
   };
 
   systemd.timers.fedifetcher = {
     wantedBy = [ "multi-user.target" ];
-    timerConfig = { OnCalendar = "daily"; };
+    timerConfig = { OnCalendar = "*:0/5"; };
   };
 
   systemd.services.minecraft-overviewer = {
