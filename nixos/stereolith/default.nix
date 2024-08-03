@@ -1,6 +1,14 @@
 { config, inputs, lib, pkgs, ... }:
 
 {
+  age.secrets.mastodonPlainMail = {
+    group = "mastodon";
+    mode = "440";
+    file = ../../secrets/mail/mastodonPlain.age;
+  };
+  age.secrets.mastodonActiveRecordSecrets.file =
+    ../../secrets/mastodon-qa-activerecord.age;
+
   networking.hostName = "stereolith";
   networking.hostId = "adcad022";
 
@@ -286,4 +294,47 @@
   virtualisation.libvirtd.enable = true;
 
   services.pykms.enable = true;
+
+  #users.groups.mastodon = { members = [ "nginx"]; };
+  services.mastodon = {
+    enable = true;
+    webProcesses = 4;
+    streamingProcesses = 4;
+    localDomain = "social-qa.of-a.cat";
+    configureNginx = true;
+    smtp = {
+      user = "mastodon@is-a.cat";
+      passwordFile = config.age.secrets.mastodonPlainMail.path;
+      fromAddress = "mastodon@is-a.cat";
+      host = "is-a.cat";
+      createLocally = false;
+      authenticate = true;
+    };
+    extraConfig = {
+      EMAIL_DOMAIN_ALLOWLIST = "is-a.cat";
+      MAX_TOOT_CHARS = "20000";
+      MAX_PINNED_TOOTS = "10";
+      MAX_BIO_CHARS = "2000";
+      MAX_PROFILE_FIELDS = "8";
+      MAX_POLL_OPTIONS = "10";
+      MAX_IMAGE_SIZE = "33554432";
+      MAX_VIDEO_SIZE = "167772160";
+      ALLOWED_PRIVATE_ADDRESSES = "127.1.33.7";
+      GITHUB_REPOSITORY = "arachnist/mastodon/tree/meow";
+      MAX_REACTIONS = "10";
+    };
+    extraEnvFiles = [ config.age.secrets.mastodonActiveRecordSecrets.path ];
+    package = pkgs.glitch-soc;
+  };
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_16;
+    ensureDatabases = [ "mastodon" ];
+    ensureUsers = [
+      {
+        name = "mastodon";
+        ensureDBOwnership = true;
+      }
+    ];
+  };
 }

@@ -66,7 +66,7 @@ in {
   "secrets/mail/mastodon.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/mail/mastodonPlain.age".publicKeys = meta.users.ar
-    ++ [ meta.hosts.zorigami.publicKey ];
+    ++ [ meta.hosts.zorigami.publicKey meta.hosts.stereolith.publicKey ];
   "secrets/mail/madargon.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/mail/enki.age".publicKeys = meta.users.ar
@@ -87,6 +87,8 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/mastodon-activerecord.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/mastodon-qa-activerecord.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.stereolith.publicKey ];
   "secrets/gitea-runner-token-zorigami.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/gitea-runner-token-scylla.age".publicKeys = meta.users.ar
