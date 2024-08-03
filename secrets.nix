@@ -87,6 +87,8 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/mastodon-activerecord.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/fedifetcherAccessToken_ar.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/mastodon-qa-activerecord.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.stereolith.publicKey ];
   "secrets/gitea-runner-token-zorigami.age".publicKeys = meta.users.ar

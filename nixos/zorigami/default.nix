@@ -67,6 +67,9 @@
   age.secrets.automataDendriteEnv.file =
     ../../secrets/automata.of-a.cat-matrix_env.age;
 
+  age.secrets.fedifetcherAccessToken_ar.file =
+    ../../secrets/fedifetcherAccessToken_ar.age;
+
   nibylandia.monitoring-server = { domain = "monitoring.is-a.cat"; };
 
   services.nginx = {
@@ -133,6 +136,54 @@
       ExecStart = ''
         ${pkgs.cass}/bin/cass -listen "127.0.0.1:8000" -file-store "/srv/www/arachnist.is-a.cat/c" -url-base "https://ar.is-a.cat/c/"'';
     };
+  };
+
+  systemd.services.fedifetcher = let
+    # access token(s) from environment
+    fedifetcher = pkgs.fedifetcher.overrideAttrs(old: {
+      src = pkgs.fetchFromGitHub {
+        owner = "arachnist";
+        repo = "FediFetcher";
+        rev = "d8daa28db9ec2b7791ed72c43f1b4165ae9ba075";
+        hash = "sha256-gbYbolV+DeX4KUwX0ceruyzhMX0ZiN+0b1BISIdPzTg=";
+      };
+    });
+  in
+  {
+    path = [ fedifetcher ];
+    description = "fetch fedi posts";
+    script = let
+      fedifetcherConfig = (pkgs.formats.json {}).generate "fedifetcher.json" {
+        server = "is-a.cat";
+        state-dir = "/var/lib/fedifetcher";
+        lock-file = "/run/fedifetcher/fedifetcher.lock";
+        from-lists = 1;
+        from-notifications = 1;
+        max-favourites = 1000;
+        max-follow-requests = 80;
+        max-followers = 400;
+        max-followings = 400;
+        remember-hosts-for-days = 70;
+        remember-users-for-hours = 1680;
+        reply-interval-in-hours = 2;
+      };
+    in ''
+      fedifetcher --config "${fedifetcherConfig}"
+    '';
+    serviceConfig = {
+      DynamicUser = true;
+      User = "fedifetcher";
+      RuntimeDirectory = "fedifetcher";
+      RuntimeDirectoryPreserve = true;
+      StateDirectory = "fedifetcher";
+      UMask = "0077";
+      EnvironmentFile = config.age.secrets.fedifetcherAccessToken_ar.path;
+    };
+  };
+
+  systemd.timers.fedifetcher = {
+    wantedBy = [ "multi-user.target" ];
+    timerConfig = { OnCalendar = "daily"; };
   };
 
   systemd.services.minecraft-overviewer = {
