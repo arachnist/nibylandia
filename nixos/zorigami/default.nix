@@ -144,31 +144,32 @@
       src = pkgs.fetchFromGitHub {
         owner = "arachnist";
         repo = "FediFetcher";
-        rev = "d8daa28db9ec2b7791ed72c43f1b4165ae9ba075";
-        hash = "sha256-gbYbolV+DeX4KUwX0ceruyzhMX0ZiN+0b1BISIdPzTg=";
+        rev = "d246f25bfcc892c8b134e4842edb239d7e4bc982";
+        hash = "sha256-CubzR3FbojR5gLQUkIrrJJKquVIoEb8/HCyO/p9hick=";
       };
     });
   in {
     path = [ fedifetcher ];
     description = "fetch fedi posts";
-    script = let
-      fedifetcherConfig = (pkgs.formats.json { }).generate "fedifetcher.json" {
-        server = "is-a.cat";
-        state-dir = "/var/lib/fedifetcher";
-        lock-file = "/run/fedifetcher/fedifetcher.lock";
-        from-lists = 1;
-        from-notifications = 1;
-        max-favourites = 1000;
-        max-follow-requests = 80;
-        max-followers = 400;
-        max-followings = 400;
-        remember-hosts-for-days = 70;
-        remember-users-for-hours = 1680;
-        reply-interval-in-hours = 2;
-      };
-    in ''
-      fedifetcher --config "${fedifetcherConfig}"
+    script = ''
+      fedifetcher
     '';
+    environment = lib.mapAttrs' (n: v:
+      (lib.nameValuePair ("ff_" + builtins.replaceStrings [ "-" ] [ "_" ] n)
+        (builtins.toString v))) {
+          server = "is-a.cat";
+          state-dir = "/var/lib/fedifetcher";
+          lock-file = "/run/fedifetcher/fedifetcher.lock";
+          from-lists = 1;
+          from-notifications = 1;
+          max-favourites = 1000;
+          max-follow-requests = 80;
+          max-followers = 400;
+          max-followings = 400;
+          remember-hosts-for-days = 70;
+          remember-users-for-hours = 1680;
+          reply-interval-in-hours = 2;
+        };
     serviceConfig = {
       DynamicUser = true;
       User = "fedifetcher";
