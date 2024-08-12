@@ -4,8 +4,8 @@
   src = fetchFromGitHub {
     owner = "arachnist";
     repo = "mastodon";
-    rev = "704396e6014b97970516e5f61fe04e8bb28454fa";
-    hash = "sha256-c1mfl0QxiKNhcLdT1fktVWzXhqrYDdoynvf2vs/PHbs=";
+    rev = "69d4e3fa2ba78dba40f0593b90d6151bea65b69f";
+    hash = "sha256-OnanDlparytwsFz8lO6ZIPim0sDVD4zCsleMJFY0n44=";
   };
   inherit patches;
   nativeBuildInputs = [ gawk gnused ];
