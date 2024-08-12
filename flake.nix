@@ -3,8 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:arachnist/nixpkgs/ar-patchset-unstable";
-    nixpkgsOlder.url =
-      "github:arachnist/nixpkgs/02e10f7e99522cef9909f78312ffbbd2d96e59c3";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
     deploy-rs.url = "github:serokell/deploy-rs";
     impermanence.url = "github:nix-community/impermanence";

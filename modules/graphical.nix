@@ -3,10 +3,6 @@
 let
   flakes = lib.filterAttrs (name: value: value ? outputs) inputs;
   nixRegistry = builtins.mapAttrs (name: v: { flake = v; }) flakes;
-  pkgsOlder = import inputs.nixpkgsOlder {
-    inherit (pkgs) system;
-    config.allowUnfree = true;
-  };
   # rfkill block 0; rmmod btusb btintel; systemctl restart bluetooth.service; modprobe btintel; modprobe btusb; systemctl restart bluetooth.service; rfkill unblock 0
   bt-unfuck = with pkgs;
     writeScriptBin "bt-unfuck" ''
@@ -176,7 +172,7 @@ in {
     kolourpaint
     okular
     discover
-  ]) ++ (with pkgsOlder; [ freecad neofetch ]) ++ (with pkgs; [
+  ]) ++ (with pkgs; [
     chromium
     ffmpeg-full
     firefox
@@ -202,6 +198,8 @@ in {
     vlc
     libreoffice-qt6
     bitwarden
+    freecad
+    neofetch
 
     glasgow
 

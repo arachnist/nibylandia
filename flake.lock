@@ -395,22 +395,6 @@
         "type": "github"
       }
     },
-    "nixpkgsOlder": {
-      "locked": {
-        "lastModified": 1719918800,
-        "narHash": "sha256-9UoMK9d1PiJZJrInbMONscA7QN8C6kZIX9FUyHp6UqQ=",
-        "owner": "arachnist",
-        "repo": "nixpkgs",
-        "rev": "02e10f7e99522cef9909f78312ffbbd2d96e59c3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "arachnist",
-        "repo": "nixpkgs",
-        "rev": "02e10f7e99522cef9909f78312ffbbd2d96e59c3",
-        "type": "github"
-      }
-    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1702272962,
@@ -528,7 +512,6 @@
         "lanzaboote": "lanzaboote",
         "nix-formatter-pack": "nix-formatter-pack",
         "nixpkgs": "nixpkgs_4",
-        "nixpkgsOlder": "nixpkgsOlder",
         "simple-nixos-mailserver": "simple-nixos-mailserver"
       }
     },
