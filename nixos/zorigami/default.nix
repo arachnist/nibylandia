@@ -739,9 +739,7 @@
     package = pkgs.openjdk21;
   };
 
-  environment.systemPackages =
-    config.services.github-runners.test262.extraPackages
-    ++ (with pkgs; [ john restic weechat ]);
+  environment.systemPackages = with pkgs; [ john restic weechat ];
   users.groups.domi = { gid = 1004; };
   users.users.domi = {
     isNormalUser = true;
