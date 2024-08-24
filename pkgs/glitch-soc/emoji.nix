@@ -3,142 +3,152 @@
   patches = [
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/c5a0388aea784370172251aaba1f5eb472d41390.patch";
-      hash = "sha256-Wkaz+bxorouepORc+7uwUorJElKLch9rXQxapgHa4x8=";
+        "https://github.com/arachnist/mastodon/pull/1/commits/9681981d82ec73a34036670898aac83de8517fde.patch";
+      hash = "sha256-yPML7AgKmS7tpMbXdQFS5m20/alvONFndjRcQ9gQvgw=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/50f9f3d59274f2f3377d758b4f27d586ff977df0.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/1a774b86ef16668729a3225d87ed2ccfee6ee2a8.patch";
+      hash = "sha256-3rtndx0YjppJE2ShDmJZud1J68xPzGqAG0t4nG40s9Q=";
+    })
+    (fetchpatch {
+      url =
+        "https://github.com/arachnist/mastodon/pull/1/commits/236b3919afa69dc22a47ecf19824baef95a70691.patch";
       hash = "sha256-jN2286+CfPXMbAX0urBDqmQa6/Xfdwa9qt5urs/gFY4=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/917f87645164e374628101ae7232d261b4940dd6.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/2a95a5e80fa483c937b6cd143884bd6a4e9ac19e.patch";
       hash = "sha256-W54/zXblx89YfWqkkeHYpYArDPzI63S+XgPw5kbtVIQ=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/013a47ed04739c05724430cb444501ae37b71562.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/f251481aa62abcdda41b38aaa2232132d673e5a8.patch";
       hash = "sha256-ShXE7LykbImUByMjpKpMrB+mvjV9Y+txwNWBQwlHYX0=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/829efbf6b6d93b7cf19c188b03f345833559228c.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/30447a8400d29d6e90accf99afb0c3efa898f615.patch";
       hash = "sha256-IWYVmQCUs/dVNfGFGElk3vAts+zLIfwB2Uhc8T5tQpA=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/29ec04c430aea8050b834f4c36fe2c367e090bd8.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/efd662d83d5553b55de8f5c71fd54b819ca770cc.patch";
+      hash = "sha256-W5hJEUNpBAiEnX9JDwoeoZVdtsUXUXZWL9ZthhtfHxo=";
+    })
+    (fetchpatch {
+      url =
+        "https://github.com/arachnist/mastodon/pull/1/commits/5ccaf2aeed137c4143e1776fb29e9e7db9c4d1de.patch";
       hash = "sha256-zwEraYkd814yxMkB+y9aMJZMs3xqHDQ6Xc1lBZO/mfs=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/f307ab4c02289a647c006e2cbf1e6bbdee6adc1d.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/448c8d10a3048721aba1b5091439e6357debc923.patch";
       hash = "sha256-//d36ZolRH5Z9/2tBGWAUjlbIbaXb2MQGrDUVrlPHGI=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/fd584bc5299a8c1cb525b2040d51ddd2855d150a.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/9189c0b7771bee6df997b3415bbf1e0d4041732e.patch";
       hash = "sha256-F73oi+m6905u9N/iE+0kG8a/raSPW7znDeoNSjzrWJc=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/6937dbddcd9774e77c58a7d9f9d2fd4243fdb9b0.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/52bb667215b8363d11f5442b90f2e915b74c79e2.patch";
       hash = "sha256-WgWtfn2UJXUz1elSPlM6PfIOG9xRgP0KVOtJ/35tY44=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/43e2392e3962fe44ed0815472f31382c4ce54fe9.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/6c67927c45a3b6be91396cb3aa890f937d9235f3.patch";
       hash = "sha256-Vj2vaxJf6Fyuew4yTZ8T8rH7sVmey3zkmlYX++L4DzQ=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/2010d24cd4109381eb01deafe7d6a04f84c61d1d.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/113de0e243c1a512648be096e9ad9cb1f9ca3d23.patch";
       hash = "sha256-chZ5T+YNzSGG3zNTWus/0FZXGUd/ToiUt/IFG30UbU0=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/39dc72216cea220e0ed14fcff0dbab2517ba4fc9.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/4703e2d804d6860428a04a0f27fd8b70ed202009.patch";
       hash = "sha256-zWDnO/KLpl0aBaxS2DTt0W7WCeR29gU4N//5gZvJcwg=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/dc245f1795a9c50f9bb4a4486941598180b741be.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/1fb91f45eba22cb981ef018e856469c98e5529fb.patch";
       hash = "sha256-ygSdBo/9UKp9LAHNvpjvqcRF5uFpRWaqOH86gLnxYwU=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/17582e51e8e9763e65178bc951747240997b539d.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/e3d2c14a199a06509df8295cd3dc8a870d16e21a.patch";
       hash = "sha256-haFsOBTGWWbhEvbWWVf9Sawdw/CCUa3ZVRCz3AHNlF4=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/95266dd8c6f1f40a4bdd7105d6a9f61952a8e157.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/48f25077413ad37b8a39c210ba51478fcc31fe03.patch";
       hash = "sha256-+oUPXiHicgK1/r1lovl4IH6jZ7rDUWwBuVCDywzCPCk=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/96b93bd46a890ff8f5e0a9e893e76c2efeb5d633.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/55cd0505ebbd6cf00379c70675d50c6585afba6b.patch";
       hash = "sha256-chbMtp949fdnu027LjNNOLIHtnG/DZdAuCzurpaROc0=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/ddb1c4c987dc46b8782302cb019a3756aeaa1ad6.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/3a751321303e10e561f9b76a29a66840930f271b.patch";
       hash = "sha256-SUOgcCBXlfsyMHKYvkkvgiOkW1uzLruI+jy5uf9f5kA=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/68698046ce286d7e2b20e6a17f46c00fc412a29a.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/fb893327c05419efaedda6dbf056747c62a6cbd7.patch";
       hash = "sha256-mweLZ82np2r/kbbDJscwOomHgruULHxxlu9zhR51PNQ=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/e3ce2078715219766f8a9b4ab7a6e9a304b024ed.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/3455f6cbcff5a50a9fab132eddceacad9d466580.patch";
       hash = "sha256-AXtLtSUL9OrJ0UM6jvmb57NfZs1RUWVDbjerv2siANI=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/068729b542af57a6439bacf58404a72c0a5f212e.patch";
-      hash = "sha256-1Z8IWEyEhJqtq4x3m+q7fHVsrh/XzePa17r4JkLNrt0=";
+        "https://github.com/arachnist/mastodon/pull/1/commits/476d3dd93c183ec590c350930f7622122eebf680.patch";
+      hash = "sha256-0V2hUKX0emtlGckQ1espMGJTHczeMduUKN4pbgZGNLY=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/9a49b1fc030a888e11221cd39ff669bc3da2eb65.patch";
-      hash = "sha256-n1Qk6SXHssVsR7XeGpCP8sARGGKparskOMSI1eQCjSw=";
+        "https://github.com/arachnist/mastodon/pull/1/commits/25514da63c12cb3740dedd00639ff3b420c9e408.patch";
+      hash = "sha256-/2QCMiswc6kmaz4rMNsLfx55PtFqZtDbenMBAjaANjw=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/73ecfa357e7796318e6044bfec2df9ee4d46bd6a.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/0476adbebabe51cf5455bdd87a324a007942a8fc.patch";
       hash = "sha256-qWLhyNBX4dLmYXW1cEd2AklqHTBWYernEKqljbKZqV4=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/e7b95369992148110432c745b2b54de18aca8eb6.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/98b47a7685552f3b682f14d578543a4b6218f37f.patch";
       hash = "sha256-NzPDILSEQvcVqARq400nu7ImrPiYlHb0ye5AEexrVrs=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/f2dc00cfae0aff2eaf5da141ef76f522efae7343.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/1e7e5b94e05173141419899ce3ebe6405acd1ab3.patch";
       hash = "sha256-gvXd0BRQO+pAnH6+2fyxucrntbYw2Fcx7XmiMxs8y+g=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/4db564e496388b851f0f6bd38d071fc509eeefc2.patch";
-      hash = "sha256-yZ6D1l2oXKvr3Kuw4LxBMtWWlPk8CqwaR9Zgk5BxoFw=";
+        "https://github.com/arachnist/mastodon/pull/1/commits/68be0194b9d8224938170b83483dd28344ea3eed.patch";
+      hash = "sha256-MAcFkLm5NyY93UIqf+3EUlfn6PkSkp4znGExrRoc5fo=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/fb0c1d8df4e8cf766327ae9165ce6040e1720736.patch";
-      hash = "sha256-k+h0tZxoflAB2li9G/OqWwTdwZyridq6Ke/+GrbxeyQ=";
+        "https://github.com/arachnist/mastodon/pull/1/commits/51b22f1e5ad9d4196f571d3a4c0bf785208eee2d.patch";
+      hash = "sha256-9sAEExZkU5XXaDM3npB5MxY2kua74PqARlQHE+291FI=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/f49d8617a7afca0f1d47c40e6bb2180744692833.patch";
-      hash = "sha256-oI2HXreqTH9GKklVgKW2C0jxQfvle6FBD5OQRJ+dmyg=";
+        "https://github.com/arachnist/mastodon/pull/1/commits/bfd42e3e5f45c6ba028f1494f17ab5aa3c5661ff.patch";
+      hash = "sha256-wHdRoBp+yH+szm6VoSYdRwm4tAPXCi47/F1P4Ax5zso=";
     })
     (fetchpatch {
       url =
-        "https://github.com/glitch-soc/mastodon/pull/2462/commits/b9af877f343b0e14a8dbbca0f8465367a70c69bb.patch";
+        "https://github.com/arachnist/mastodon/pull/1/commits/c7a038bfaff6f24248061959a1358d5040af617e.patch";
       hash = "sha256-bgPO9wrX0RU5JvDYVZibpAC+DF7tk4mcqeEj164r0Oo=";
     })
   ];
@@ -146,7 +156,7 @@
     {
       src = fetchurl {
         url =
-          "https://github.com/glitch-soc/mastodon/raw/b9af877f343b0e14a8dbbca0f8465367a70c69bb/app%2Fjavascript%2Fimages%2Fmailer-new%2Fheading%2Freaction.png";
+          "https://github.com/arachnist/mastodon/raw/c7a038bfaff6f24248061959a1358d5040af617e/app%2Fjavascript%2Fimages%2Fmailer-new%2Fheading%2Freaction.png";
         hash = "sha256-6QLPNTSigxXryjO0IbvZFOQjWrnwrQHr5Mb0ZJllMLk=";
       };
       name = "app/javascript/images/mailer-new/heading/reaction.png";
@@ -154,7 +164,7 @@
     {
       src = fetchurl {
         url =
-          "https://github.com/glitch-soc/mastodon/raw/b9af877f343b0e14a8dbbca0f8465367a70c69bb/app%2Fjavascript%2Fimages%2Fmailer%2Ficon_add.png";
+          "https://github.com/arachnist/mastodon/raw/c7a038bfaff6f24248061959a1358d5040af617e/app%2Fjavascript%2Fimages%2Fmailer%2Ficon_add.png";
         hash = "sha256-UYDdj5GKsg1cfVTx04hwsEURk6iKZfQCMAA2UFT0SJA=";
       };
       name = "app/javascript/images/mailer/icon_add.png";

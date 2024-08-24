@@ -401,7 +401,7 @@
       MAX_IMAGE_SIZE = "33554432";
       MAX_VIDEO_SIZE = "167772160";
       ALLOWED_PRIVATE_ADDRESSES = "127.1.33.7";
-      GITHUB_REPOSITORY = "arachnist/mastodon/tree/meow";
+      GITHUB_REPOSITORY = "arachnist/mastodon/tree/meow-mfm";
       MAX_REACTIONS = "10";
     };
     extraEnvFiles = [ config.age.secrets.mastodonActiveRecordSecrets.path ];
@@ -739,7 +739,7 @@
     package = pkgs.openjdk21;
   };
 
-  environment.systemPackages = with pkgs; [ john restic weechat ];
+  environment.systemPackages = with pkgs; [ john restic weechat matrix-synapse-tools.rust-synapse-compress-state ];
   users.groups.domi = { gid = 1004; };
   users.users.domi = {
     isNormalUser = true;

@@ -5,7 +5,7 @@ set -e
 
 cd "$(dirname "$0")"
 
-commit="$(curl -SsL "${1:-https://api.github.com/repos/arachnist/mastodon/branches/meow}")"
+commit="$(curl -SsL "${1:-https://api.github.com/repos/arachnist/mastodon/branches/meow-mfm}")"
 rev="$(jq -r '.commit.sha' <<<"$commit")"
 date="$(jq -r '.commit.commit.committer.date' <<<"$commit")"
 date="$(date --date="$date" --iso-8601=date)"

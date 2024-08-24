@@ -218,10 +218,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "08zfxy1709vgl3i6vgyh6bmn3h3yqdswwfv4ql1hfqa9zm1gqb4s";
+      sha256 = "18jiikxcd4sqhhfvph90s1b46gci3jbcw8hi7gaw65nghm6340hl";
       type = "gem";
     };
-    version = "1.964.0";
+    version = "1.966.0";
   };
   aws-sdk-core = {
     dependencies = ["aws-eventstream" "aws-partitions" "aws-sigv4" "jmespath"];
@@ -251,10 +251,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19mjlqnd0dzizsmk44a8rx9pj2z4bgqqan14afyaj8s5sr4qpmim";
+      sha256 = "162yf9q8m5jk17f1vfjr39wdg3c77wfdywx518skh2c9d1fafss0";
       type = "gem";
     };
-    version = "1.158.0";
+    version = "1.159.0";
   };
   aws-sigv4 = {
     dependencies = ["aws-eventstream"];
@@ -1109,10 +1109,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10m9b2gvwfvmm61000mq7n8q7pk2xkxmizgfydpis66n2ybrhwh5";
+      sha256 = "0s4qhq3mjl0gak5wl20w9d5jhq069mk1393dkj76s8i2pvkqb578";
       type = "gem";
     };
-    version = "1.10.1";
+    version = "1.11.1";
   };
   fuubar = {
     dependencies = ["rspec-core" "ruby-progressbar"];
@@ -1883,17 +1883,6 @@
     };
     version = "1.16.7";
   };
-  nsa = {
-    dependencies = ["activesupport" "concurrent-ruby" "sidekiq" "statsd-ruby"];
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "1narh0bj0c9pg8cb2jhpydfa9mnm3dclckzk5s6xrwa2gm99hnk4";
-      type = "gem";
-    };
-    version = "0.3.0";
-  };
   oj = {
     dependencies = ["bigdecimal" "ostruct"];
     groups = ["default"];
@@ -2074,10 +2063,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0xndzl28mb0jaa7wd8za6mb3a5z12y4car6z0h5654b56s4d02g4";
+      sha256 = "1a5afx39bf0pzi0w75ic8zs8447i96993h056ww4vr23zl585f2x";
       type = "gem";
     };
-    version = "0.7.6";
+    version = "0.7.7";
   };
   opentelemetry-instrumentation-active_model_serializers = {
     dependencies = ["opentelemetry-api" "opentelemetry-instrumentation-base"];
@@ -3237,16 +3226,6 @@
       type = "gem";
     };
     version = "0.2.26";
-  };
-  statsd-ruby = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "028136c463nbravckxb1qi5c5nnv9r6vh2cyhiry423lac4xz79n";
-      type = "gem";
-    };
-    version = "1.5.0";
   };
   stoplight = {
     dependencies = ["redlock"];
