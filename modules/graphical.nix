@@ -236,5 +236,6 @@ in {
     bind
     nmap
     waypipe
+    wl-clipboard-rs
   ]);
 }
