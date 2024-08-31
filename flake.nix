@@ -26,9 +26,10 @@
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-comfyui.url = "github:dyscorv/nix-comfyui";
   };
 
-  outputs = { self, nixpkgs, deploy-rs, ... }@inputs:
+  outputs = { self, nixpkgs, deploy-rs, nix-comfyui, ... }@inputs:
     let
       systems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
