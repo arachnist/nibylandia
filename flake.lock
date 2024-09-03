@@ -285,11 +285,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1724837759,
-        "narHash": "sha256-gt1mCTlqnirTHAG8Q90IWEs91fRsTSjBqXhb6bQboe8=",
+        "lastModified": 1725153537,
+        "narHash": "sha256-8+BJdXM1WBAttY+C63pEMUmUtSEWXHEhXOkLK4k1s2E=",
         "owner": "Jovian-Experiments",
         "repo": "Jovian-NixOS",
-        "rev": "a679e3a0ef9d3d43639f7ba894069c43e2d39c2c",
+        "rev": "b13488a1f8ab01db6a3d18629f7b22a430f03984",
         "type": "github"
       },
       "original": {
@@ -310,11 +310,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1722329086,
-        "narHash": "sha256-e/fSi0WER06N8WCvpht62fkGtWfe5ckDxr6zNYkwkFw=",
+        "lastModified": 1725379389,
+        "narHash": "sha256-qS1H/5/20ewJIXmf8FN2A5KTOKKU9elWvCPwdBi1P/U=",
         "owner": "nix-community",
         "repo": "lanzaboote",
-        "rev": "f5a3a7dff44d131807fc1a89fbd8576cd870334a",
+        "rev": "e7bd94e0b5ff3c1e686f2101004ebf4fcea9d871",
         "type": "github"
       },
       "original": {
@@ -502,11 +502,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1724869516,
-        "narHash": "sha256-6DeaNrKehN4Gar6bZbwuPtwPzpd5vgV45QwR4ZZ91lQ=",
+        "lastModified": 1725383289,
+        "narHash": "sha256-DpN9ParEY6z/5dJ7cpP/guHAsn/0n8/6+O6Vj2ZyKpg=",
         "owner": "arachnist",
         "repo": "nixpkgs",
-        "rev": "cd1d08050b78b538be91626b6d484422eda727e4",
+        "rev": "a9d8c747b4b5115aac07efe7398d800a9a7d25c0",
         "type": "github"
       },
       "original": {
