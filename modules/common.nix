@@ -91,6 +91,7 @@ in {
     "olm-3.2.16"
     "cinny-4.2.0"
     "cinny-unwrapped-4.2.0"
+    "nix-2.24.5" # TODO: figure out later what pulls this version
   ];
 
   environment.systemPackages = with pkgs; [
