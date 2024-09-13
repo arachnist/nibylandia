@@ -675,6 +675,7 @@
           rewrite ^/config.json$ /config.json break;
           rewrite ^/manifest.json$ /manifest.json break;
           rewrite ^.*/olm.wasm$ /olm.wasm break;
+          rewrite ^/sw.js$ /sw.js break;
           rewrite ^/pdf.worker.min.js$ /pdf.worker.min.js break;
           rewrite ^/public/(.*)$ /public/$1 break;
           rewrite ^/assets/(.*)$ /assets/$1 break;
