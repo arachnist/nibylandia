@@ -6,10 +6,7 @@
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
     deploy-rs.url = "github:serokell/deploy-rs";
     impermanence.url = "github:nix-community/impermanence";
-    colmena = {
-      url = "github:zhaofengli/colmena/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    colmena.url = "github:zhaofengli/colmena/main";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.darwin.follows = "";
