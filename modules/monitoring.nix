@@ -82,6 +82,18 @@ in {
         listenAddress = "127.0.0.1";
         enabledCollectors = [ "systemd" ];
       };
+      smokeping = {
+        enable = true;
+        pingInterval = "300ms";
+        listenAddress = "127.0.0.1";
+        hosts = [
+          "i.am-a.cat"
+          "customs.waw.hackerspace.pl"
+          "edge01.waw.bgp.wtf"
+          "1.1.1.1"
+          "185.236.240.143"
+        ];
+      };
     };
 
     services.prometheus.scrapeConfigs = [{
