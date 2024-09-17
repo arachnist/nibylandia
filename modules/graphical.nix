@@ -164,7 +164,7 @@ in {
 
   environment.systemPackages = [
     inputs.agenix.packages.${pkgs.system}.default
-    inputs.nixpkgs.legacyPackages.${pkgs.system}.colmena
+    inputs.colmena.packages.${pkgs.system}.colmena
   ] ++ (with pkgs.kdePackages; [
     tokodon
     neochat
