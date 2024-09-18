@@ -148,9 +148,9 @@ in {
     useDHCP = true;
     wireless = {
       enable = true;
-      environmentFile = "/etc/wifi-secrets";
-      networks."hackerspace.pl-guests".psk = "@HSWAW_WIFI@";
-      networks."hackerspace.pl-guests-5G".psk = "@HSWAW_WIFI@";
+      secretsFile = "/etc/wifi-secrets";
+      networks."hackerspace.pl-guests".pskRaw = "ext:HSWAW_WIFI";
+      networks."hackerspace.pl-guests-5G".pskRaw = "ext:HSWAW_WIFI";
     };
   };
   networking.firewall.enable = false;
