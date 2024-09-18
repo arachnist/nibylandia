@@ -255,11 +255,11 @@
         "create mode" = 700;
       };
     };
-    extraConfig = ''
-      load printers = yes
-      printing = cups
-      printcap name = cups
-    '';
+    settings.global = {
+      "load printers" = "yes";
+      "printing" = "cups";
+      "printcap name" = "cups";
+    };
   };
   systemd.tmpfiles.rules = [ "d /var/spool/samba 1777 root root -" ];
   hardware.pulseaudio.enable = false;
