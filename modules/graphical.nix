@@ -238,5 +238,6 @@ in {
     nmap
     waypipe
     wl-clipboard-rs
+    zen-browser
   ]);
 }
