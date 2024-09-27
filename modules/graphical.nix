@@ -228,7 +228,8 @@ in {
 
     deploy-rs
     go
-    pry
+    rubyPackages.pry
+    rubyPackages.irb
     sshfs
     dig
     whois
