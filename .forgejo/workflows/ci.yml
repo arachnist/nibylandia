@@ -7,7 +7,7 @@ on:
 jobs:
   x86_64-linux:
     if: |
-      !contains(github.event.head_commit.message, '[skip-ci arm64]')
+      !contains(github.event.head_commit.message, '[skip-ci x64]')
       && !contains(github.event.head_commit.message, '[skip-ci]')
     runs-on: self-hosted-x86_64-linux
     steps:
