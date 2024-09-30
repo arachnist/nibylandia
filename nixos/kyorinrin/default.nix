@@ -10,6 +10,7 @@
     graphical
     laptop
     secureboot
+    gaming
   ];
 
   nixpkgs.overlays = [
