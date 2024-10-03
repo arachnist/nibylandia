@@ -239,5 +239,6 @@ in {
     waypipe
     wl-clipboard-rs
     zen-browser
+    amdgpu_top
   ]);
 }
