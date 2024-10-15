@@ -240,5 +240,8 @@ in {
     wl-clipboard-rs
     zen-browser
     amdgpu_top
+    radeontop
   ]);
+
+  services.lact.enable = true;
 }
