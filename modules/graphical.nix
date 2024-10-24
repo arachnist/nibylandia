@@ -109,7 +109,7 @@ in {
       font-awesome
       terminus_font
       terminus_font_ttf
-      noto-fonts-cjk
+      noto-fonts-cjk-sans
       noto-fonts-emoji
       noto-fonts-emoji-blob-bin
       joypixels
