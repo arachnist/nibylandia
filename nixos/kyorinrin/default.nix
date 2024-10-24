@@ -1,6 +1,5 @@
 { config, inputs, pkgs, ... }:
 
-
 {
   networking.hostName = "kyorinrin";
 
@@ -13,9 +12,7 @@
     gaming
   ];
 
-  nixpkgs.overlays = [
-    inputs.nix-comfyui.overlays.default
-  ];
+  nixpkgs.overlays = [ inputs.nix-comfyui.overlays.default ];
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
 
@@ -46,21 +43,12 @@
     User = "ar";
   };
 
-  hardware.graphics.extraPackages = with pkgs; [
-    rocmPackages.clr.icd
-  ];
+  hardware.graphics.extraPackages = with pkgs; [ rocmPackages.clr.icd ];
 
-  systemd.tmpfiles.rules =
-  let
+  systemd.tmpfiles.rules = let
     rocmEnv = pkgs.symlinkJoin {
       name = "rocm-combined";
-      paths = with pkgs.rocmPackages; [
-        rocblas
-        hipblas
-        clr
-      ];
+      paths = with pkgs.rocmPackages; [ rocblas hipblas clr ];
     };
-  in [
-    "L+    /opt/rocm   -    -    -     -    ${rocmEnv}"
-  ];
+  in [ "L+    /opt/rocm   -    -    -     -    ${rocmEnv}" ];
 }

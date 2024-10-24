@@ -740,7 +740,12 @@
     package = pkgs.openjdk21;
   };
 
-  environment.systemPackages = with pkgs; [ john restic weechat matrix-synapse-tools.rust-synapse-compress-state ];
+  environment.systemPackages = with pkgs; [
+    john
+    restic
+    weechat
+    matrix-synapse-tools.rust-synapse-compress-state
+  ];
   users.groups.domi = { gid = 1004; };
   users.users.domi = {
     isNormalUser = true;

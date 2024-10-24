@@ -186,7 +186,7 @@
         forceSSL = true;
         enableACME = true;
         locations."/" = {
-          return = "200 \"yes, here, but not yet\"";
+          return = ''200 "yes, here, but not yet"'';
           extraConfig = ''
             types { } default_type "text/plain; charset=utf-8";
           '';
