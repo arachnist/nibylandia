@@ -4,5 +4,5 @@
     remotePlay.openFirewall = true;
   };
 
-  environment.systemPackages = with pkgs; [ ryujinx ];
+  environment.systemPackages = with pkgs; [ ryujinx steamtinkerlaunch ];
 }
