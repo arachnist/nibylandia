@@ -133,7 +133,7 @@ in {
       }];
 
       postSetup = ''
-        ${pkgs.iproute}/bin/ip addr add dev dn42_w1kl4s_1 172.20.148.161/32 peer 172.23.193.2/32
+        ${pkgs.iproute2}/bin/ip addr add dev dn42_w1kl4s_1 172.20.148.161/32 peer 172.23.193.2/32
       '';
     };
   };
