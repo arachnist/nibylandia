@@ -9,7 +9,7 @@ let
     curl
     gawk
     git-lfs
-    nixFlakes
+    nixVersions.latest
     gitFull
     gnused
     nodejs
