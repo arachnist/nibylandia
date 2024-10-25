@@ -89,8 +89,8 @@ in {
   nixpkgs.config.permittedInsecurePackages = [
     "jitsi-meet-1.0.8043"
     "olm-3.2.16"
-    "cinny-4.2.1"
-    "cinny-unwrapped-4.2.1"
+    "cinny-${pkgs.cinny.version}"
+    "cinny-unwrapped-${pkgs.cinny-unwrapped.version}"
   ];
 
   environment.systemPackages = with pkgs; [
