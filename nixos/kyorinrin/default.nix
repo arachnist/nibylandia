@@ -12,7 +12,7 @@
     gaming
   ];
 
-  nixpkgs.overlays = [ inputs.nix-comfyui.overlays.default ];
+  # nixpkgs.overlays = [ inputs.nix-comfyui.overlays.default ];
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
 
@@ -35,7 +35,7 @@
     iio-sensor-proxy
     xournalpp
 
-    pkgs.comfyuiPackages.rocm.comfyui-with-extensions
+    # pkgs.comfyuiPackages.rocm.comfyui-with-extensions
   ];
 
   services.displayManager.sddm.settings.Fingerprintlogin = {
