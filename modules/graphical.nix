@@ -237,7 +237,6 @@ in {
     nmap
     waypipe
     wl-clipboard-rs
-    zen-browser
     amdgpu_top
     radeontop
   ]);
