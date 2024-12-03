@@ -29,8 +29,11 @@ let
   getEnabled = x:
     lib.concatMap (name:
       let v = x.${name};
-      in if builtins.typeOf v == "set" && v.enable then [ v ] else [ ])
-    (lib.attrNames x);
+      in if (!builtins.elem name [ "minio" "tor" ]) && builtins.typeOf v
+      == "set" && v.enable then
+        [ v ]
+      else
+        [ ]) (lib.attrNames x);
   # TODO: add some magic to configure endpoints for all the other exporters
   localExporterEndpoints =
     map (x: x.listenAddress + ":" + builtins.toString x.port)
