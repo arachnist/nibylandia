@@ -1,7 +1,10 @@
-{ fetchFromGitea, buildGoPackage, ... }:
+{ fetchFromGitea, buildGoModule, ... }:
 
-buildGoPackage rec {
+let
   pname = "cass";
+in
+buildGoModule {
+  inherit pname;
   version = "0.0.1";
 
   src = fetchFromGitea {
@@ -12,5 +15,5 @@ buildGoPackage rec {
     sha256 = "+ZGO/ZoGN+LdcPGWHjjZ/wpayFxnfKvxiVMaS0iNYr0=";
   };
 
-  goPackagePath = "github.com/arachnist/cass";
+  vendorHash = null;
 }
