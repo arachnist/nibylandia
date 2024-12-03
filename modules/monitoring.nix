@@ -48,7 +48,7 @@ in {
   config = {
     services.victoriametrics = {
       enable = true;
-      retentionPeriod = 12;
+      retentionPeriod = "1y";
       listenAddress = "127.0.0.1:8428";
       extraOptions = [
         "-selfScrapeInterval=10s"
