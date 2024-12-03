@@ -210,6 +210,12 @@ in {
     clang-tools
     python3Packages.python-lsp-server
     yaml-language-server
+    marksman
+    kotlin-language-server
+    solargraph
+    bash-language-server
+    clippy
+    rust-analyzer
 
     (signal-desktop.overrideAttrs (old: {
       preFixup = ''
