@@ -1,9 +1,7 @@
 { fetchFromGitea, buildGoModule, ... }:
 
-let
-  pname = "cass";
-in
-buildGoModule {
+let pname = "cass";
+in buildGoModule {
   inherit pname;
   version = "0.0.1";
 
