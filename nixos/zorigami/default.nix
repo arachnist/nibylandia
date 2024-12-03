@@ -97,7 +97,7 @@
 
   services.postgresql = {
     enable = true;
-    package = pkgs.postgresql_13;
+    package = pkgs.postgresql_16;
   };
   services.prometheus.exporters.postgres = {
     enable = true;
