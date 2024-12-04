@@ -5,7 +5,6 @@
     nixpkgs.url = "github:arachnist/nixpkgs/ar-patchset-unstable";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
     deploy-rs.url = "github:serokell/deploy-rs";
-    impermanence.url = "github:nix-community/impermanence";
     colmena.url = "github:zhaofengli/colmena/main";
     agenix = {
       url = "github:ryantm/agenix";
@@ -24,9 +23,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-comfyui.url = "github:dyscorv/nix-comfyui";
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, deploy-rs, nix-comfyui, ... }@inputs:
+  outputs = { self, nixpkgs, deploy-rs, ... }@inputs:
     let
       systems = [ "x86_64-linux" "aarch64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;

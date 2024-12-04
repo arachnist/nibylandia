@@ -162,6 +162,8 @@ in {
 
   environment.sessionVariables = { MOZ_ENABLE_WAYLAND = "1"; };
 
+  nixpkgs.overlays = [ inputs.rust-overlay.overlays.default ];
+
   environment.systemPackages = [
     inputs.agenix.packages.${pkgs.system}.default
     inputs.colmena.packages.${pkgs.system}.colmena
@@ -216,6 +218,7 @@ in {
     bash-language-server
     clippy
     rust-analyzer
+    rust-bin.stable.latest.default
 
     (signal-desktop.overrideAttrs (old: {
       preFixup = ''
