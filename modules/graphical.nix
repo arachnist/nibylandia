@@ -219,6 +219,11 @@ in {
     clippy
     rust-analyzer
     rust-bin.stable.latest.default
+    go
+    ruby-lsp
+    rubyfmt
+    rubyPackages.pry
+    rubyPackages.irb
 
     (signal-desktop.overrideAttrs (old: {
       preFixup = ''
@@ -235,9 +240,6 @@ in {
     # super-slicer-beta
 
     deploy-rs
-    go
-    rubyPackages.pry
-    rubyPackages.irb
     sshfs
     dig
     whois
