@@ -567,4 +567,17 @@ in {
     extraArguments = [ "-d" ];
   };
   systemd.services."cage-tty1".serviceConfig.Restart = "always";
+
+  systemd.services."force-time-sync" = {
+    wants = [ "network-online.target" ];
+    after = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = [
+        "${pkgs.coreutils}/bin/sleep 30"
+        "${pkgs.chrony}/bin/chronyc -a makestep"
+      ];
+      Type = "oneshot";
+    };
+  };
 }
