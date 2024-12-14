@@ -17,20 +17,8 @@ let
   klipperHostMcu = "${
       pkgs.klipper-firmware.override {
         firmwareConfig = ./klipper-rpi.cfg;
-        klipper = klipperOld;
       }
     }/klipper.elf";
-  klipperOld = pkgs.klipper.overrideAttrs (old: {
-    version = "unstable-dc6182f3";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "KevinOConnor";
-      repo = "klipper";
-      rev =
-        "dc6182f3b339b990c8a68940f02a210e332be269"; # 266e96621c0133e1192bbaec5addb6bcf443a203 broke shit in weird ways
-      sha256 = "sha256-0uoq5bvL/4L9oa/JY54qHMRw5vE7V//HxLFMOEqGUjA=";
-    };
-  });
 in {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
@@ -296,7 +284,6 @@ in {
           "/dev/serial/by-id/usb-Klipper_stm32f429xx_400048000251313133383438-if00";
         package = pkgs.klipper-firmware.override {
           gcc-arm-embedded = pkgs.gcc-arm-embedded-11;
-          klipper = klipperOld;
         };
       };
     };
