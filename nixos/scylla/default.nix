@@ -131,11 +131,14 @@ in {
         allowedIPs = [ "0.0.0.0/0" "::/0" ];
         endpoint = "193.31.26.15:53137";
       }];
-
-      postSetup = ''
-        ${pkgs.iproute2}/bin/ip addr add dev dn42_w1kl4s_1 172.20.148.161/32 peer 172.23.193.2/32
-      '';
     };
+  };
+  systemd.network.networks.dn42_w1kl4s_1 = {
+    matchConfig.Name = "dn42_w1kl4s_1";
+    addresses = [{
+      Address = "172.20.148.161";
+      Peer = "172.23.193.2/32";
+    }];
   };
 
   networking.firewall.enable = true;
