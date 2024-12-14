@@ -24,10 +24,10 @@ in {
   networking.hostName = "akamanto";
   deployment.buildOnTarget = lib.mkForce false;
 
-  imports = [ "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix" ]
+  imports = [ "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix" inputs.raspberry-pi-nix.nixosModules.raspberry-pi ]
     ++ (with inputs.self.nixosModules; [ common ]);
 
-  nixpkgs.overlays = [ inputs.self.overlays.rpi5 ];
+  nixpkgs.overlays = [ inputs.self.overlays.rpi5 inputs.raspberry-pi-nix.overlays.core ];
 
   sdImage = {
     compressImage = false;
@@ -93,8 +93,13 @@ in {
   hardware.enableRedistributableFirmware = lib.mkForce false;
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
 
+  raspberry-pi-nix = {
+    board = "bcm2712";
+    kernel-version = "v6_10_12";
+  };
+
   boot = {
-    kernelPackages = lib.mkForce pkgs.linuxPackages_rpi5;
+    # kernelPackages = lib.mkForce pkgs.rpi-kernels.v6_10_12.bcm2712;
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
     kernelParams = [
       "fbcon=rotate:2"
@@ -109,12 +114,6 @@ in {
       "pcie_brcmstb" # required for the pcie bus to work
       "reset-raspberrypi" # required for vl805 firmware to load
     ];
-    loader.grub = {
-      enable = true;
-      efiSupport = true;
-      efiInstallAsRemovable = true;
-      device = "nodev";
-    };
   };
 
   fileSystems = lib.mkForce {
