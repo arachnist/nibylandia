@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ pkgs, lib, inputs, ... }:
 
 let
   ci-secrets = import ../../ci-secrets.nix;
@@ -9,86 +9,23 @@ let
   '';
   cageScript = pkgs.writeScriptBin "klipperCageScript" ''
     #!${pkgs.runtimeShell}
-    ${pkgs.wlr-randr}/bin/wlr-randr --output Unknown-1 --transform 180
+    ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
     sounds=( /home/ar/startup-sounds/* )
     ${pkgs.mpv}/bin/mpv ''${sounds[ $RANDOM % ''${#sounds[@]}]} &
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
   '';
   klipperHostMcu = "${
-      pkgs.klipper-firmware.override {
-        firmwareConfig = ./klipper-rpi.cfg;
-      }
+      pkgs.klipper-firmware.override { firmwareConfig = ./klipper-rpi.cfg; }
     }/klipper.elf";
 in {
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
   deployment.buildOnTarget = lib.mkForce false;
 
-  imports = [ "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix" inputs.raspberry-pi-nix.nixosModules.raspberry-pi ]
-    ++ (with inputs.self.nixosModules; [ common ]);
+  imports = (with inputs.self.nixosModules; [ common ])
+    ++ (with inputs.raspberry-pi-nix.nixosModules; [ raspberry-pi sd-image ]);
 
-  nixpkgs.overlays = [ inputs.self.overlays.rpi5 inputs.raspberry-pi-nix.overlays.core ];
-
-  sdImage = {
-    compressImage = false;
-    firmwareSize = 1024;
-    imageName =
-      "${config.sdImage.imageBaseName}-${pkgs.stdenv.hostPlatform.system}-${config.networking.hostName}.img";
-    populateFirmwareCommands = ''
-      storePath() {
-        local path="$1"
-        echo ''${path/\/nix\/store\/}
-      }
-
-      cp -v ${pkgs.rpi5-uefi}/* firmware
-      cp -v ${pkgs.rpi5-dtb}/* firmware
-
-      mkdir -p firmware/kernels
-      touch firmware/nixos-sd-system-image
-
-      kernelFile=$(storePath ${config.boot.kernelPackages.kernel})-${config.system.boot.loader.kernelFile}
-      initrdFile=$(storePath ${config.system.build.initialRamdisk})-${config.system.boot.loader.initrdFile}
-
-      cp ${
-        config.boot.kernelPackages.kernel + "/"
-        + config.system.boot.loader.kernelFile
-      } \
-        firmware/kernels/$kernelFile
-
-      cp ${
-        config.system.build.initialRamdisk + "/"
-        + config.system.boot.loader.initrdFile
-      } \
-        firmware/kernels/$initrdFile
-
-      mkdir -p firmware/EFI/boot
-
-      # making our own efi program; grub-install tries to probe for things
-      MODULES=( fat part_gpt part_msdos normal boot linux configfile efifwsetup
-        ls search search_label search_fs_uuid search_fs_file echo serial test
-        loadenv ext2 reboot help cat )
-      ${pkgs.grub2_efi}/bin/grub-mkimage --directory=${pkgs.grub2_efi}/lib/grub/arm64-efi \
-        -o firmware/EFI/boot/bootaa64.efi \
-        -p /EFI/boot -O arm64-efi ''${MODULES[@]}
-
-      cat <<EOF > firmware/EFI/boot/grub.cfg
-      search --set=drive1 --file /nixos-sd-system-image
-
-      set timeout=10
-      set default="0"
-
-      menuentry '${config.system.nixos.distroName} ${config.system.nixos.label}' {
-        linux (\$drive1)/kernels/$kernelFile init=${config.system.build.toplevel}/init ${
-          toString config.boot.kernelParams
-        }
-        initrd (\$drive1)/kernels/$initrdFile
-      }
-      EOF
-    '';
-    populateRootCommands = ''
-      mkdir -p ./files/boot
-    '';
-  };
+  nixpkgs.overlays = [ inputs.raspberry-pi-nix.overlays.core ];
 
   hardware.enableRedistributableFirmware = lib.mkForce false;
   hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
@@ -99,7 +36,6 @@ in {
   };
 
   boot = {
-    # kernelPackages = lib.mkForce pkgs.rpi-kernels.v6_10_12.bcm2712;
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
     kernelParams = [
       "fbcon=rotate:2"
@@ -122,7 +58,7 @@ in {
       options = [ "x-initrd.mount" ];
       fsType = "ext4";
     };
-    "/boot" = {
+    "/boot/firmware" = {
       device = "/dev/disk/by-label/FIRMWARE";
       fsType = "vfat";
     };
@@ -166,7 +102,7 @@ in {
     value = { enable = lib.mkForce false; };
   }) [ "man" "info" "nixos" "doc" "dev" ]);
 
-  services.openssh.settings.PasswordAuthentication = lib.mkForce true;
+  services.openssh.settings.PasswordAuthentication = lib.mkForce false;
   services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
 
   hardware.graphics.enable = true;
