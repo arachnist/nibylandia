@@ -12,7 +12,11 @@ let
     ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
     sounds=( /home/ar/startup-sounds/* )
     ${pkgs.mpv}/bin/mpv ''${sounds[ $RANDOM % ''${#sounds[@]}]} &
-    ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
+    ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig} &
+    while true; do
+      ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --transform 180
+      sleep 10
+    done
   '';
   klipperHostMcu = "${
       pkgs.klipper-firmware.override { firmwareConfig = ./klipper-rpi.cfg; }
