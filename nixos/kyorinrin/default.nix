@@ -62,8 +62,8 @@
       "802-1x" = {
         anonymous-identity = "38C3";
         eap = "ttls;";
-        identity = "38C3";
-        password = "38C3";
+        identity = "allowany";
+        password = "allowany";
         phase2-auth = "pap";
         altsubject-matches = "DNS:radius.c3noc.net";
         ca-cert = "${builtins.fetchurl {
@@ -74,7 +74,7 @@
       };
       ipv4 = { method = "auto"; };
       ipv6 = {
-        addr-gen-mode = "default";
+        addr-gen-mode = "stable-privacy";
         method = "auto";
       };
     };
