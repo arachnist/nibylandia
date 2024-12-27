@@ -193,4 +193,6 @@ in {
 
   services.chrony.enable = true;
   services.timesyncd.enable = false;
+
+  networking.firewall.logRefusedConnections = false;
 }
