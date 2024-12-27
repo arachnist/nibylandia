@@ -34,6 +34,7 @@ in {
     amanojaku.publicKey
     tsukumogami.publicKey
     kyorinrin.publicKey
+    homekitty.publicKey
   ]);
   "secrets/wg/nibylandia_scylla.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.scylla.publicKey ];
