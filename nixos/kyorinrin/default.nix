@@ -36,6 +36,8 @@
     xournalpp
 
     # pkgs.comfyuiPackages.rocm.comfyui-with-extensions
+
+    woeusb-ng ntfs3g
   ];
 
   services.displayManager.sddm.settings.Fingerprintlogin = {
