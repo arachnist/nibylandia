@@ -15,7 +15,8 @@
   boot.uefi.enable = true;
   boot.loader.systemd-boot.xbootldrMountPoint = "/efi";
   boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
-  boot.loader.systemd-boot.windows."10".efiDeviceHandle = "HD1b";
+  boot.loader.systemd-boot.windows."10".efiDeviceHandle = "HD0b";
+  boot.loader.systemd-boot.windows."10-alternative".efiDeviceHandle = "HD1b";
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
 
   virtualisation.docker.enable = true;
@@ -34,6 +35,18 @@
     # pkgs.comfyuiPackages.rocm.comfyui-with-extensions
 
     woeusb-ng ntfs3g
+
+    bison
+    flex
+    fontforge
+    makeWrapper
+    pkg-config
+    gnumake
+    gcc
+    libiconv
+    autoconf
+    automake
+    libtool
   ];
 
   hardware.graphics.extraPackages = with pkgs; [ rocmPackages.clr.icd ];

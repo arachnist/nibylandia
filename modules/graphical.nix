@@ -219,6 +219,7 @@ in {
     clippy
     rust-analyzer
     rust-bin.stable.latest.default
+    rustlings
     go
     ruby-lsp
     rubyfmt

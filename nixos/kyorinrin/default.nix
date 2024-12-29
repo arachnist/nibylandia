@@ -38,6 +38,18 @@
     # pkgs.comfyuiPackages.rocm.comfyui-with-extensions
 
     woeusb-ng ntfs3g
+
+    bison
+    flex
+    fontforge
+    makeWrapper
+    pkg-config
+    gnumake
+    gcc
+    libiconv
+    autoconf
+    automake
+    libtool
   ];
 
   services.displayManager.sddm.settings.Fingerprintlogin = {
