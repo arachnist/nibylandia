@@ -48,7 +48,7 @@ in {
   systemd.services.NetworkManager-wait-online.serviceConfig.ExecStart =
     lib.mkForce [ "" "${pkgs.networkmanager}/bin/nm-online" ];
 
-  hardware.glasgow.enable = true;
+  # hardware.glasgow.enable = true;
   hardware.nitrokey.enable = true;
   hardware.steam-hardware.enable = true;
   hardware.bluetooth = {
@@ -202,7 +202,7 @@ in {
     freecad
     neofetch
 
-    glasgow
+    # glasgow
 
     easyeffects
 
