@@ -453,38 +453,42 @@ in {
       # causes issues for some reason
       # zeroconf = { mdns_hostname = "barbie-girl"; };
       machine = { provider = "systemd_cli"; };
-      "webcam rpi" = {
+      "webcam go2rtc" = {
         enabled = "True";
-        service = "mjpegstreamer-adaptive";
-        stream_url = "/webcam/stream";
-        snapshot_url = "/webcam/snapshot";
-        target_fps = "30";
-        target_fps_idle = "30";
-        aspect_ratio = "4:3";
+        aspect_ratio = "16:9";
+        stream_url = "http://kodak.waw.hackerspace.pl:8080/stream.html?src=webcam&mode=webrtc";
+        service = "webrtc-go2rtc";
       };
     };
   };
 
   services.fluidd = {
     enable = false;
-    nginx.locations."/webcam/".proxyPass = "http://127.0.0.1:8080/";
+    nginx.locations."/webcam/" = {
+      proxyPass = "http://127.0.0.1:8080/";
+      proxyWebsockets = true;
+    };
   };
 
   services.mainsail = {
     enable = true;
-    nginx.locations."/webcam/".proxyPass = "http://127.0.0.1:8080/";
+    nginx.locations."/webcam/" = {
+      proxyPass = "http://127.0.0.1:8080/";
+      proxyWebsockets = true;
+    };
   };
 
   services.nginx.clientMaxBodySize = "1000m";
   services.nginx.recommendedProxySettings = true;
 
-  systemd.services.ustreamer = {
-    wantedBy = [ "multi-user.target" ];
-    description = "uStreamer for video0";
-    serviceConfig = {
-      Type = "simple";
-      ExecStart =
-        "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --rotate 180 --resolution 1296x972 --desired-fps 30";
+  services.go2rtc = {
+    enable = true;
+    settings = {
+      streams.webcam = "ffmpeg:device?video=0&resolution=1280x720#video=h264#rotate=180";
+      api = {
+        listen = ":8080";
+        origin = "*";
+      };
     };
   };
 
