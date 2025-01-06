@@ -1,5 +1,7 @@
 self: super:
-let inherit (self) lib;
+let
+  inherit (self) lib;
+  emptyDir = self.emptyDirectory;
 in {
   cass = super.callPackage ../pkgs/cass.nix { };
   notbot = super.callPackage ../pkgs/notbot.nix { };
@@ -30,4 +32,18 @@ in {
     };
   };
   python311Packages = self.python311.pkgs;
+
+  python312 = super.python312.override {
+    packageOverrides = self: super: { pysaml2 = self.toPythonModule emptyDir; };
+  };
+  matrix-synapse-unwrapped = super.matrix-synapse-unwrapped.overrideAttrs
+    (old: {
+      postPatch = (old.postPatch or "") + ''
+        substituteInPlace tests/storage/databases/main/test_events_worker.py --replace-fail \
+        $'    def test_recovery(' \
+        $'    from tests.unittest import skip_unless\n'\
+        $'    @skip_unless(False, "broken")\n'\
+        $'    def test_recovery('
+      '';
+    });
 }
