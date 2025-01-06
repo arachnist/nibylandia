@@ -34,7 +34,8 @@
 
     # pkgs.comfyuiPackages.rocm.comfyui-with-extensions
 
-    woeusb-ng ntfs3g
+    woeusb-ng
+    ntfs3g
 
     bison
     flex
@@ -85,7 +86,6 @@
       };
     };
   };
-
 
   users.mutableUsers = lib.mkForce true;
 

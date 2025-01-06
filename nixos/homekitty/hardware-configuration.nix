@@ -4,33 +4,33 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+  boot.initrd.availableKernelModules =
+    [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/c16faa05-5a94-4ebf-ab49-6fcde83e77d6";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/c16faa05-5a94-4ebf-ab49-6fcde83e77d6";
+    fsType = "ext4";
+  };
 
-  boot.initrd.luks.devices."homekitty".device = "/dev/disk/by-uuid/d51fc137-6a1a-41a7-a998-9f068d1cb523";
+  boot.initrd.luks.devices."homekitty".device =
+    "/dev/disk/by-uuid/d51fc137-6a1a-41a7-a998-9f068d1cb523";
 
-  fileSystems."/efi" =
-    { device = "/dev/disk/by-uuid/EE05-0FAC";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/efi" = {
+    device = "/dev/disk/by-uuid/EE05-0FAC";
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" ];
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B6C3-4F75";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/B6C3-4F75";
+    fsType = "vfat";
+    options = [ "fmask=0022" "dmask=0022" ];
+  };
 
   swapDevices = [ ];
 
@@ -45,5 +45,6 @@
   # networking.interfaces.wwp0s20f0u7.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

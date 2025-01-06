@@ -456,7 +456,8 @@ in {
       "webcam go2rtc" = {
         enabled = "True";
         aspect_ratio = "16:9";
-        stream_url = "http://kodak.waw.hackerspace.pl:8080/stream.html?src=webcam&mode=webrtc";
+        stream_url =
+          "http://kodak.waw.hackerspace.pl:8080/stream.html?src=webcam&mode=webrtc";
         service = "webrtc-go2rtc";
       };
     };
@@ -484,7 +485,8 @@ in {
   services.go2rtc = {
     enable = true;
     settings = {
-      streams.webcam = "ffmpeg:device?video=0&resolution=1280x720#video=h264#rotate=180";
+      streams.webcam =
+        "ffmpeg:device?video=0&resolution=1280x720#video=h264#rotate=180";
       api = {
         listen = ":8080";
         origin = "*";
