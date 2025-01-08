@@ -1,52 +1,45 @@
-{ callPackage, fetchFromGitHub, pkgs, buildPythonPackage, python311, pythonOlder
-, ... }:
+{ fetchFromGitHub, pipreqs, pillow_with_headers, buildPythonApplication, python3
+, altgraph, certifi, charset-normalizer, distutils, docopt, idna
+, importlib-metadata, nbtlib, numpy, packaging, pefile, requests, setuptools
+, urllib3, yarg, zipp, ... }:
 
-let
-  python3 = python311;
-  python3Packages = pkgs.python311Packages;
-  pillow_with_headers =
-    callPackage ./pillow-with-headers.nix { inherit python3Packages; };
-in buildPythonPackage {
+buildPythonApplication {
   pname = "Minecraft-Overviewer";
-  version = "2024-03-15";
+  version = "2024-12-08";
   format = "other";
 
-  propagatedBuildInputs =
-    [ (pkgs.pipreqs.override { inherit python3; }) pillow_with_headers ]
-    ++ (with python3Packages; [
-      altgraph
-      certifi
-      charset-normalizer
-      docopt
-      idna
-      importlib-metadata
-      nbtlib
-      numpy
-      packaging
-      pefile
-      requests
-      urllib3
-      yarg
-      zipp
-    ]);
+  build-system = [ setuptools ];
 
-  buildInputs = with python3Packages; [ setuptools ];
+  dependencies = [
+    pipreqs
+    pillow_with_headers
+    altgraph
+    certifi
+    charset-normalizer
+    distutils
+    docopt
+    idna
+    importlib-metadata
+    nbtlib
+    numpy
+    packaging
+    pefile
+    requests
+    urllib3
+    yarg
+    zipp
+  ];
 
-  buildPhase = ''
-    export CFLAGS="-I${pillow_with_headers}/include/libImaging"
-    ${python3.interpreter} setup.py build
-  '';
+  env.NIX_CFLAGS_COMPILE = "-I${pillow_with_headers}/include/libImaging";
 
   installPhase = ''
-    ${python3.interpreter} setup.py install --prefix=$out --install-lib=$out/${python3.sitePackages}
+    python setup.py install --prefix=$out --install-lib=$out/${python3.sitePackages}
   '';
-
-  doCheck = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "GregoryAM-SP";
     repo = "The-Minecraft-Overviewer";
-    rev = "4deb15d2cfbaaff7327a39b1e24d03eb4f7878ec";
-    sha256 = "sha256-8YCZ7pk0Rj7wAT5DqGZmNsSI5qQWx5By+1G73yUsAQw=";
+    rev = "bd53129ac47434bc78ca25518a45d927fb1df032";
+    sha256 = "sha256-6jcReRuWBVmOp3vCwEV9B5B08/O6MDB1hUFqhSu1V0s=";
   };
 }

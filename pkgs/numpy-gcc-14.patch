@@ -1,0 +1,21 @@
+diff --git a/numpy/_core/code_generators/generate_numpy_api.py b/numpy/_core/code_generators/generate_numpy_api.py
+index af3a275ce9..43a1b83f46 100644
+--- a/numpy/_core/code_generators/generate_numpy_api.py
++++ b/numpy/_core/code_generators/generate_numpy_api.py
+@@ -65,6 +65,7 @@
+ {
+   int st;
+   PyObject *numpy = PyImport_ImportModule("numpy._core._multiarray_umath");
++  PyObject *c_api;
+   if (numpy == NULL && PyErr_ExceptionMatches(PyExc_ModuleNotFoundError)) {
+     PyErr_Clear();
+     numpy = PyImport_ImportModule("numpy.core._multiarray_umath");
+@@ -74,7 +75,7 @@
+       return -1;
+   }
+ 
+-  PyObject *c_api = PyObject_GetAttrString(numpy, "_ARRAY_API");
++  c_api = PyObject_GetAttrString(numpy, "_ARRAY_API");
+   Py_DECREF(numpy);
+   if (c_api == NULL) {
+       return -1;
