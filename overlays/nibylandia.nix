@@ -21,17 +21,19 @@ in {
     inherit (emoji-reactions) patches;
   };
 
-  python311ForMCOverviewer = super.python311.override {
-    packageOverrides = self: super: {
+  python311MCOverviewer = super.python311.override {
+    packageOverrides = pyself: pysuper: {
       pillow_with_headers =
-        self.callPackage ../pkgs/pillow-with-headers.nix { };
-      numpy = super.numpy.overrideAttrs
+        pyself.callPackage ../pkgs/pillow-with-headers.nix { };
+      numpy = pysuper.numpy.overrideAttrs
         (super: { patches = super.patches ++ [ ../pkgs/numpy-gcc-14.patch ]; });
     };
   };
 
-  py311MCOPackages = self.python311ForMCOverviewer.pkgs;
+  py311MCOPackages = self.python311MCOverviewer.pkgs;
 
   minecraft-overviewer =
-    self.py311MCOPackages.callPackage ../pkgs/minecraft-overviewer.nix { };
+    self.py311MCOPackages.callPackage ../pkgs/minecraft-overviewer.nix {
+      python3 = self.python311MCOverviewer;
+    };
 }
