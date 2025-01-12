@@ -774,6 +774,30 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICr7oqFHkwPMV67PhjdLomvcfdQfZ4W+KncQ86ywjtrt Termius@iPhone"
     ];
   };
+  users.groups.elly = { gid = 1006; };
+  users.users.elly = {
+    isNormalUser = true;
+    uid = 1006;
+    group = "elly";
+    extraGroups = [ "users" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILF+5DmHypvp6WE3RKW0VyERYRxbQn0ZNm78FIa+qLf2"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIh3CBzyn8Ww6RAq8vDwYiGSN3pCBoK5iqCHxIWh30Ti"
+    ];
+  };
+  users.groups.mei = { gid = 1007; };
+  users.users.mei = {
+    isNormalUser = true;
+    uid = 1007;
+    group = "mei";
+    extraGroups = [ "users" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJLjNLzRQpUucHr9jY1o9wD/9LuFTshnXXfDVMVTlV1c maya@sachiko"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIERC8AsLmCEUcka7ZDGgc5fE0cBdoInjlu7tSVuAbId maya@chikara"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKKXXhLmJelCYIYW8iAPzrrZsRuOLdbOp5BFFnmszPJc mei@zork"
+    ];
+  };
+
 
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries =
