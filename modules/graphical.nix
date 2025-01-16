@@ -40,6 +40,22 @@ in {
     };
     jack.enable = true;
     pulse.enable = true;
+    extraConfig = {
+      pipewire-pulse = {
+        "10-network" = {
+          "pulse.cmd" = [
+            {
+              cmd = "load-module";
+              args = "module-zeroconf-discover";
+            }
+            {
+              cmd = "load-module";
+              args = "module-raop-discover";
+            }
+          ];
+        };
+      };
+    };
   };
 
   networking.networkmanager.enable = true;
