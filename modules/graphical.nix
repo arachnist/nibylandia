@@ -134,6 +134,10 @@ in {
   services.avahi = {
     enable = true;
     nssmdns4 = true;
+    publish = {
+      enable = true;
+      userServices = true;
+    };
   };
 
   services.flatpak.enable = true;
