@@ -22,8 +22,8 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.supportedFilesystems = [ "zfs" ];
   boot.kernelPackages = pkgs.linuxPackages;
-  boot.zfs.package = pkgs.zfs_2_1;
-  boot.extraModulePackages = with config.boot.kernelPackages; [ zfs_2_1 ];
+  boot.zfs.package = pkgs.zfs_unstable;
+  boot.extraModulePackages = with config.boot.kernelPackages; [ zfs_unstable ];
 
   boot.enableContainers = true;
   boot.zfs.extraPools = [ config.networking.hostName ];
