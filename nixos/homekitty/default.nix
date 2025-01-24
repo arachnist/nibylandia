@@ -32,8 +32,6 @@
     iio-sensor-proxy
     xournalpp
 
-    # pkgs.comfyuiPackages.rocm.comfyui-with-extensions
-
     woeusb-ng
     ntfs3g
 
@@ -110,11 +108,4 @@
       "networkmanager"
     ];
   };
-
-  systemd.tmpfiles.rules = let
-    rocmEnv = pkgs.symlinkJoin {
-      name = "rocm-combined";
-      paths = with pkgs.rocmPackages; [ rocblas hipblas clr ];
-    };
-  in [ "L+    /opt/rocm   -    -    -     -    ${rocmEnv}" ];
 }
