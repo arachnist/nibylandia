@@ -240,6 +240,9 @@ in {
     rust-analyzer
     rust-bin.stable.latest.default
     rustlings
+    binutils
+    clang
+    stdenv
     go
     ruby-lsp
     rubyfmt
