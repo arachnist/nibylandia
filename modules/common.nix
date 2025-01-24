@@ -108,7 +108,7 @@ in {
     zip
     # config.boot.kernelPackages.perf
     age
-    dstat
+    dool
     htop
     iperf
     xxd
