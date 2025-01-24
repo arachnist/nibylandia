@@ -48,8 +48,6 @@
     libtool
   ];
 
-  hardware.graphics.extraPackages = with pkgs; [ rocmPackages.clr.icd ];
-
   networking.networkmanager.ensureProfiles.profiles = {
     "38C3" = {
       connection = {
