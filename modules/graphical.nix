@@ -21,6 +21,33 @@ let
     let
       unwrapped = kdePackages.kate;
       devDeps = [ openssl sqlite ];
+      binDeps = [
+        binutils
+        clang
+        stdenv
+
+        pkg-config
+
+        openssl
+        sqlite
+
+        nixd
+        nil
+        nvd
+        clang-tools
+        python3Packages.python-lsp-server
+        yaml-language-server
+        marksman
+        kotlin-language-server
+        solargraph
+        bash-language-server
+        clippy
+        rust-analyzer
+        rust-bin.stable.latest.default
+        ruby-lsp
+        rubyfmt
+
+      ];
     in stdenvNoCC.mkDerivation {
       pname = "kate-dev-wrapped";
       inherit (unwrapped) version;
@@ -29,16 +56,10 @@ let
 
       buildCommand = ''
         makeWrapper ${unwrapped}/bin/kate $out/bin/kate \
-          --prefix PATH ":" ${
-            lib.makeBinPath ([
-              binutils
-              clang
-              stdenv
-
-              pkg-config
-            ] ++ devDeps)
-          } \
-          --prefix PKG_CONFIG_PATH ":" ${lib.makeSearchPath "lib/pkgconfig" (map (x: x.dev) devDeps)}
+          --prefix PATH ":" ${lib.makeBinPath binDeps} \
+          --prefix PKG_CONFIG_PATH ":" ${
+            lib.makeSearchPath "lib/pkgconfig" (map (x: x.dev) devDeps)
+          }
       '';
     };
 in {
@@ -213,93 +234,70 @@ in {
     inputs.agenix.packages.${pkgs.system}.default
     inputs.colmena.packages.${pkgs.system}.colmena
     kate-dev
-  ] ++ (with pkgs.kdePackages; [
-    tokodon
-    neochat
-    kolourpaint
-    okular
-    discover
-  ]) ++ (with pkgs; [
-    chromium
-    ffmpeg-full
-    firefox
-    imagemagick
-    inkscape
-    nixfmt-classic
-    paprefs
-    pavucontrol
-    solvespace
-    spotify
-    mpv
-    gphoto2
-    minicom
-    thunderbird
-    feh
-    virt-manager
-    ncdu
-    nixos-option
-    yt-dlp
-    element-desktop
-    scrcpy
-    krita
-    vlc
-    libreoffice-qt6
-    freecad
-    neofetch
+  ] ++ (with pkgs.kdePackages; [ tokodon neochat kolourpaint okular discover ])
+    ++ (with pkgs; [
+      chromium
+      ffmpeg-full
+      firefox
+      imagemagick
+      inkscape
+      nixfmt-classic
+      paprefs
+      pavucontrol
+      solvespace
+      spotify
+      mpv
+      gphoto2
+      minicom
+      thunderbird
+      feh
+      virt-manager
+      ncdu
+      nixos-option
+      yt-dlp
+      element-desktop
+      scrcpy
+      krita
+      vlc
+      libreoffice-qt6
+      freecad
+      neofetch
 
-    # glasgow
+      # glasgow
 
-    easyeffects
+      easyeffects
 
-    nixd
-    nil
-    nvd
-    clang-tools
-    python3Packages.python-lsp-server
-    yaml-language-server
-    marksman
-    kotlin-language-server
-    solargraph
-    bash-language-server
-    clippy
-    rust-analyzer
-    rust-bin.stable.latest.default
-    rustlings
-    binutils
-    clang
-    stdenv
-    go
-    ruby-lsp
-    rubyfmt
-    rubyPackages.pry
-    rubyPackages.irb
+      rustlings
+      go
+      rubyPackages.pry
+      rubyPackages.irb
 
-    (signal-desktop.overrideAttrs (old: {
-      preFixup = ''
-        gappsWrapperArgs+=(
-          --add-flags "--enable-features=UseOzonePlatform"
-          --add-flags "--ozone-platform=wayland"
-        )
-      '' + old.preFixup;
-    }))
+      (signal-desktop.overrideAttrs (old: {
+        preFixup = ''
+          gappsWrapperArgs+=(
+            --add-flags "--enable-features=UseOzonePlatform"
+            --add-flags "--ozone-platform=wayland"
+          )
+        '' + old.preFixup;
+      }))
 
-    prusa-slicer
-    # TODO: investigate later
-    # orca-slicer
-    # super-slicer-beta
+      prusa-slicer
+      # TODO: investigate later
+      # orca-slicer
+      # super-slicer-beta
 
-    deploy-rs
-    sshfs
-    dig
-    whois
-    cfssl
-    bind
-    nmap
-    waypipe
-    wl-clipboard-rs
-    amdgpu_top
-    radeontop
-  ]);
+      deploy-rs
+      sshfs
+      dig
+      whois
+      cfssl
+      bind
+      nmap
+      waypipe
+      wl-clipboard-rs
+      amdgpu_top
+      radeontop
+    ]);
 
   services.lact.enable = true;
 }
