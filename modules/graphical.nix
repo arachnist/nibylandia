@@ -16,6 +16,31 @@ let
       ${systemd}/bin/systemctl restart bluetooth.service
       ${util-linux}/bin/rfkill unblock 0
     '';
+  # wrap pkgs.kdePackages.kate with a bunch of C deps so we don't need to remember about nix-shell and stuff
+  kate-dev = with pkgs;
+    let
+      unwrapped = kdePackages.kate;
+      devDeps = [ openssl sqlite ];
+    in stdenvNoCC.mkDerivation {
+      pname = "kate-dev-wrapped";
+      inherit (unwrapped) version;
+
+      nativeBuildInputs = [ makeWrapper ];
+
+      buildCommand = ''
+        makeWrapper ${unwrapped}/bin/kate $out/bin/kate \
+          --prefix PATH ":" ${
+            lib.makeBinPath ([
+              binutils
+              clang
+              stdenv
+
+              pkg-config
+            ] ++ devDeps)
+          } \
+          --prefix PKG_CONFIG_PATH ":" ${lib.makeSearchPath "lib/pkgconfig" (map (x: x.dev) devDeps)}
+      '';
+    };
 in {
   imports = [ inputs.self.nixosModules.common ];
 
@@ -187,10 +212,10 @@ in {
   environment.systemPackages = [
     inputs.agenix.packages.${pkgs.system}.default
     inputs.colmena.packages.${pkgs.system}.colmena
+    kate-dev
   ] ++ (with pkgs.kdePackages; [
     tokodon
     neochat
-    kate
     kolourpaint
     okular
     discover
