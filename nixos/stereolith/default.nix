@@ -209,7 +209,7 @@
   };
   services.samba = {
     enable = true;
-    package = (pkgs.samba4Full.override { enableCephFS = false; });
+    package = pkgs.samba4Full.override { enableCephFS = false; };
     shares = {
       scan = {
         browseable = "yes";
