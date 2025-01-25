@@ -13,7 +13,7 @@
 
   # nixpkgs.overlays = [ inputs.nix-comfyui.overlays.default ];
   boot.uefi.enable = true;
-  boot.loader.systemd-boot.xbootldrMountPoint = "/efi";
+  # boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
   boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
   boot.loader.systemd-boot.windows."10".efiDeviceHandle = "HD0b";
   boot.loader.systemd-boot.windows."10-alternative".efiDeviceHandle = "HD1b";
@@ -46,6 +46,8 @@
     autoconf
     automake
     libtool
+
+    kicad
   ];
 
   users.mutableUsers = lib.mkForce true;

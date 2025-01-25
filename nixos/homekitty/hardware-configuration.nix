@@ -20,13 +20,13 @@
   boot.initrd.luks.devices."homekitty".device =
     "/dev/disk/by-uuid/d51fc137-6a1a-41a7-a998-9f068d1cb523";
 
-  fileSystems."/efi" = {
+  fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/EE05-0FAC";
     fsType = "vfat";
     options = [ "fmask=0022" "dmask=0022" ];
   };
 
-  fileSystems."/boot" = {
+  fileSystems."/efi" = {
     device = "/dev/disk/by-uuid/B6C3-4F75";
     fsType = "vfat";
     options = [ "fmask=0022" "dmask=0022" ];
