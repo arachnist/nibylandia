@@ -46,7 +46,6 @@ let
         rust-bin.stable.latest.default
         ruby-lsp
         rubyfmt
-
       ];
     in stdenvNoCC.mkDerivation {
       pname = "kate-dev-wrapped";
@@ -221,6 +220,16 @@ in {
       #  browserpass
       #  plasma-browser-integration
       #];
+    };
+    appimage = {
+      enable = true;
+      binfmt = true;
+      package = pkgs.appimage-run.override {
+        extraPkgs = pkgs: [
+	  pkgs.icu
+	  pkgs.protontricks
+	];
+      };
     };
   };
 
