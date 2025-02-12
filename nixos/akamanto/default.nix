@@ -36,7 +36,7 @@ in {
 
   raspberry-pi-nix = {
     board = "bcm2712";
-    kernel-version = "v6_10_12";
+    kernel-version = "v6_12_11";
   };
 
   boot = {
