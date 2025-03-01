@@ -745,7 +745,7 @@
     john
     restic
     weechat
-    matrix-synapse-tools.rust-synapse-compress-state
+    rust-synapse-state-compress
   ];
   users.groups.domi = { gid = 1004; };
   users.users.domi = {
