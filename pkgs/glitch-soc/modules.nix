@@ -63,6 +63,7 @@ stdenv.mkDerivation {
     cp -r node_modules $out/node_modules
     cp -r public/assets $out/public
     cp -r public/packs $out/public
+    rm $out/node_modules/@mastodon/streaming
 
     runHook postInstall
   '';
