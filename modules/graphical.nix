@@ -247,6 +247,7 @@ in {
     ++ (with pkgs; [
       chromium
       ffmpeg-full
+      floorp
       imagemagick
       inkscape
       nixfmt-classic
