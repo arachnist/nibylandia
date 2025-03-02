@@ -46,6 +46,9 @@ let
         rust-bin.stable.latest.default
         ruby-lsp
         rubyfmt
+        gopls
+        gnumake
+        gcc
       ];
     in stdenvNoCC.mkDerivation {
       pname = "kate-dev-wrapped";
