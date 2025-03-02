@@ -228,10 +228,7 @@ in {
       enable = true;
       binfmt = true;
       package = pkgs.appimage-run.override {
-        extraPkgs = pkgs: [
-	  pkgs.icu
-	  pkgs.protontricks
-	];
+        extraPkgs = pkgs: [ pkgs.icu pkgs.protontricks ];
       };
     };
   };
