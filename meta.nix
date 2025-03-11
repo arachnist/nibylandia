@@ -5,6 +5,8 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO6rEwERSm/Fj4KO4SxFIo0BUvi9YNyf8PSL1FteMcMt ar@microlith";
   ar_kyorinrin =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO8Gk/5iqVco5VQLrAJ2Xd7LvgOmr4f5DpQtQHj1DFqi ar@kyorinrin";
+  mae =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBO4040oKfM5kCwzcPhQPFORJ2h+fipz5hnDx7vAMU/Z mae@toothbrush";
   defaultDomain = "tail412c1.ts.net";
 in {
   hosts = builtins.mapAttrs (name: value:
