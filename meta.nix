@@ -17,5 +17,6 @@ in {
     // builtins.fromJSON (builtins.readFile (./nixos/. + "/${name}/meta.json")))
     (builtins.readDir ./nixos);
 
-  users.ar = [ ar_khas ar_microlith ar_kyorinrin ];
+  users.ar = [ ar_khas ar_microlith ar_kyorinrin mae ];
+
 }
