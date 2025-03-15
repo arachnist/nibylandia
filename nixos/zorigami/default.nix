@@ -138,48 +138,49 @@
     };
   };
 
-  systemd.services.fedifetcher = let
-    # access token(s) from environment
-    fedifetcher = pkgs.fedifetcher.overrideAttrs (old: {
-      src = pkgs.fetchFromGitHub {
-        owner = "arachnist";
-        repo = "FediFetcher";
-        rev = "d246f25bfcc892c8b134e4842edb239d7e4bc982";
-        hash = "sha256-CubzR3FbojR5gLQUkIrrJJKquVIoEb8/HCyO/p9hick=";
-      };
-    });
-  in {
-    path = [ fedifetcher ];
-    description = "fetch fedi posts";
-    script = ''
-      fedifetcher
-    '';
-    environment = lib.mapAttrs' (n: v:
-      (lib.nameValuePair ("ff_" + builtins.replaceStrings [ "-" ] [ "_" ] n)
-        (builtins.toString v))) {
-          server = "is-a.cat";
-          state-dir = "/var/lib/fedifetcher";
-          lock-file = "/run/fedifetcher/fedifetcher.lock";
-          from-lists = 1;
-          from-notifications = 1;
-          max-favourites = 1000;
-          max-follow-requests = 80;
-          max-followers = 400;
-          max-followings = 400;
-          remember-hosts-for-days = 70;
-          remember-users-for-hours = 1680;
-          reply-interval-in-hours = 2;
-        };
-    serviceConfig = {
-      DynamicUser = true;
-      User = "fedifetcher";
-      RuntimeDirectory = "fedifetcher";
-      RuntimeDirectoryPreserve = true;
-      StateDirectory = "fedifetcher";
-      UMask = "0077";
-      EnvironmentFile = [ config.age.secrets.fedifetcherAccessToken_ar.path ];
-    };
-  };
+  # possibly deprecated in favor of native mastodon functionality
+  # systemd.services.fedifetcher = let
+  #   # access token(s) from environment
+  #   fedifetcher = pkgs.fedifetcher.overrideAttrs (old: {
+  #     src = pkgs.fetchFromGitHub {
+  #       owner = "arachnist";
+  #       repo = "FediFetcher";
+  #       rev = "d246f25bfcc892c8b134e4842edb239d7e4bc982";
+  #       hash = "sha256-CubzR3FbojR5gLQUkIrrJJKquVIoEb8/HCyO/p9hick=";
+  #     };
+  #   });
+  # in {
+  #   path = [ fedifetcher ];
+  #   description = "fetch fedi posts";
+  #   script = ''
+  #     fedifetcher
+  #   '';
+  #   environment = lib.mapAttrs' (n: v:
+  #     (lib.nameValuePair ("ff_" + builtins.replaceStrings [ "-" ] [ "_" ] n)
+  #       (builtins.toString v))) {
+  #         server = "is-a.cat";
+  #         state-dir = "/var/lib/fedifetcher";
+  #         lock-file = "/run/fedifetcher/fedifetcher.lock";
+  #         from-lists = 1;
+  #         from-notifications = 1;
+  #         max-favourites = 1000;
+  #         max-follow-requests = 80;
+  #         max-followers = 400;
+  #         max-followings = 400;
+  #         remember-hosts-for-days = 70;
+  #         remember-users-for-hours = 1680;
+  #         reply-interval-in-hours = 2;
+  #       };
+  #   serviceConfig = {
+  #     DynamicUser = true;
+  #     User = "fedifetcher";
+  #     RuntimeDirectory = "fedifetcher";
+  #     RuntimeDirectoryPreserve = true;
+  #     StateDirectory = "fedifetcher";
+  #     UMask = "0077";
+  #     EnvironmentFile = [ config.age.secrets.fedifetcherAccessToken_ar.path ];
+  #   };
+  # };
 
   systemd.timers.fedifetcher = {
     wantedBy = [ "multi-user.target" ];
@@ -404,6 +405,12 @@
       ALLOWED_PRIVATE_ADDRESSES = "127.1.33.7";
       GITHUB_REPOSITORY = "arachnist/mastodon/tree/meow-mfm";
       MAX_REACTIONS = "10";
+      FETCH_REPLIES_ENABLED = "true";
+      FETCH_REPLIES_COOLDOWN_MINUTES = "15";
+      FETCH_REPLIES_INITIAL_WAIT_MINUTES = "5";
+      FETCH_REPLIES_MAX_GLOBAL = "10000";
+      FETCH_REPLIES_MAX_SINGLE = "1000";
+      FETCH_REPLIES_MAX_PAGES = "1000";
     };
     extraEnvFiles = [ config.age.secrets.mastodonActiveRecordSecrets.path ];
     package = pkgs.glitch-soc;
