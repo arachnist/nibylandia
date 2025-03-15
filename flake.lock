@@ -263,11 +263,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1741874414,
-        "narHash": "sha256-gtIrDkG/iap32MYyaSAlWaixshiqMyFB9eKyhcF66eM=",
+        "lastModified": 1742021951,
+        "narHash": "sha256-Nxrkvh353BeG6/D8yPq50VCaYnCMKviS7krw4DfzLVU=",
         "owner": "Jovian-Experiments",
         "repo": "Jovian-NixOS",
-        "rev": "662d117ac0ffc81f3e91b5f0fb800c3effd904a1",
+        "rev": "ecaf8b6aa7d28cb7b87da334310fbe1ba31f8d64",
         "type": "github"
       },
       "original": {
@@ -843,11 +843,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1741833135,
-        "narHash": "sha256-HUtFcF4NLwvu7CAowWgqCHXVkNj0EOc/W6Ism4biV6I=",
+        "lastModified": 1742005800,
+        "narHash": "sha256-6wuOGWkyW6R4A6Th9NMi6WK2jjddvZt7V2+rLPk6L3o=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "f3cd1e0feb994188fe3ad9a5c3ab021ed433b8c8",
+        "rev": "028cd247a6375f83b94adc33d83676480fc9c294",
         "type": "github"
       },
       "original": {
@@ -866,17 +866,17 @@
         "nixpkgs-24_11": "nixpkgs-24_11"
       },
       "locked": {
-        "lastModified": 1740437053,
-        "narHash": "sha256-exPTta4qI1ka9sk+jPcLogGffJ1OVXnAsTRqpeAXeNw=",
-        "owner": "simple-nixos-mailserver",
+        "lastModified": 1742045290,
+        "narHash": "sha256-G9tHNVv5dYhvSNFImWyZt+DUQOdIuyoy3+3tzCYy8YA=",
+        "owner": "arachnist",
         "repo": "nixos-mailserver",
-        "rev": "c8ec4d5e432f5df4838eacd39c11828d23ce66ec",
-        "type": "gitlab"
+        "rev": "a4dbf657db7c0f4bf1c6d6306be2724b90034f03",
+        "type": "github"
       },
       "original": {
-        "owner": "simple-nixos-mailserver",
+        "owner": "arachnist",
         "repo": "nixos-mailserver",
-        "type": "gitlab"
+        "type": "github"
       }
     },
     "stable": {
