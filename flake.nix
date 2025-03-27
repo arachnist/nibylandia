@@ -2,8 +2,8 @@
   description = "Nibylandia configurations";
 
   inputs = {
-    # nixpkgs.url = "git+file:///home/ar/scm/nixpkgs";
-    nixpkgs.url = "github:arachnist/nixpkgs/ar-patchset-unstable";
+    nixpkgs.url = "git+file:///home/ar/scm/nixpkgs";
+    # nixpkgs.url = "github:arachnist/nixpkgs/ar-patchset-unstable";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
     deploy-rs.url = "github:serokell/deploy-rs";
     colmena.url = "github:zhaofengli/colmena/main";
