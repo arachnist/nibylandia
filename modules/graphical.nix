@@ -22,6 +22,7 @@ let
       unwrapped = kdePackages.kate;
       devDeps = [ openssl sqlite ];
       binDeps = [
+        nix-output-monitor
         nix-fast-build
 
         binutils
