@@ -537,15 +537,16 @@
       "locked": {
         "lastModified": 1743033970,
         "narHash": "sha256-crmdcZNYlyOt/dN0GnQUiYnKFyn42AL/YRUJpb1qYl8=",
-        "ref": "refs/heads/ar-patchset-unstable",
+        "owner": "arachnist",
+        "repo": "nixpkgs",
         "rev": "c20f56227e4dd233920f1742e44cad11e139c660",
-        "revCount": 773913,
-        "type": "git",
-        "url": "file:///home/ar/scm/nixpkgs"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/ar/scm/nixpkgs"
+        "owner": "arachnist",
+        "ref": "ar-patchset-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nixpkgs_7": {
