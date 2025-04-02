@@ -52,6 +52,9 @@ let
         gopls
         gnumake
         gcc
+        meson
+        cmake
+        ninja
       ];
     in stdenvNoCC.mkDerivation {
       pname = "kate-dev-wrapped";
