@@ -277,6 +277,7 @@ in {
       libreoffice-qt6
       freecad
       neofetch
+      wprs
 
       # glasgow
 
