@@ -53,7 +53,11 @@
   age.secrets.mastodonActiveRecordSecrets.file =
     ../../secrets/mastodon-activerecord.age;
 
-  age.secrets.notbotEnvironment.file = ../../secrets/notbotEnvironment.age;
+  age.secrets.notbotConfig = {
+    group = "bot";
+    mode = "440";
+    file = ../../secrets/notbotConfig.age;
+  };
 
   age.secrets.synapseExtraConfig = {
     group = "matrix-synapse";
@@ -105,18 +109,18 @@
     listenAddress = "127.0.0.1";
   };
 
-  systemd.services.notbot = {
+  systemd.services.notbot-rs = {
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
-    description = "Notbot irc bot service";
+    description = "Notbot Matrix bot service";
+    environment = {
+      RUST_LOG = "notbot=debug";
+    };
     serviceConfig = {
       Type = "simple";
       User = "bot";
-      EnvironmentFile = config.age.secrets.notbotEnvironment.path;
       ExecStart = ''
-        ${pkgs.notbot}/bin/notbot -nickname "notbot" -name "notbot" -user "bot" \
-          -server "irc.libera.chat:6667" -password $NICKSERV_PASSWORD \
-          -channels $CHANNELS -jitsi.channels $JITSI_CHANNELS -spaceapi.channels $SPACEAPI_CHANNELS
+        ${pkgs.notbot-rs}/bin/notbot ${config.age.secrets.notbotConfig.path}
       '';
     };
   };
@@ -623,36 +627,6 @@
       forceSSL = true;
       enableACME = true;
     };
-    "akkoma-fe.is-a.cat" = let
-      proxyConf = {
-        proxyPass = "https://is-a.cat";
-        recommendedProxySettings = false;
-        extraConfig = ''
-          proxy_set_header Host is-a.cat;
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header X-Forwarded-Proto $scheme;
-        '';
-      };
-      akkoma-fe-patched = pkgs.akkoma-frontends.akkoma-fe.overrideAttrs (old: {
-        postPatch = old.postPatch + ''
-          sed -e 's/read write follow push admin/read write follow push/g' -i src/services/new_api/oauth.js
-        '';
-      });
-    in {
-      enableACME = true;
-      forceSSL = true;
-      locations = {
-        "/" = {
-          root = akkoma-fe-patched;
-          tryFiles = "$uri $uri/ /index.html";
-        };
-        "/api" = proxyConf;
-        "/instance" = proxyConf;
-        "/nodeinfo" = proxyConf;
-        "/oauth/" = proxyConf;
-      };
-    };
     "${config.services.matrix-synapse.settings.server_name}" = {
       enableACME = true;
       forceSSL = true;
@@ -817,8 +791,10 @@
 
     # list of debian packages from Linus
     # git nodejs make build-essential unzip zip jq rsync python3 python3-pip python3-virtualenv python3-wheel cargo rustc liblttng-ust1 librust-openssl-dev npm openjdk-8-jre
-    extraPackages = (with pkgs.python311Packages; [ pip virtualenv wheel ])
-      ++ (with pkgs; [
+    extraPackages = [ (pkgs.python311.withPackages (ps: with ps; [ pip
+        virtualenv
+        wheel
+      ])) ] ++ (with pkgs; [
         python311
         git
         nodejs # also includes npm

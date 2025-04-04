@@ -1,6 +1,6 @@
-{ python311Packages, ... }:
+{ pillow, ... }:
 
-python311Packages.pillow.overrideAttrs (_: {
+pillow.overrideAttrs (_: {
   postInstall = ''
     mkdir -p $out/include/libImaging
     cp src/libImaging/*.h $out/include/libImaging

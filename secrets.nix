@@ -46,6 +46,8 @@ in {
     ++ [ meta.hosts.scylla.publicKey ];
   "secrets/notbotEnvironment.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/notbotConfig.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/nextCloudAdmin.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/nextCloudExporter.age".publicKeys = meta.users.ar

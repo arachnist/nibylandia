@@ -3,6 +3,7 @@ let inherit (self) lib;
 in {
   cass = super.callPackage ../pkgs/cass.nix { };
   notbot = super.callPackage ../pkgs/notbot.nix { };
+  notbot-rs = super.callPackage ../pkgs/notbot-rs.nix { };
   nix-top = super.callPackage ../pkgs/nix-top { };
   glitch-soc = let
     emoji-reactions = import ../pkgs/glitch-soc/emoji.nix {
