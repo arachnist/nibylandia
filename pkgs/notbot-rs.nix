@@ -1,7 +1,7 @@
 { fetchFromGitea, rustPlatform, pkg-config, openssl, sqlite, ... }:
 
 let
-  version = "0.1.4";
+  version = "0.1.5";
 in
 rustPlatform.buildRustPackage {
   pname = "notbot-rs";
@@ -12,11 +12,11 @@ rustPlatform.buildRustPackage {
     owner = "ar";
     repo = "notbot";
     tag = "v${version}";
-    hash = "sha256-NQjHUPrd255VdMEaqzwMKji85603cWw2nir61VZUsdI=";
+    hash = "sha256-arUCHcu1Vk9S2AwfdcADRb+80I0Qt4wYoOBv0vo1RYQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-vSCh3ngwxe2u7Ihpofy2rl8yG37VrWqAcGfg44tf/wc=";
+  cargoHash = "sha256-9QDvLMUASm9Vq1w+nBXOHPQa/4k815pm06ru3QHvqVk=";
 
   nativeBuildInputs = [
     pkg-config
