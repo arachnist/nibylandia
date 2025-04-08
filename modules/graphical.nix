@@ -55,6 +55,7 @@ let
         meson
         cmake
         ninja
+        python3
       ];
     in stdenvNoCC.mkDerivation {
       pname = "kate-dev-wrapped";
