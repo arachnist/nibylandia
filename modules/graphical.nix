@@ -17,46 +17,48 @@ let
       ${util-linux}/bin/rfkill unblock 0
     '';
   # wrap pkgs.kdePackages.kate with a bunch of C deps so we don't need to remember about nix-shell and stuff
+  devDeps = with pkgs; [ openssl sqlite luajit_2_1 ];
+  binDeps = with pkgs; [
+    nix-output-monitor
+    nix-fast-build
+
+    binutils
+    clang
+    stdenv
+
+    pkg-config
+
+    openssl
+    sqlite
+
+    nixd
+    nil
+    nvd
+    clang-tools
+    python3Packages.python-lsp-server
+    yaml-language-server
+    marksman
+    kotlin-language-server
+    solargraph
+    bash-language-server
+    clippy
+    cargo-mommy
+    rust-analyzer
+    rust-bin.nightly.latest.default
+    # rustc
+    # cargo
+    ruby-lsp
+    rubyfmt
+    gopls
+    gnumake
+    gcc
+    meson
+    cmake
+    ninja
+    python3
+  ];
   kate-dev = with pkgs;
-    let
-      unwrapped = kdePackages.kate;
-      devDeps = [ openssl sqlite ];
-      binDeps = [
-        nix-output-monitor
-        nix-fast-build
-
-        binutils
-        clang
-        stdenv
-
-        pkg-config
-
-        openssl
-        sqlite
-
-        nixd
-        nil
-        nvd
-        clang-tools
-        python3Packages.python-lsp-server
-        yaml-language-server
-        marksman
-        kotlin-language-server
-        solargraph
-        bash-language-server
-        clippy
-        rust-analyzer
-        rust-bin.stable.latest.default
-        ruby-lsp
-        rubyfmt
-        gopls
-        gnumake
-        gcc
-        meson
-        cmake
-        ninja
-        python3
-      ];
+    let unwrapped = kdePackages.kate;
     in stdenvNoCC.mkDerivation {
       pname = "kate-dev-wrapped";
       inherit (unwrapped) version;
@@ -67,7 +69,7 @@ let
         makeWrapper ${unwrapped}/bin/kate $out/bin/kate \
           --prefix PATH ":" ${lib.makeBinPath binDeps} \
           --prefix PKG_CONFIG_PATH ":" ${
-            lib.makeSearchPath "lib/pkgconfig" (map (x: x.dev) devDeps)
+            lib.makeSearchPath "lib/pkgconfig" (map (x: x.dev or x) devDeps)
           }
       '';
     };
@@ -279,6 +281,8 @@ in {
       freecad
       neofetch
       wprs
+
+      nheko
 
       # glasgow
 
