@@ -115,18 +115,24 @@
     description = "Notbot Matrix bot service";
     environment = {
       RUST_LOG = "notbot=debug";
+      LUA_PATH = "/home/bot/mun/?;/home/bot/mun/?.lua";
     };
     serviceConfig = {
       Type = "simple";
       User = "bot";
       ExecStart = ''
-        ${pkgs.notbot-rs}/bin/notbot ${config.age.secrets.notbotConfig.path}
+        ${pkgs.notbot-rs}/bin/notbot /home/bot/notbot.toml
       '';
     };
   };
   users.users.bot = {
-    isSystemUser = true;
+    isNormalUser = true;
     group = "bot";
+    openssh.authorizedKeys.keys =
+      config.users.users.ar.openssh.authorizedKeys.keys ++ [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG599UildOrAq+LIOQjKqtGMwjgjIxozI1jtQQRKHtCP q3k@mimeomia"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHYIBqUBavv4RPjazPdsvTT35ibfud3cG1KuCSh2l2zh q3k@ospad"
+      ];
   };
   users.groups.bot = { };
 
@@ -791,10 +797,9 @@
 
     # list of debian packages from Linus
     # git nodejs make build-essential unzip zip jq rsync python3 python3-pip python3-virtualenv python3-wheel cargo rustc liblttng-ust1 librust-openssl-dev npm openjdk-8-jre
-    extraPackages = [ (pkgs.python311.withPackages (ps: with ps; [ pip
-        virtualenv
-        wheel
-      ])) ] ++ (with pkgs; [
+    extraPackages =
+      [ (pkgs.python311.withPackages (ps: with ps; [ pip virtualenv wheel ])) ]
+      ++ (with pkgs; [
         python311
         git
         nodejs # also includes npm
