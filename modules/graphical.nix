@@ -294,12 +294,12 @@ in {
       rubyPackages.irb
 
       (signal-desktop.overrideAttrs (old: {
-        preFixup = ''
-          gappsWrapperArgs+=(
-            --add-flags "--enable-features=UseOzonePlatform"
-            --add-flags "--ozone-platform=wayland"
-          )
-        '' + old.preFixup;
+      # preFixup = ''
+      #   gappsWrapperArgs+=(
+      #     --add-flags "--enable-features=UseOzonePlatform"
+      #     --add-flags "--ozone-platform=wayland"
+      #   )
+      # '' + old.preFixup;
       }))
 
       prusa-slicer
