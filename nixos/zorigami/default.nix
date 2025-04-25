@@ -74,6 +74,8 @@
   age.secrets.fedifetcherAccessToken_ar.file =
     ../../secrets/fedifetcherAccessToken_ar.age;
 
+  age.secrets.oauth2-proxy.file = ../../secrets/oauth2-proxy-secrets.age;
+
   nibylandia.monitoring-server = { domain = "monitoring.is-a.cat"; };
 
   services.nginx = {
@@ -581,6 +583,20 @@
     };
   };
 
+  services.oauth2-proxy = {
+    enable = true;
+    provider = "oidc";
+    email.domains = [ "*" ];
+    keyFile = config.age.secrets.oauth2-proxy.path;
+    oidcIssuerUrl = "https://sso.hackerspace.pl";
+    validateURL = "https://sso.hackerspace.pl/oauth/token";
+    setXauthrequest = true;
+    nginx = {
+      domain = "notbot-test.is-a.cat";
+      virtualHosts = [ "notbot-test.is-a.cat" ];
+    };
+  };
+
   services.nginx.virtualHosts = {
     "s.nork.club" = {
       forceSSL = true;
@@ -608,6 +624,14 @@
           proxy_send_timeout "9000s";
           proxy_read_timeout "9000s";
         '';
+      };
+    };
+    "notbot-test.is-a.cat" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/" = {
+        proxyPass = "http://khas.tail412c1.ts.net:6544";
+        recommendedProxySettings = true;
       };
     };
     "arachnist.is-a.cat" = {
