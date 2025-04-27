@@ -583,6 +583,7 @@
     };
   };
 
+  /*
   services.oauth2-proxy = {
     enable = true;
     provider = "oidc";
@@ -596,6 +597,7 @@
       virtualHosts = [ "notbot-test.is-a.cat" ];
     };
   };
+  */
 
   services.nginx.virtualHosts = {
     "s.nork.club" = {
