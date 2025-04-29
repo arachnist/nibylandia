@@ -114,6 +114,4 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/github-runner-token-test262.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
-  "secrets/oauth2-proxy-secrets.age".publicKeys = meta.users.ar
-    ++ [ meta.hosts.zorigami.publicKey ];
 }
