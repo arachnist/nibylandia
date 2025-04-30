@@ -581,6 +581,13 @@
     };
   };
 
+  services.nginx.upstreams = {
+    "notbot-test".servers = {
+      "microlith.tail412c1.ts.net:6543" = { max_fails = 1; fail_timeout = "5s"; };
+      /* "khas.tail412c1.ts.net:6543" = { max_fails = 1; fail_timeout = "5s"; };
+      "kyorinrin.tail412c1.ts.net:6543" = { max_fails = 1; fail_timeout = "5s"; }; */
+    };
+  };
   services.nginx.virtualHosts = {
     "s.nork.club" = {
       forceSSL = true;
@@ -614,7 +621,7 @@
       forceSSL = true;
       enableACME = true;
       locations."/" = {
-        proxyPass = "http://khas.tail412c1.ts.net:6544";
+        proxyPass = "http://notbot-test";
         recommendedProxySettings = true;
       };
     };
