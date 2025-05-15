@@ -101,6 +101,27 @@
     };
   };
 
+  services.matrix-synapse = {
+    enable = false;
+    settings.server_name = "matrix-test.am-a.cat";
+    settings.public_baseurl = "https://matrix-test.am-a.cat";
+    settings.listeners = [
+      { port = 8008;
+        bind_addresses = [ "::" ];
+        type = "http";
+        tls = false;
+        x_forwarded = true;
+        resources = [ {
+          names = [ "client" "federation" ];
+          compress = true;
+        } ];
+      }
+    ];
+    extraConfigFiles = [
+      "/var/lib/secrets/matrix/extraconfig"
+    ];
+  };
+
   services.nginx = {
     enable = true;
     recommendedGzipSettings = true;
@@ -110,6 +131,7 @@
     commonHttpConfig = ''
       add_header X-Clacks-Overhead "GNU Terry Pratchett";
     '';
+    # package = pkgs.nginx.override { withDebug = true; };
 
     virtualHosts = {
       "default" = {
@@ -118,6 +140,36 @@
         serverName = "_";
         locations."/".return = "410";
         locations."/tftp/" = { alias = "/stereolith/crap/tftp/"; };
+      };
+      "matrix-test.am-a.cat" =
+      let
+        fqdn = "matrix-test.am-a.cat";
+        baseUrl = "https://${fqdn}";
+        clientConfig."m.homeserver".base_url = baseUrl;
+        serverConfig."m.server" = "${fqdn}:443";
+        mkWellKnown = data: ''
+          default_type application/json;
+          add_header Access-Control-Allow-Origin *;
+          return 200 '${builtins.toJSON data}';
+        '';
+      in {
+        forceSSL = true;
+        enableACME = true;
+        locations."/.well-known/matrix/server".extraConfig = mkWellKnown serverConfig;
+        locations."/.well-known/matrix/client".extraConfig = mkWellKnown clientConfig;
+        locations."/_matrix".proxyPass = "http://[::1]:8008";
+        locations."/_synapse/client".proxyPass = "http://[::1]:8008";
+        locations."/".extraConfig = ''
+          return 404;
+        '';
+        /*
+        extraConfig = ''
+          error_log /var/log/nginx/matrix-test.am-a.cat.error.log debug;
+        '';
+        extraConfig = ''
+          location / { proxy_pass http://[::1]:8008; }
+        '';
+        */
       };
       "i.am-a.cat" = {
         forceSSL = true;

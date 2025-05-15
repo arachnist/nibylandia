@@ -66,10 +66,6 @@
   };
   age.secrets.acmeZorigamiZajebaLi.file =
     ../../secrets/acme-zorigami-zajeba.li.age;
-  age.secrets.automataDendritePrivateKey.file =
-    ../../secrets/automata.of-a.cat-matrix_key.pem.age;
-  age.secrets.automataDendriteEnv.file =
-    ../../secrets/automata.of-a.cat-matrix_env.age;
 
   age.secrets.fedifetcherAccessToken_ar.file =
     ../../secrets/fedifetcherAccessToken_ar.age;
@@ -328,47 +324,6 @@
     };
   };
   services.dovecot2.sieve.extensions = [ "fileinto" ];
-
-  # automata.of-a.cat
-  services.dendrite = {
-    enable = true;
-    httpPort = 8108;
-    loadCredential = [
-      "matrix-server-key:${config.age.secrets.automataDendritePrivateKey.path}"
-    ];
-    environmentFile = config.age.secrets.automataDendriteEnv.path;
-
-    settings = let
-      database_config = {
-        connection_string = "postgresql:///dendrite?host=/run/postgresql";
-        max_open_conns = 10;
-        max_idle_conns = 5;
-      };
-    in {
-      global = {
-        server_name = "automata.of-a.cat";
-        private_key = "$CREDENTIALS_DIRECTORY/matrix-server-key";
-        jetstream.storage_path = "/var/lib/dendrite/";
-      };
-
-      client_api = {
-        registration_disabled = true;
-        rate_limiting.enabled = false;
-        registration_shared_secret = "\${REGISTRATION_SHARED_SECRET}";
-      };
-
-      app_service_api.database = database_config;
-      federation_api.database = database_config;
-      key_server.database = database_config;
-      media_api.database = database_config;
-      mscs.database = database_config;
-      room_server.database = database_config;
-      sync_api.database = database_config;
-      user_api.account_database = database_config;
-      user_api.device_database = database_config;
-      relay_api.device_database = database_config;
-    };
-  };
 
   # is-a.cat
   services.matrix-synapse = {
@@ -656,16 +611,39 @@
       forceSSL = true;
       enableACME = true;
     };
-    "${config.services.matrix-synapse.settings.server_name}" = {
+    "${config.services.matrix-synapse.settings.server_name}" =
+    let
+      clientConfig."m.homeserver".base_url = "https://${config.services.matrix-synapse.settings.server_name}";
+      serverConfig = {
+        "m.server" = "${config.services.matrix-synapse.settings.server_name}:443";
+        "m.homeserver" = {
+          "base_url" = "https://${config.services.matrix-synapse.settings.server_name}";
+        };
+      };
+      mkWellKnown = data: ''
+        default_type application/json;
+        add_header Access-Control-Allow-Origin *;
+        return 200 '${builtins.toJSON data}';
+      '';
+    in {
       enableACME = true;
       forceSSL = true;
 
-      locations."/_matrix" = { proxyPass = "http://127.0.0.1:8008"; };
+      locations."/_synapse/client".proxyPass = "http://[::1]:8008";
+      locations."/_matrix" = {
+        proxyPass = "http://127.0.0.1:8008";
+        extraConfig = ''
+          proxy_hide_header Access-Control-Allow-Origin;
+          add_header Access-Control-Allow-Origin *;
+        '';
+      };
 
-      locations."/.well-known/matrix/server" = {
+      locations."= /.well-known/matrix/server".extraConfig = mkWellKnown serverConfig;
+      locations."= /.well-known/matrix/client".extraConfig = mkWellKnown clientConfig;
+      /* locations."/.well-known/matrix/server" = {
         return = ''
           200 "{\"m.server\":\"${config.services.matrix-synapse.settings.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://${config.services.matrix-synapse.settings.server_name}\"}}"'';
-      };
+      }; */
     };
     "matrix.${config.services.matrix-synapse.settings.server_name}" = {
       enableACME = true;
@@ -694,7 +672,7 @@
         '';
       };
     };
-    ${config.services.dendrite.settings.global.server_name} = {
+    /*${config.services.dendrite.settings.global.server_name} = {
       enableACME = true;
       forceSSL = true;
       locations = {
@@ -717,7 +695,7 @@
         "/_synapse".proxyPass =
           "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
       };
-    };
+    };*/
     "rower.zajeba.li" = {
       enableACME = true;
       forceSSL = true;
