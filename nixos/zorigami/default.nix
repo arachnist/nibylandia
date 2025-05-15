@@ -116,6 +116,7 @@
     serviceConfig = {
       Type = "simple";
       User = "bot";
+      WorkingDirectory = "${pkgs.notbot-rs}";
       ExecStart = ''
         ${pkgs.notbot-rs}/bin/notbot /home/bot/notbot.toml
       '';

@@ -10,8 +10,8 @@ in rustPlatform.buildRustPackage rec {
     owner = "ar";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "e40096eb07e0d683f61f5ac9d5bbc9d36527c524";
-    hash = "sha256-UfYFylItjPp+Vmfh/aWVTWBPN/GvrnDv/9u6bqDKXOU=";
+    rev = "7a7b848855f5abc4ee321b150e8530154d4bcc00";
+    hash = "sha256-cUyd19f6Afg1Iosn+iOEhGohzOnQTb/Lg6py/q9P9Ok=";
   };
 
   useFetchCargoVendor = true;
@@ -24,4 +24,8 @@ in rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl sqlite ];
+
+  postInstall = ''
+    cp -r $src/webui $out/webui
+  '';
 }
