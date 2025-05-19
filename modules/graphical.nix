@@ -50,6 +50,7 @@ let
     ruby-lsp
     rubyfmt
     gopls
+    jsonnet-language-server
     gnumake
     gcc
     meson
@@ -281,6 +282,7 @@ in {
       freecad
       neofetch
       wprs
+      kleopatra
 
       nheko
 
