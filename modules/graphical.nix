@@ -253,7 +253,7 @@ in {
     inputs.agenix.packages.${pkgs.system}.default
     inputs.colmena.packages.${pkgs.system}.colmena
     kate-dev
-  ] ++ (with pkgs.kdePackages; [ tokodon neochat kolourpaint okular discover ])
+  ] ++ (with pkgs.kdePackages; [ tokodon neochat kolourpaint okular discover kleopatra ])
     ++ (with pkgs; [
       chromium
       ffmpeg-full
@@ -282,7 +282,6 @@ in {
       freecad
       neofetch
       wprs
-      kleopatra
 
       nheko
 
