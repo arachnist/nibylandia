@@ -91,6 +91,9 @@
     ++ [ 113 ];
   networking.firewall.allowedUDPPorts = [ 80 443 ]
     ++ [ 19132 19133 25565 25566 ] ++ [ 51315 ];
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+    5432
+  ];
 
   nix.settings.max-jobs = 1;
   nix.settings.cores = 24;
@@ -98,6 +101,7 @@
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_16;
+    enableTCPIP = true;
   };
   services.prometheus.exporters.postgres = {
     enable = true;
@@ -260,7 +264,7 @@
   };
 
   services.postgresql.ensureDatabases =
-    [ "nextcloud" "matrix-synapse" "mastodon" "dendrite" ];
+    [ "nextcloud" "matrix-synapse" "mastodon" "dendrite" "notbot" ];
   services.postgresql.ensureUsers = [
     {
       name = "nextcloud";
@@ -278,7 +282,14 @@
       name = "dendrite";
       ensureDBOwnership = true;
     }
+    {
+      name = "notbot";
+      ensureDBOwnership = true;
+    }
   ];
+  services.postgresql.authentication = ''
+    host notbot notbot 100.64.0.0/10 scram-sha-256
+  '';
 
   systemd.services."nextcloud-setup" = {
     requires = [ "postgresql.service" ];
