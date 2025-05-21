@@ -17,7 +17,7 @@ let
       ${util-linux}/bin/rfkill unblock 0
     '';
   # wrap pkgs.kdePackages.kate with a bunch of C deps so we don't need to remember about nix-shell and stuff
-  devDeps = with pkgs; [ openssl sqlite luajit_2_1 ];
+  devDeps = with pkgs; [ openssl sqlite luajit_2_1 fontconfig freetype ];
   binDeps = with pkgs; [
     nix-output-monitor
     nix-fast-build
@@ -57,6 +57,9 @@ let
     cmake
     ninja
     python3
+    python3Packages.ipython
+    python3Packages.black
+    python3Packages.jsonnet
   ];
   kate-dev = with pkgs;
     let unwrapped = kdePackages.kate;
