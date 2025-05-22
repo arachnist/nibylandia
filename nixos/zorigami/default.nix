@@ -747,6 +747,24 @@
     weechat
     rust-synapse-state-compress
   ];
+
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      font-awesome
+      terminus_font
+      terminus_font_ttf
+      noto-fonts-cjk-sans
+      noto-fonts-emoji
+      noto-fonts-emoji-blob-bin
+      twemoji-color-font
+      carlito
+      meslo-lgs-nf
+      fira-code
+      fira-code-symbols
+    ];
+  };
+
   users.groups.domi = { gid = 1004; };
   users.users.domi = {
     isNormalUser = true;

@@ -1,4 +1,4 @@
-{ fetchFromGitea, rustPlatform, pkg-config, openssl, sqlite, ... }:
+{ fetchFromGitea, rustPlatform, pkg-config, openssl, sqlite, fontconfig, freetype, ... }:
 
 let version = "0.6.12";
 in rustPlatform.buildRustPackage rec {
@@ -10,9 +10,16 @@ in rustPlatform.buildRustPackage rec {
     owner = "ar";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "614f5ac29963e507acf3d2d0d78b892a124e9e24";
-    hash = "sha256-urTB3d13s+AzqS8p0jCUs3+Asm5tOxjs2kJRMmXuFBE=";
+    rev = "45a328d2403cbf78ac82115aa66062a2d6341982";
+    hash = "sha256-DRa6mH9ONLw1EtOAtozEqizo4fR7ggLs9C+7c5Ats6w=";
   };
+  /*
+  src = builtins.fetchGit {
+    url = "file:///home/ar/scm/notbot";
+    rev = "2ab3785eb6df1053b3b41195de12c0ed499c1f05";
+    ref = "riir";
+  };
+  */
 
   useFetchCargoVendor = true;
   # cargoHash = "";
@@ -23,7 +30,7 @@ in rustPlatform.buildRustPackage rec {
   doCheck = false;
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl sqlite ];
+  buildInputs = [ openssl sqlite fontconfig freetype ];
 
   postInstall = ''
     cp -r $src/webui $out/webui
