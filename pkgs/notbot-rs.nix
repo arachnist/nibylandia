@@ -1,6 +1,6 @@
 { fetchFromGitea, rustPlatform, pkg-config, openssl, sqlite, fontconfig, freetype, ... }:
 
-let version = "0.6.12";
+let version = "0.6.13";
 in rustPlatform.buildRustPackage rec {
   pname = "notbot-rs";
   inherit version;
@@ -9,9 +9,9 @@ in rustPlatform.buildRustPackage rec {
     domain = "code.hackerspace.pl";
     owner = "ar";
     repo = "notbot";
-    # tag = "v${version}";
-    rev = "45a328d2403cbf78ac82115aa66062a2d6341982";
-    hash = "sha256-DRa6mH9ONLw1EtOAtozEqizo4fR7ggLs9C+7c5Ats6w=";
+    tag = "v${version}";
+    # rev = "45a328d2403cbf78ac82115aa66062a2d6341982";
+    hash = "sha256-MbmmgB4seDKAC8DI+mNaLFKFvF5XagxmQ/77aB778KE=";
   };
   /*
   src = builtins.fetchGit {
