@@ -52,7 +52,7 @@ in {
     services.victoriametrics = {
       enable = true;
       retentionPeriod = "1y";
-      listenAddress = "127.0.0.1:8428";
+      listenAddress = ":8428";
       extraOptions = [
         "-selfScrapeInterval=10s"
         "-promscrape.config=${generatedPrometheusYml}"
@@ -99,11 +99,19 @@ in {
       };
     };
 
-    services.prometheus.scrapeConfigs = [{
-      job_name = "local_exporters";
-      scrape_interval = "10s";
-      static_configs = [{ targets = localExporterEndpoints; }];
-    }];
+    services.prometheus.scrapeConfigs = [
+      {
+        job_name = "local_exporters";
+        scrape_interval = "10s";
+        static_configs = [{ targets = localExporterEndpoints; }];
+      }
+      {
+        job_name = "spejsiot";
+        metrics_path = "/metrics/spejsiot";
+        scrape_interval = "10s";
+        static_configs = [{ targets = [ "customs.hackerspace.pl" ]; }];
+      }
+    ];
     services.nginx.virtualHosts.${cfg.domain} = {
       forceSSL = true;
       enableACME = true;
