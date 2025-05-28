@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p curl jq coreutils nix-prefetch-github gnused bundix prefetch-yarn-deps
+#! nix-shell -i bash -p curl jq coreutils nix-prefetch-github gnused bundix yarn-berry.passthru.yarn-berry-fetcher 'callPackage ../nix-from-pr { }'
 
 set -e
 
@@ -17,19 +17,17 @@ sed -i -Ee "s|^( *rev = )\".*\";|\\1\"$rev\";|g;" ./source.nix
 sed -i -Ee "s|^( *hash = )\".*\";|\\1\"$hash\";|g;" ./source.nix
 sed -i -Ee "s|^( *version = )\".*\";|\\1\"unstable-$date\";|g;" ./source.nix
 
+nix-from-pr -o emoji.nix glitch-soc/mastodon 2462
+
 echo "building source"
-srcdir="$(nix-build --no-out-link -E '(import <nixpkgs> {}).callPackage ./source.nix {}')"
+# do this to make sure all patches are applied before generating the gemset
+srcdir="$(nix-build --no-out-link -E 'let pkgs = import <nixpkgs> {}; overlay = import ../../overlays/nibylandia.nix; in (overlay pkgs pkgs).glitch-soc.src')"
 
 echo "creating gemset"
 rm -f gemset.nix
 bundix --lockfile $srcdir/Gemfile.lock --gemfile $srcdir/Gemfile
-echo "" >> gemset.nix
 
-# TODO: find a way to automate this
-sed -i -Ee "s|^( *yarnHash = )\".*\";|\\1\"\";|g;" ./source.nix
-# echo "creating yarn hash"
-# hash="$(prefetch-yarn-deps $srcdir/yarn.lock)"
-# hash="$(nix hash --to-sri --type sha256 "$hash")"
-# sed -i -Ee "s|^( *yarnHash = )\".*\";|\\1\"$hash\";|g;' ./source.nix
-
-./update-emoji-patch.sh
+echo "creating yarn hash"
+yarn-berry-fetcher missing-hashes $srcdir/yarn.lock 2>/dev/null > ./missing-hashes.json
+hash="$(yarn-berry-fetcher prefetch $srcdir/yarn.lock ./missing-hashes.json 2>/dev/null)"
+sed -i -Ee "s|^( *yarnHash = )\".*\";|\\1\"$hash\";|g;" ./source.nix

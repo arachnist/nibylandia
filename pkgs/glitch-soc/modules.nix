@@ -19,9 +19,6 @@ stdenv.mkDerivation {
     runHook preBuild
 
     export HOME=$PWD
-    # This option is needed for openssl-3 compatibility
-    # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
-    export NODE_OPTIONS=--openssl-legacy-provider
 
     export YARN_ENABLE_TELEMETRY=0
     mkdir -p ~/.yarn/berry
@@ -35,23 +32,36 @@ stdenv.mkDerivation {
     # skip running yarn install
     rm -rf ~/bin/yarn
 
-    OTP_SECRET=precompile_placeholder \
-    SECRET_KEY_BASE=precompile_placeholder \
-    ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=precompile_placeholder \
-    ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=precompile_placeholder \
-    ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=precompile_placeholder \
-      rails assets:precompile
+    export SECRET_KEY_BASE_DUMMY=1
+    bundle exec rails assets:precompile
+
     yarn cache clean
     rm -rf ~/node_modules/.cache
 
+    # Remove execute permissions
+    find public/emoji -type f ! -perm 0555 \
+      -exec chmod 0444 {} ';'
+
     # Create missing static gzip and brotli files
-    gzip --best --keep ~/public/assets/500.html
-    gzip --best --keep ~/public/packs/report.html
-    find ~/public/assets -maxdepth 1 -type f -name '.*.json' \
-      -exec gzip --best --keep --force {} ';'
-    brotli --best --keep ~/public/packs/report.html
-    find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|js|json|html)' \
+    find public -maxdepth 1 -type f -regextype posix-extended -iregex '.*\.(js|txt)' \
+      -exec gzip --best --keep --force {} ';' \
       -exec brotli --best --keep {} ';'
+    find public/emoji -type f -name '*.svg' \
+      -exec gzip --best --keep --force {} ';' \
+      -exec brotli --best --keep {} ';'
+    find public/assets public/packs -type f -regextype posix-extended -iregex '.*\.(css|html|js|js.map|json|svg)' \
+      -exec gzip --best --keep --force {} ';' \
+      -exec brotli --best --keep {} ';'
+    ln -s assets/500.html.gz public/500.html.gz
+    ln -s assets/500.html.br public/500.html.br
+    ln -s packs/sw.js.gz public/sw.js.gz
+    ln -s packs/sw.js.br public/sw.js.br
+    ln -s packs/sw.js.map.gz public/sw.js.map.gz
+    ln -s packs/sw.js.map.br public/sw.js.map.br
+
+    rm -rf log
+    ln -s /var/log/mastodon log
+    ln -s /tmp tmp
 
     runHook postBuild
   '';

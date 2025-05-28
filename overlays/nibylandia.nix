@@ -7,7 +7,7 @@ in {
   nix-top = super.callPackage ../pkgs/nix-top { };
   glitch-soc = let
     emoji-reactions = import ../pkgs/glitch-soc/emoji.nix {
-      inherit (super) fetchpatch fetchurl;
+      inherit (super) fetchpatch2 fetchurl;
     };
     file-post-patch = lib.concatMapStringsSep "\n" (f: ''
       mkdir -p "$(dirname "${f.name}")"
@@ -21,6 +21,7 @@ in {
     '';
     inherit (emoji-reactions) patches;
   };
+  nix-from-pr = super.callPackage ../pkgs/nix-from-pr { };
 
   python311MCOverviewer = super.python311.override {
     packageOverrides = pyself: pysuper: {

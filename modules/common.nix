@@ -83,6 +83,7 @@ in {
       trusted-substituters = config.nix.settings.substituters;
     };
   };
+  nixpkgs.flake.setNixPath = true;
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
   nixpkgs.overlays = [ inputs.self.overlays.nibylandia ];
