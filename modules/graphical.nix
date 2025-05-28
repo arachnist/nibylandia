@@ -154,13 +154,8 @@ in {
 
   services.libinput.enable = true;
   services.displayManager = {
-    sddm = {
-      enable = lib.mkDefault true;
-      wayland.enable = true;
-      settings.Wayland.SessionDir =
-        "/run/current-system/sw/share/wayland-sessions";
-      settings.X11.SessionDir = lib.mkForce "";
-    };
+    sddm.enable = false;
+    cosmic-greeter.enable = true;
     defaultSession = "plasma";
   };
 

@@ -1,4 +1,4 @@
-{ pkgs, config, inputs, ... }:
+{ config, inputs, ... }:
 
 {
   networking.hostName = "microlith";
