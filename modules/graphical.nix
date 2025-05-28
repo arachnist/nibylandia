@@ -254,7 +254,7 @@ in {
 
   environment.systemPackages = [
     inputs.agenix.packages.${pkgs.system}.default
-    inputs.colmena.packages.${pkgs.system}.colmena
+    # inputs.colmena.packages.${pkgs.system}.colmena -- TODO: deal with colmena 0.5 compatibility later
     kate-dev
   ] ++ (with pkgs.kdePackages; [ tokodon neochat kolourpaint okular discover kleopatra ])
     ++ (with pkgs; [
@@ -311,6 +311,7 @@ in {
       # orca-slicer
       # super-slicer-beta
 
+      colmena
       deploy-rs
       sshfs
       dig
