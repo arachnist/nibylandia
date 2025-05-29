@@ -9,9 +9,9 @@ in rustPlatform.buildRustPackage rec {
     domain = "code.hackerspace.pl";
     owner = "ar";
     repo = "notbot";
-    tag = "v${version}";
-    # rev = "45a328d2403cbf78ac82115aa66062a2d6341982";
-    hash = "sha256-MbmmgB4seDKAC8DI+mNaLFKFvF5XagxmQ/77aB778KE=";
+    # tag = "v${version}";
+    rev = "b839033f8eb7d38a319b7af3b566189ef51a7233";
+    hash = "sha256-30866LdoAIQ0Y1yxVeQAu9BbYs4cClDpXvTuGFT4T2Y=";
   };
   /*
   src = builtins.fetchGit {
