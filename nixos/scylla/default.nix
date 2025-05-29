@@ -417,6 +417,7 @@ in {
   services.bird = {
     enable = true;
     checkConfig = false;
+    package = pkgs.bird2;
     config = builtins.readFile ./bird/bird2.conf;
   };
   environment.etc."bird/peers/w1kl4s.conf" = {
