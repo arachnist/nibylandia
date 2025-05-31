@@ -49,6 +49,10 @@ in {
   };
 
   config = {
+    networking.firewall.extraCommands = ''
+      iptables -A INPUT -m iprange --src-range 185.236.240.0-185.236.243.255 -p tcp -m tcp --dport 8428 -j ACCEPT
+      ip6tables -A INPUT -m iprange --src-range 2a0d:eb00::0-2a0d:eb07:ffff:ffff:ffff:ffff:ffff:ffff -p tcp -m tcp --dport 8428 -j ACCEPT
+    '';
     services.victoriametrics = {
       enable = true;
       retentionPeriod = "1y";
