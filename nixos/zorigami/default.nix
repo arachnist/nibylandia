@@ -298,6 +298,7 @@
 
   mailserver = {
     enable = true;
+    stateVersion = 2;
     fqdn = "is-a.cat";
     domains = [ "is-a.cat" "i.am-a.cat" "rsg.enterprises" ];
     certificateScheme = "acme-nginx";
