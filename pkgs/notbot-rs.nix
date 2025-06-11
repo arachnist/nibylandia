@@ -10,8 +10,8 @@ in rustPlatform.buildRustPackage rec {
     owner = "ar";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "e831a03f81136aa574be634ec20b9218cbf60c82";
-    hash = "sha256-jG93WYCLV6hKbvIcpABX2zeqmDkahNMkk/WN7/yYBBk=";
+    rev = "5ad937f13617ae0ce3ef5a7c79737cf9557d3ccc";
+    hash = "sha256-CqBFdGqc/q5wZw6D78er7q+fhgfv/WxZKggmBpIs6qc=";
   };
   /*
   src = builtins.fetchGit {
