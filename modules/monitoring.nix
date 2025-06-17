@@ -110,6 +110,12 @@ in {
         static_configs = [{ targets = localExporterEndpoints ++ [ "127.0.0.1:6543" ]; }];
       }
       {
+        job_name = "https_exporters";
+        scrape_interval = "10s";
+        scheme = "https";
+        static_configs = [{ targets = [ "at.hackerspace.pl" ]; }];
+      }
+      {
         job_name = "spejsiot";
         metrics_path = "/metrics/spejsiot";
         scrape_interval = "10s";
