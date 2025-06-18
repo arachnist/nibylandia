@@ -107,7 +107,8 @@ in {
       {
         job_name = "local_exporters";
         scrape_interval = "10s";
-        static_configs = [{ targets = localExporterEndpoints ++ [ "127.0.0.1:6543" ]; }];
+        static_configs =
+          [{ targets = localExporterEndpoints ++ [ "127.0.0.1:6543" ]; }];
       }
       {
         job_name = "https_exporters";

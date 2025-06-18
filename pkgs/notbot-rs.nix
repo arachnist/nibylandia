@@ -1,4 +1,5 @@
-{ fetchFromGitea, rustPlatform, pkg-config, openssl, sqlite, fontconfig, freetype, ... }:
+{ fetchFromGitea, rustPlatform, pkg-config, openssl, sqlite, fontconfig
+, freetype, ... }:
 
 let version = "0.6.13";
 in rustPlatform.buildRustPackage rec {
@@ -13,12 +14,11 @@ in rustPlatform.buildRustPackage rec {
     rev = "5ad937f13617ae0ce3ef5a7c79737cf9557d3ccc";
     hash = "sha256-CqBFdGqc/q5wZw6D78er7q+fhgfv/WxZKggmBpIs6qc=";
   };
-  /*
-  src = builtins.fetchGit {
-    url = "file:///home/ar/scm/notbot";
-    rev = "2ab3785eb6df1053b3b41195de12c0ed499c1f05";
-    ref = "riir";
-  };
+  /* src = builtins.fetchGit {
+       url = "file:///home/ar/scm/notbot";
+       rev = "2ab3785eb6df1053b3b41195de12c0ed499c1f05";
+       ref = "riir";
+     };
   */
 
   useFetchCargoVendor = true;

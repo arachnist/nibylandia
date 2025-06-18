@@ -91,9 +91,7 @@
     ++ [ 113 ];
   networking.firewall.allowedUDPPorts = [ 80 443 ]
     ++ [ 19132 19133 25565 25566 ] ++ [ 51315 ];
-  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
-    5432
-  ];
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 5432 ];
 
   nix.settings.max-jobs = 1;
   nix.settings.cores = 24;
@@ -551,9 +549,13 @@
 
   services.nginx.upstreams = {
     "notbot-test".servers = {
-      "microlith.tail412c1.ts.net:6543" = { max_fails = 1; fail_timeout = "5s"; };
+      "microlith.tail412c1.ts.net:6543" = {
+        max_fails = 1;
+        fail_timeout = "5s";
+      };
       /* "khas.tail412c1.ts.net:6543" = { max_fails = 1; fail_timeout = "5s"; };
-      "kyorinrin.tail412c1.ts.net:6543" = { max_fails = 1; fail_timeout = "5s"; }; */
+         "kyorinrin.tail412c1.ts.net:6543" = { max_fails = 1; fail_timeout = "5s"; };
+      */
     };
   };
   services.nginx.virtualHosts = {
@@ -624,13 +626,15 @@
       forceSSL = true;
       enableACME = true;
     };
-    "${config.services.matrix-synapse.settings.server_name}" =
-    let
-      clientConfig."m.homeserver".base_url = "https://${config.services.matrix-synapse.settings.server_name}";
+    "${config.services.matrix-synapse.settings.server_name}" = let
+      clientConfig."m.homeserver".base_url =
+        "https://${config.services.matrix-synapse.settings.server_name}";
       serverConfig = {
-        "m.server" = "${config.services.matrix-synapse.settings.server_name}:443";
+        "m.server" =
+          "${config.services.matrix-synapse.settings.server_name}:443";
         "m.homeserver" = {
-          "base_url" = "https://${config.services.matrix-synapse.settings.server_name}";
+          "base_url" =
+            "https://${config.services.matrix-synapse.settings.server_name}";
         };
       };
       mkWellKnown = data: ''
@@ -651,12 +655,15 @@
         '';
       };
 
-      locations."= /.well-known/matrix/server".extraConfig = mkWellKnown serverConfig;
-      locations."= /.well-known/matrix/client".extraConfig = mkWellKnown clientConfig;
+      locations."= /.well-known/matrix/server".extraConfig =
+        mkWellKnown serverConfig;
+      locations."= /.well-known/matrix/client".extraConfig =
+        mkWellKnown clientConfig;
       /* locations."/.well-known/matrix/server" = {
-        return = ''
-          200 "{\"m.server\":\"${config.services.matrix-synapse.settings.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://${config.services.matrix-synapse.settings.server_name}\"}}"'';
-      }; */
+           return = ''
+             200 "{\"m.server\":\"${config.services.matrix-synapse.settings.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://${config.services.matrix-synapse.settings.server_name}\"}}"'';
+         };
+      */
     };
     "matrix.${config.services.matrix-synapse.settings.server_name}" = {
       enableACME = true;
@@ -685,30 +692,31 @@
         '';
       };
     };
-    /*${config.services.dendrite.settings.global.server_name} = {
-      enableACME = true;
-      forceSSL = true;
-      locations = {
-        "/.well-known/matrix/server".return = ''
-          200 "{\"m.server\":\"matrix.${config.services.dendrite.settings.global.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
-        '';
-        "/.well-known/matrix/client".return = ''
-          200 "{\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
-        '';
-      };
-    };
-    "matrix.${config.services.dendrite.settings.global.server_name}" = {
-      enableACME = true;
-      forceSSL = true;
-      locations = {
-        "/_matrix".proxyPass =
-          "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
-        "/_dendrite".proxyPass =
-          "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
-        "/_synapse".proxyPass =
-          "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
-      };
-    };*/
+    /* ${config.services.dendrite.settings.global.server_name} = {
+         enableACME = true;
+         forceSSL = true;
+         locations = {
+           "/.well-known/matrix/server".return = ''
+             200 "{\"m.server\":\"matrix.${config.services.dendrite.settings.global.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
+           '';
+           "/.well-known/matrix/client".return = ''
+             200 "{\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
+           '';
+         };
+       };
+       "matrix.${config.services.dendrite.settings.global.server_name}" = {
+         enableACME = true;
+         forceSSL = true;
+         locations = {
+           "/_matrix".proxyPass =
+             "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
+           "/_dendrite".proxyPass =
+             "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
+           "/_synapse".proxyPass =
+             "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
+         };
+       };
+    */
     "rower.zajeba.li" = {
       enableACME = true;
       forceSSL = true;
