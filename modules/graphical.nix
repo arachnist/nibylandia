@@ -18,49 +18,6 @@ let
     '';
   # wrap pkgs.kdePackages.kate with a bunch of C deps so we don't need to remember about nix-shell and stuff
   devDeps = with pkgs; [ openssl sqlite luajit_2_1 fontconfig freetype ];
-  binDeps = with pkgs; [
-    nix-output-monitor
-    nix-fast-build
-
-    binutils
-    clang
-    stdenv
-
-    pkg-config
-
-    openssl
-    sqlite
-
-    nixd
-    nil
-    nvd
-    clang-tools
-    python3Packages.python-lsp-server
-    yaml-language-server
-    marksman
-    kotlin-language-server
-    solargraph
-    bash-language-server
-    clippy
-    cargo-mommy
-    rust-analyzer
-    rust-bin.nightly.latest.default
-    # rustc
-    # cargo
-    ruby-lsp
-    rubyfmt
-    gopls
-    jsonnet-language-server
-    gnumake
-    gcc
-    meson
-    cmake
-    ninja
-    python3
-    python3Packages.ipython
-    python3Packages.black
-    python3Packages.jsonnet
-  ];
   kate-dev = with pkgs;
     let unwrapped = kdePackages.kate;
     in stdenvNoCC.mkDerivation {
@@ -71,7 +28,6 @@ let
 
       buildCommand = ''
         makeWrapper ${unwrapped}/bin/kate $out/bin/kate \
-          --prefix PATH ":" ${lib.makeBinPath binDeps} \
           --prefix PKG_CONFIG_PATH ":" ${
             lib.makeSearchPath "lib/pkgconfig" (map (x: x.dev or x) devDeps)
           }
@@ -246,80 +202,140 @@ in {
 
   environment.sessionVariables = { MOZ_ENABLE_WAYLAND = "1"; };
 
-  nixpkgs.overlays = [ inputs.rust-overlay.overlays.default ];
+  nixpkgs.overlays = [ inputs.fenix.overlays.default ];
 
   environment.systemPackages = [
     inputs.agenix.packages.${pkgs.system}.default
     # inputs.colmena.packages.${pkgs.system}.colmena -- TODO: deal with colmena 0.5 compatibility later
     kate-dev
-  ] ++ (with pkgs.kdePackages; [ tokodon neochat kolourpaint okular discover kleopatra ])
-    ++ (with pkgs; [
-      chromium
-      ffmpeg-full
-      floorp
-      imagemagick
-      inkscape
-      nixfmt-classic
-      paprefs
-      pavucontrol
-      solvespace
-      spotify
-      mpv
-      gphoto2
-      minicom
-      thunderbird
-      feh
-      virt-manager
-      ncdu
-      nixos-option
-      yt-dlp
-      element-desktop
-      scrcpy
-      krita
-      vlc
-      libreoffice-qt6
-      freecad
-      neofetch
-      wprs
+  ] ++ (with pkgs.kdePackages; [
+    tokodon
+    neochat
+    kolourpaint
+    okular
+    discover
+    kleopatra
+  ]) ++ (with pkgs; [
+    chromium
+    ffmpeg-full
+    floorp
+    imagemagick
+    inkscape
+    nixfmt-classic
+    paprefs
+    pavucontrol
+    solvespace
+    spotify
+    mpv
+    gphoto2
+    minicom
+    thunderbird
+    feh
+    virt-manager
+    ncdu
+    nixos-option
+    yt-dlp
+    element-desktop
+    scrcpy
+    krita
+    vlc
+    libreoffice-qt6
+    freecad
+    neofetch
+    wprs
 
-      nheko
+    nheko
 
-      # glasgow
+    # glasgow
 
-      easyeffects
+    easyeffects
 
-      rustlings
-      go
-      rubyPackages.pry
-      rubyPackages.irb
+    rustlings
+    go
+    rubyPackages.pry
+    rubyPackages.irb
 
-      (signal-desktop.overrideAttrs (old: {
-      # preFixup = ''
-      #   gappsWrapperArgs+=(
-      #     --add-flags "--enable-features=UseOzonePlatform"
-      #     --add-flags "--ozone-platform=wayland"
-      #   )
-      # '' + old.preFixup;
+    (signal-desktop.overrideAttrs (old:
+      {
+        # preFixup = ''
+        #   gappsWrapperArgs+=(
+        #     --add-flags "--enable-features=UseOzonePlatform"
+        #     --add-flags "--ozone-platform=wayland"
+        #   )
+        # '' + old.preFixup;
       }))
 
-      prusa-slicer
-      # TODO: investigate later
-      # orca-slicer
-      # super-slicer-beta
+    prusa-slicer
+    # TODO: investigate later
+    # orca-slicer
+    # super-slicer-beta
 
-      colmena
-      deploy-rs
-      sshfs
-      dig
-      whois
-      cfssl
-      bind
-      nmap
-      waypipe
-      wl-clipboard-rs
-      amdgpu_top
-      radeontop
-    ]);
+    colmena
+    deploy-rs
+    sshfs
+    dig
+    whois
+    cfssl
+    bind
+    nmap
+    waypipe
+    wl-clipboard-rs
+    amdgpu_top
+    radeontop
+  ]) ++ (with pkgs; [
+    nix-output-monitor
+    nix-fast-build
+
+    binutils
+    clang
+    stdenv
+
+    pkg-config
+
+    openssl
+    sqlite
+
+    nixd
+    nil
+    nvd
+    clang-tools
+    python3Packages.python-lsp-server
+    yaml-language-server
+    marksman
+    kotlin-language-server
+    solargraph
+    bash-language-server
+    # clippy
+    # cargo-mommy
+    # rust-analyzer
+    # rust-bin.nightly.latest.complete
+    # rustc
+    # cargo
+    (fenix.complete.withComponents [
+      "cargo"
+      "clippy"
+      "rust-analyzer"
+      "rustc"
+      "rustfmt"
+      "rust-docs"
+      "rust-std"
+      "rust-src"
+    ])
+    ruby-lsp
+    rubyfmt
+    gopls
+    jsonnet-language-server
+    go-jsonnet
+    gnumake
+    gcc
+    meson
+    cmake
+    ninja
+    python3
+    python3Packages.ipython
+    python3Packages.black
+    python3Packages.jsonnet
+  ]);
 
   services.lact.enable = true;
 }

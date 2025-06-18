@@ -25,8 +25,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-comfyui.url = "github:dyscorv/nix-comfyui";
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
+    fenix = {
+      url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     raspberry-pi-nix.url = "github:nix-community/raspberry-pi-nix";

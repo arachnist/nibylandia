@@ -95,6 +95,27 @@
         "type": "github"
       }
     },
+    "fenix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-analyzer-src": "rust-analyzer-src"
+      },
+      "locked": {
+        "lastModified": 1750228962,
+        "narHash": "sha256-M5y3WuvyFwr6Xw3d2xnmBCpTaz/87GR8mib+nLLDGIQ=",
+        "owner": "nix-community",
+        "repo": "fenix",
+        "rev": "770345287ea0845c38d15bd750226a96250a30f0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "fenix",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -735,13 +756,13 @@
         "agenix": "agenix",
         "colmena": "colmena",
         "deploy-rs": "deploy-rs",
+        "fenix": "fenix",
         "jovian-nixos": "jovian-nixos",
         "lanzaboote": "lanzaboote",
         "nix-comfyui": "nix-comfyui",
         "nix-formatter-pack": "nix-formatter-pack",
         "nixpkgs": "nixpkgs_6",
         "raspberry-pi-nix": "raspberry-pi-nix",
-        "rust-overlay": "rust-overlay_2",
         "simple-nixos-mailserver": "simple-nixos-mailserver"
       }
     },
@@ -864,6 +885,23 @@
         "type": "github"
       }
     },
+    "rust-analyzer-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1750174047,
+        "narHash": "sha256-N4Sfk43+lsOcjWQE8SsuML0WovWRT53vPbO8PebAJXg=",
+        "owner": "rust-lang",
+        "repo": "rust-analyzer",
+        "rev": "5d93e31067f2344e1401ffe5323796122403e10e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rust-lang",
+        "ref": "nightly",
+        "repo": "rust-analyzer",
+        "type": "github"
+      }
+    },
     "rust-overlay": {
       "inputs": {
         "nixpkgs": [
@@ -877,26 +915,6 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "rev": "539ba15741f0e6691a2448743dbc601d8910edce",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
-    "rust-overlay_2": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1750214276,
-        "narHash": "sha256-1kniuhH70q4TAC/xIvjFYH46aHiLrbIlcr6fdrRwO1A=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "f9b2b2b1327ff6beab4662b8ea41689e0a57b8d4",
         "type": "github"
       },
       "original": {
