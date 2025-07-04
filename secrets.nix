@@ -114,4 +114,8 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/github-runner-token-test262.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/victoriametrics-hass-hswaw-basic-password.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/victoriametrics-hass-hswaw-bearer.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
 }

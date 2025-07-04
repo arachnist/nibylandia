@@ -53,15 +53,6 @@ in {
       iptables -A INPUT -m iprange --src-range 185.236.240.0-185.236.243.255 -p tcp -m tcp --dport 8428 -j ACCEPT
       ip6tables -A INPUT -m iprange --src-range 2a0d:eb00::0-2a0d:eb07:ffff:ffff:ffff:ffff:ffff:ffff -p tcp -m tcp --dport 8428 -j ACCEPT
     '';
-    services.victoriametrics = {
-      enable = true;
-      retentionPeriod = "1y";
-      listenAddress = ":8428";
-      extraOptions = [
-        "-selfScrapeInterval=10s"
-        "-promscrape.config=${generatedPrometheusYml}"
-      ];
-    };
 
     services.grafana.enable = true;
 
@@ -103,6 +94,11 @@ in {
       };
     };
 
+    age.secrets = {
+      hswaw-hass-pass.file = ../secrets/victoriametrics-hass-hswaw-basic-password.age;
+      hswaw-hass-bearer.file = ../secrets/victoriametrics-hass-hswaw-bearer.age;
+    };
+
     services.prometheus.scrapeConfigs = [
       {
         job_name = "local_exporters";
@@ -122,7 +118,43 @@ in {
         scrape_interval = "10s";
         static_configs = [{ targets = [ "customs.hackerspace.pl" ]; }];
       }
+      {
+        job_name = "hswaw_hass";
+        metrics_path = "/api/prometheus";
+        basic_auth = {
+          username = "ari_is-a_cat-victoriametrics";
+          password_file = "/run/credentials/victoriametrics.service/hswaw-hass-pass";
+        };
+        scheme = "https";
+        headers = [
+          "#hswaw_hass_bearer#"
+        ];
+        static_configs = [{ targets = [ "iot.waw.hackerspace.pl" ]; }];
+      }
     ];
+    systemd.services.victoriametrics = {
+      preStart = ''
+        ${pkgs.gnused}/bin/sed \
+        -e "s/[#]hswaw_hass_bearer[#]/$(</run/credentials/victoriametrics.service/hswaw-hass-bearer)/" \
+        ${generatedPrometheusYml} > /tmp/prometheus.yml
+      '';
+      serviceConfig = {
+        LoadCredential = [
+          "hswaw-hass-pass:${config.age.secrets.hswaw-hass-pass.path}"
+          "hswaw-hass-bearer:${config.age.secrets.hswaw-hass-bearer.path}"
+        ];
+      };
+    };
+    services.victoriametrics = {
+      enable = true;
+      retentionPeriod = "1y";
+      listenAddress = ":8428";
+      extraOptions = [
+        "-selfScrapeInterval=10s"
+        "-promscrape.config=/tmp/prometheus.yml"
+      ];
+    };
+
     services.nginx.virtualHosts.${cfg.domain} = {
       forceSSL = true;
       enableACME = true;
