@@ -121,6 +121,7 @@ in {
       {
         job_name = "hswaw_hass";
         metrics_path = "/api/prometheus";
+        scrape_interval = "1s";
         basic_auth = {
           username = "ari_is-a_cat-victoriametrics";
           password_file = "/run/credentials/victoriametrics.service/hswaw-hass-pass";
