@@ -153,6 +153,7 @@ in {
       extraOptions = [
         "-selfScrapeInterval=10s"
         "-promscrape.config=/tmp/prometheus.yml"
+        "-search.latencyOffset=1s"
       ];
     };
 
