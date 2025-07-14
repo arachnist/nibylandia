@@ -196,6 +196,7 @@
     timerConfig = { OnCalendar = "*:0/5"; };
   };
 
+  /*
   systemd.services.minecraft-overviewer = {
     script = ''
       ${pkgs.minecraft-overviewer}/bin/overviewer.py -p 12 -c "/srv/minecraft-overviewer/survival/config.py"
@@ -212,6 +213,7 @@
     wantedBy = [ "multi-user.target" ];
     timerConfig = { OnCalendar = "hourly"; };
   };
+  */
 
   systemd.timers.minecraft-backup = {
     wantedBy = [ "multi-user.target" ];
@@ -296,7 +298,7 @@
 
   mailserver = {
     enable = true;
-    stateVersion = 2;
+    stateVersion = 3;
     fqdn = "is-a.cat";
     domains = [ "is-a.cat" "i.am-a.cat" "rsg.enterprises" ];
     certificateScheme = "acme-nginx";
@@ -334,7 +336,10 @@
         config.age.secrets.vaultwardenMail.path;
     };
   };
-  services.dovecot2.sieve.extensions = [ "fileinto" ];
+  services.dovecot2 = {
+    sieve.extensions = [ "fileinto" ];
+    hasNewUnitName = true;
+  };
 
   # is-a.cat
   services.matrix-synapse = {
