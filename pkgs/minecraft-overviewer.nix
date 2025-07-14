@@ -5,7 +5,7 @@
 
 buildPythonApplication {
   pname = "Minecraft-Overviewer";
-  version = "2024-12-08";
+  version = "2025-05-28";
   format = "other";
 
   build-system = [ setuptools ];
@@ -39,7 +39,7 @@ buildPythonApplication {
   src = fetchFromGitHub {
     owner = "GregoryAM-SP";
     repo = "The-Minecraft-Overviewer";
-    rev = "bd53129ac47434bc78ca25518a45d927fb1df032";
-    sha256 = "sha256-6jcReRuWBVmOp3vCwEV9B5B08/O6MDB1hUFqhSu1V0s=";
+    rev = "fed92af78752f0cfde9e94abf53ffb56ffba5435";
+    sha256 = "sha256-RGjOW4+aJF0L+mUU7Mg0ZhN+PfzZZSS2pZ4hXkuqQU8=";
   };
 }

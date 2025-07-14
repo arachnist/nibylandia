@@ -196,7 +196,6 @@
     timerConfig = { OnCalendar = "*:0/5"; };
   };
 
-  /*
   systemd.services.minecraft-overviewer = {
     script = ''
       ${pkgs.minecraft-overviewer}/bin/overviewer.py -p 12 -c "/srv/minecraft-overviewer/survival/config.py"
@@ -213,7 +212,6 @@
     wantedBy = [ "multi-user.target" ];
     timerConfig = { OnCalendar = "hourly"; };
   };
-  */
 
   systemd.timers.minecraft-backup = {
     wantedBy = [ "multi-user.target" ];

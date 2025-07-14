@@ -27,8 +27,6 @@ in {
     packageOverrides = pyself: pysuper: {
       pillow_with_headers =
         pyself.callPackage ../pkgs/pillow-with-headers.nix { };
-      numpy = pysuper.numpy.overrideAttrs
-        (super: { patches = super.patches ++ [ ../pkgs/numpy-gcc-14.patch ]; });
     };
   };
 
