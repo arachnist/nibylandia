@@ -827,41 +827,4 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKKXXhLmJelCYIYW8iAPzrrZsRuOLdbOp5BFFnmszPJc mei@zork"
     ];
   };
-
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries =
-    [ (lib.getLib pkgs.stdenv.cc.cc) (lib.getLib pkgs.openssl) ];
-  age.secrets.github-runner-test262.file =
-    ../../secrets/github-runner-token-test262.age;
-  services.github-runners."test262" = {
-    enable = true;
-    url = "https://github.com/arachnist/test262.fyi";
-    tokenFile = config.age.secrets.github-runner-test262.path;
-
-    # list of debian packages from Linus
-    # git nodejs make build-essential unzip zip jq rsync python3 python3-pip python3-virtualenv python3-wheel cargo rustc liblttng-ust1 librust-openssl-dev npm openjdk-8-jre
-    extraPackages =
-      [ (pkgs.python311.withPackages (ps: with ps; [ pip virtualenv wheel ])) ]
-      ++ (with pkgs; [
-        python311
-        git
-        nodejs # also includes npm
-        gnumake
-        stdenv
-        unzip
-        zip
-        jq
-        rsync
-        rustup
-        lttng-ust
-        openjdk8
-        curl
-        stdenv
-      ]);
-    extraEnvironment = {
-      NIX_LD = "/run/current-system/sw/share/nix-ld/lib/ld.so";
-      NIX_LD_LIBRARY_PATH = "/run/current-system/sw/share/nix-ld/lib";
-      CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.gcc}/bin/cc";
-    };
-  };
 }
