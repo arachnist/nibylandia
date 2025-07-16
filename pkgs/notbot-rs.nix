@@ -11,8 +11,8 @@ in rustPlatform.buildRustPackage rec {
     owner = "ar";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "ffe9145ce427e653cd482459d449549142270143";
-    hash = "sha256-bT9opotcGjA8XnvUPWhRzcjEM690iPxjVa6CmbCKGo4=";
+    rev = "895bed0dc9031b7f5f7907151159f1cbdfa12ce2";
+    hash = "sha256-Rd2eIRAaT6dFqAysfLar6x00l068WZkRJwyONJzvNoE=";
   };
   /* src = builtins.fetchGit {
        url = "file:///home/ar/scm/notbot";
