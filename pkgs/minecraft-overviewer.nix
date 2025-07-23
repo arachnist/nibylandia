@@ -5,7 +5,7 @@
 
 buildPythonApplication {
   pname = "Minecraft-Overviewer";
-  version = "2025-05-28";
+  version = "2025-03-28";
   format = "other";
 
   build-system = [ setuptools ];
@@ -42,4 +42,8 @@ buildPythonApplication {
     rev = "fed92af78752f0cfde9e94abf53ffb56ffba5435";
     sha256 = "sha256-RGjOW4+aJF0L+mUU7Mg0ZhN+PfzZZSS2pZ4hXkuqQU8=";
   };
+
+  patches = [
+    ./minecraft-overviewer.patch
+  ];
 }

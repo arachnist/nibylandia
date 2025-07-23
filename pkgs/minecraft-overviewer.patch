@@ -1,0 +1,13 @@
+diff --git a/overviewer_core/src/Draw.c b/overviewer_core/src/Draw.c
+index 482f4a7..0d9903e 100644
+--- a/overviewer_core/src/Draw.c
++++ b/overviewer_core/src/Draw.c
+@@ -660,7 +660,7 @@ int32_t ImagingDrawLine(Imaging im, int32_t x0, int32_t y0, int32_t x1, int32_t
+ }
+ 
+ int32_t ImagingDrawWideLine(Imaging im, int32_t x0, int32_t y0, int32_t x1, int32_t y1,
+-                            const void* ink_, int32_t width, int32_t op) {
++                            const void* ink_, int32_t width, int32_t op, Imaging mask) {
+     DRAW* draw;
+     INT32 ink;
+ 
