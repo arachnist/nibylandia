@@ -4,8 +4,8 @@
   src = fetchFromGitHub {
     owner = "arachnist";
     repo = "mastodon";
-    rev = "adc9de70f8b47ab5bb2e57bb374242cecd685095";
-    hash = "sha256-oQHKBqz4ATqO1KV7k/N8BfWFrm/X9VN7twZk5wpEfvU=";
+    rev = "a87176306b8c0de8df9f55aa0f3980bd23738834";
+    hash = "sha256-uVWUdPkvMg6CjSvpWohEJYIk8groECNd9ViSzPb7yxM=";
   };
   inherit patches;
   nativeBuildInputs = [ gawk gnused ];
@@ -18,6 +18,6 @@
       sed -i -Ee 's|^  checksum: ([^/]*)$|  checksum: '$cacheKey'/\1|g;' yarn.lock
     '';
 }) // {
-  version = "unstable-2025-07-15";
-  yarnHash = "sha256-USoGq7bC3zlOIcz/zKJKkW+kGE/3vb2l5HIt6ZWoyVA=";
+  version = "unstable-2025-07-24";
+  yarnHash = "sha256-f9D8PUtnK0hQ7tLmLRpodV7arL8zyEXK+aUGkPU1xZQ=";
 }
