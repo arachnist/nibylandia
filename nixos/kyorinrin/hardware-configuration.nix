@@ -7,6 +7,8 @@ _:
   boot.initrd.availableKernelModules =
     [ "nvme" "ehci_pci" "xhci_pci" "rtsx_pci_sdmmc" ];
 
+  services.hardware.bolt.enable = true;
+
   boot.initrd.luks.devices."nixos".device =
     "/dev/disk/by-uuid/069a58b9-d8c1-4ab1-8a68-c45928045f9b";
 
