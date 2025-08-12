@@ -28,22 +28,22 @@ in {
   age.secrets = {
     gitea-runner-token.file =
       ../secrets/gitea-runner-token-${config.networking.hostName}.age;
-    github-runner-token.file =
-      ../secrets/github-runner-token-${config.networking.hostName}.age;
+    # github-runner-token.file =
+    #   ../secrets/github-runner-token-${config.networking.hostName}.age;
     ci-secrets = { # for printer host sd images
       file = ../secrets/ci-secrets.age;
       mode = "444";
     };
   };
 
-  services.github-runners."nix-${config.networking.hostName}" = {
-    enable = true;
-    extraLabels = ci-labels;
-    tokenFile = config.age.secrets.github-runner-token.path;
-    url = "https://github.com/arachnist/nibylandia";
-
-    extraPackages = ci-packages;
-  };
+  # services.github-runners."nix-${config.networking.hostName}" = {
+  #   enable = true;
+  #   extraLabels = ci-labels;
+  #   tokenFile = config.age.secrets.github-runner-token.path;
+  #   url = "https://github.com/arachnist/nibylandia";
+  #
+  #   extraPackages = ci-packages;
+  # };
 
   services.gitea-actions-runner.package = pkgs.forgejo-runner;
   services.gitea-actions-runner.instances.nix = {
