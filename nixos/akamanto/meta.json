@@ -1,4 +1,5 @@
 {
   "publicKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKb4i+BmIb2wiT4y5uWsCOmSo1dRp6Ql36toUsRHN6pC",
+  "ciSkip": true,
   "system": "aarch64-linux"
 }
