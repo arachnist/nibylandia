@@ -5,7 +5,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    ryujinx
+    ryubing
     steamtinkerlaunch
     gamescope
     gamescope-wsi
