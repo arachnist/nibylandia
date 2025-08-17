@@ -19,6 +19,7 @@ let
     ${pkgs.bird3}/bin/birdc c
     ${pkgs.bird3}/bin/birdc reload in all
   '';
+  pub_ip4 = "176.241.241.177";
 in {
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix
@@ -149,20 +150,20 @@ in {
     internalInterfaces = [ "lan" "eth1" "virbr1" "virbr2" ];
     forwardPorts = [
       {
-        loopbackIPs = [ "185.102.189.133" ];
+        loopbackIPs = [ pub_ip4 ];
         destination = "192.168.101.2:22";
         sourcePort = 11520;
         proto = "tcp";
       } # sdomi's vm
 
       {
-        loopbackIPs = [ "185.102.189.133" ];
+        loopbackIPs = [ pub_ip4 ];
         destination = "192.168.20.31:22";
         sourcePort = 23;
         proto = "tcp";
       }
       {
-        loopbackIPs = [ "185.102.189.133" ];
+        loopbackIPs = [ pub_ip4 ];
         destination = "192.168.20.32:22";
         sourcePort = 32;
         proto = "tcp";
@@ -179,19 +180,19 @@ in {
         proto = "tcp";
       }
       {
-        loopbackIPs = [ "185.102.189.133" ];
+        loopbackIPs = [ pub_ip4 ];
         destination = "192.168.20.31:80";
         sourcePort = 80;
         proto = "tcp";
       }
       {
-        loopbackIPs = [ "185.102.189.133" ];
+        loopbackIPs = [ pub_ip4 ];
         destination = "192.168.20.31:443";
         sourcePort = 443;
         proto = "tcp";
       }
       {
-        loopbackIPs = [ "185.102.189.133" ];
+        loopbackIPs = [ pub_ip4 ];
         destination = "192.168.20.31:2005";
         sourcePort = 2005;
         proto = "tcp";
@@ -203,19 +204,19 @@ in {
         proto = "udp";
       }
       {
-        loopbackIPs = [ "185.102.189.133" ];
+        loopbackIPs = [ pub_ip4 ];
         destination = "192.168.20.31:80";
         sourcePort = 80;
         proto = "udp";
       }
       {
-        loopbackIPs = [ "185.102.189.133" ];
+        loopbackIPs = [ pub_ip4 ];
         destination = "192.168.20.31:443";
         sourcePort = 443;
         proto = "udp";
       }
       {
-        loopbackIPs = [ "185.102.189.133" ];
+        loopbackIPs = [ pub_ip4 ];
         destination = "192.168.20.31:2005";
         sourcePort = 2005;
         proto = "udp";
