@@ -11,18 +11,18 @@ in rustPlatform.buildRustPackage rec {
     owner = "ar";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "0470ea4f87adbc097c02c3c54cc5d242ec58bb73";
-    hash = "sha256-Mp5OS9i9iuUmi3tCkxlOFADeAhBsxBgCyABxK18qm94=";
+    rev = "ab34b153480b9bd1ee97e54fcaa5b0848beb1f6e";
+    hash = "sha256-rOsp/ErUih97VKc2OgReC976VFyRDoBiBxMBsQOTZ50=";
   };
-  /* src = builtins.fetchGit {
-       url = "file:///home/ar/scm/notbot";
-       rev = "2ab3785eb6df1053b3b41195de12c0ed499c1f05";
-       ref = "riir";
-     };
+  /*/
+  src = builtins.fetchGit {
+    url = "file:///home/ar/scm/notbot";
+    rev = "68aae008b9790a46c8e5f1b034bb188d981cbb50";
+    ref = "riir";
+  };
   */
 
-  useFetchCargoVendor = true;
-  # cargoHash = "";
+
   cargoLock.lockFile = "${src}/Cargo.lock";
 
   RUSTFLAGS = "--cfg tokio_unstable";
