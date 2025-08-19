@@ -13,13 +13,16 @@
 
   networking.hostId = "7999af7c";
 
+  boot.initrd.luks.devices."nixos".device =
+    "/dev/disk/by-uuid/117206f8-160b-4c4f-83be-f4d90c1a8458";
+
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/2c034d00-d937-498c-85af-088616b8449c";
+    device = "/dev/disk/by-uuid/95f0c018-2f91-47de-8db5-6b6250ee4e8e";
     fsType = "xfs";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/C1BA-34FE";
+    device = "/dev/disk/by-uuid/12CE-A600";
     fsType = "vfat";
   };
 
@@ -28,8 +31,4 @@
     fsType = "tmpfs";
     options = [ "mode=755" "uid=1001" "gid=100" "size=40G" ];
   };
-
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/86fee886-bdba-4f0b-8fe6-31c32e8232fa"; }];
-
 }
