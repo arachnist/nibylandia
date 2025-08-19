@@ -11,17 +11,16 @@ in rustPlatform.buildRustPackage rec {
     owner = "ar";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "ab34b153480b9bd1ee97e54fcaa5b0848beb1f6e";
-    hash = "sha256-rOsp/ErUih97VKc2OgReC976VFyRDoBiBxMBsQOTZ50=";
+    rev = "05a258c260bed0875ff13c42c0f9077243453aaa";
+    hash = "sha256-ymOp5h/T3d3mIXPe6FoSOMRK8TvjVGEl3ZnLwUqVqmY=";
   };
   /*/
   src = builtins.fetchGit {
     url = "file:///home/ar/scm/notbot";
-    rev = "68aae008b9790a46c8e5f1b034bb188d981cbb50";
+    rev = "70fcddb1ec9e4562d3b9d8b7642ca7862e3d93b7";
     ref = "riir";
   };
   */
-
 
   cargoLock.lockFile = "${src}/Cargo.lock";
 
