@@ -363,6 +363,7 @@
     streamingProcesses = 4;
     localDomain = "is-a.cat";
     configureNginx = true;
+    mediaAutoRemove.olderThanDays = 9;
     smtp = {
       user = "mastodon@is-a.cat";
       passwordFile = config.age.secrets.mastodonPlainMail.path;
