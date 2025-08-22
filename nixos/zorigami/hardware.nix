@@ -13,11 +13,13 @@
 
   networking.hostId = "7999af7c";
 
+  systemd.services.systemd-udev-settle.enable = false;
+  boot.initrd.systemd.enable = true;
   boot.initrd.luks.devices."nixos".device =
-    "/dev/disk/by-uuid/117206f8-160b-4c4f-83be-f4d90c1a8458";
+    "/dev/disk/by-uuid/02f38fdc-1922-41a1-a313-41cd67ba78cc";
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/95f0c018-2f91-47de-8db5-6b6250ee4e8e";
+    device = "/dev/disk/by-uuid/f519d312-ea95-4a51-8529-96d0449d02cd";
     fsType = "xfs";
   };
 
