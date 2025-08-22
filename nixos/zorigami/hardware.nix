@@ -33,4 +33,14 @@
     fsType = "tmpfs";
     options = [ "mode=755" "uid=1001" "gid=100" "size=40G" ];
   };
+
+  fileSystems."/var/lib/matrix-synapse/media_store" = {
+    device = "tank/object/matrix";
+    fsType = "zfs";
+  };
+
+  fileSystems."/var/lib/mastodon/public-system" = {
+    device = "tank/object/mastodon";
+    fsType = "zfs";
+  };
 }
