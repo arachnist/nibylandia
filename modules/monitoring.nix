@@ -92,6 +92,17 @@ in {
           "185.236.240.143"
         ];
       };
+      ipmi = {
+        enable = true;
+        user = "root";
+        group = "root";
+      };
+    };
+    systemd.services.prometheus-ipmi-exporter.serviceConfig = {
+      DeviceAllow = [ "" "/dev/ipmi0" ];
+      DynamicUser = false;
+      PrivateDevices = lib.mkForce false;
+      RestrictSUIDSGID = lib.mkForce false;
     };
 
     age.secrets = {
