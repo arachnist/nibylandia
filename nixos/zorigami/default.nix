@@ -437,6 +437,8 @@
   networking.hostName = "zorigami";
 
   systemd.network.wait-online.enable = false;
+  systemd.network.enable = true;
+  networking.useNetworkd = true;
   networking.useDHCP = false;
   networking.tempAddresses = "disabled";
   networking.interfaces = {

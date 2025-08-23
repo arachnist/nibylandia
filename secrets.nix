@@ -118,4 +118,6 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/victoriametrics-hass-hswaw-bearer.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/zorigami-initrd-ssh.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
 }
