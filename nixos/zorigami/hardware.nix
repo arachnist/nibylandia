@@ -23,14 +23,13 @@
     "zorgami-tank-3".device = "/dev/disk/by-id/wwn-0x500003981b701f01";
   };
 
-  age.secrets.initrd-ssh.file = ../../secrets/zorigami-initrd-ssh.age;
   boot.initrd.network = {
     enable = true;
     ssh = {
       enable = true;
       port = 2;
       hostKeys = [
-        config.age.secrets.initrd-ssh.path
+        "/etc/ssh/initrd/ssh_host_ed25519_key"
       ];
     };
   };
