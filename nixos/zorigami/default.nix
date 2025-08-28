@@ -374,7 +374,7 @@
     };
     extraConfig = {
       EMAIL_DOMAIN_ALLOWLIST = "is-a.cat";
-      MAX_TOOT_CHARS = "20000";
+      MAX_TOOT_CHARS = "32768";
       MAX_ATTACHMENT_DESCRIPTION_LENGTH = "4096";
       MAX_PINNED_TOOTS = "10";
       MAX_BIO_CHARS = "2000";
