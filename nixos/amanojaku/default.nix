@@ -21,7 +21,7 @@
 
   services.displayManager.sddm.enable = lib.mkForce false;
 
-  hardware.pulseaudio.enable = lib.mkForce false;
+  hardware.pulseaudio.enable = false;
   jovian.devices.steamdeck.enable = true;
 
   environment.systemPackages = with pkgs; [ maliit-keyboard maliit-framework ];
