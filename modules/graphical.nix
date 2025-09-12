@@ -218,7 +218,7 @@ in {
   ]) ++ (with pkgs; [
     chromium
     ffmpeg-full
-    floorp
+    floorp-bin
     imagemagick
     inkscape
     nixfmt-classic

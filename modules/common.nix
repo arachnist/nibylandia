@@ -58,6 +58,7 @@ in {
     openFirewall = true;
     useRoutingFeatures = lib.mkDefault "client";
     permitCertUid = "ar";
+    package = (pkgs.tailscale.overrideAttrs { doCheck = false; });
   };
 
   deployment.targetHost =
@@ -117,7 +118,7 @@ in {
     traceroute
     jq
     dnsutils
-    tailscale
+    (pkgs.tailscale.overrideAttrs { doCheck = false; })
     nix-top
     nix-tree
   ];
