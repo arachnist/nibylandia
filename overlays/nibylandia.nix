@@ -36,4 +36,17 @@ in {
     self.py311MCOPackages.callPackage ../pkgs/minecraft-overviewer.nix {
       python3 = self.python311MCOverviewer;
     };
+
+  orca-slicer = let
+    sovol-profiles = super.fetchzip {
+      url =
+        "https://github.com/Sovol3d/Sovol-OrcaSlicer/releases/download/v2.3.0.4/Sovo.Profilesl.zip";
+      hash = "sha256-CvcM3Cst35Bz2lloejkKsSla1qrHHuDMxU67da5eHVs=";
+    };
+  in super.orca-slicer.overrideAttrs (old: {
+    prePatch = old.prePatch + ''
+      rm -rf resources/profiles/Sovol resources/profiles/Sovol.json
+      cp --target-directory=resources/profiles -r ${sovol-profiles}/*
+    '';
+  });
 }
