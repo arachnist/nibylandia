@@ -37,16 +37,24 @@ in {
       python3 = self.python311MCOverviewer;
     };
 
-  orca-slicer = let
-    sovol-profiles = super.fetchzip {
-      url =
-        "https://github.com/Sovol3d/Sovol-OrcaSlicer/releases/download/v2.3.0.4/Sovo.Profilesl.zip";
-      hash = "sha256-CvcM3Cst35Bz2lloejkKsSla1qrHHuDMxU67da5eHVs=";
+  orca-slicer = super.orca-slicer.overrideAttrs (old: {
+    version = "v2.3.1-git-2025-09-17";
+
+    src = super.fetchFromGitHub {
+      owner = "arachnist";
+      repo = "OrcaSlicer";
+      rev = "ee4b02b61ae8d7affc92d151611e8dadd2ebc700";
+      hash = "sha256-wF8Bif07emQ4LvbX8jDtpwhEbW0XO5mlpH+qQQwcmgI=";
     };
-  in super.orca-slicer.overrideAttrs (old: {
+
     prePatch = old.prePatch + ''
-      rm -rf resources/profiles/Sovol resources/profiles/Sovol.json
-      cp --target-directory=resources/profiles -r ${sovol-profiles}/*
+      sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/Feature/FuzzySkin/FuzzySkin.cpp
     '';
+
+    patches =
+      lib.filter (x: (builtins.match ".*-no-osmesa[.]patch" "${x}") == null)
+      super.orca-slicer.patches;
+
+    postBuild = "( cd .. && ./scripts/run_gettext.sh )";
   });
 }
