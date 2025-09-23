@@ -43,17 +43,18 @@ in {
     src = super.fetchFromGitHub {
       owner = "arachnist";
       repo = "OrcaSlicer";
-      rev = "ee4b02b61ae8d7affc92d151611e8dadd2ebc700";
-      hash = "sha256-wF8Bif07emQ4LvbX8jDtpwhEbW0XO5mlpH+qQQwcmgI=";
+      rev = "23bcae9a65b017135552bd62a20346a32528338f";
+      hash = "sha256-yNfSymhc13OfS0PyUw2oFe/WLBOu5PYMnlgS1PKY6Ds=";
     };
 
     prePatch = old.prePatch + ''
       sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/Feature/FuzzySkin/FuzzySkin.cpp
     '';
 
-    patches =
-      lib.filter (x: (builtins.match ".*-no-osmesa[.]patch" "${x}") == null)
-      super.orca-slicer.patches;
+    patches = (lib.filter (x:
+      (builtins.match ".*(no-osmesa|dont-link-opencv-world-orca)[.]patch"
+        "${x}") == null) super.orca-slicer.patches)
+      ++ [ ../pkgs/orca-slicer-dont-link-opencv-world.patch ];
 
     postBuild = "( cd .. && ./scripts/run_gettext.sh )";
   });
