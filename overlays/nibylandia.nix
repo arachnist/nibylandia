@@ -38,13 +38,13 @@ in {
     };
 
   orca-slicer = super.orca-slicer.overrideAttrs (old: {
-    version = "v2.3.1-git-2025-09-17";
+    version = "v2.3.1-git-2025-09-23";
 
     src = super.fetchFromGitHub {
       owner = "arachnist";
       repo = "OrcaSlicer";
-      rev = "23bcae9a65b017135552bd62a20346a32528338f";
-      hash = "sha256-yNfSymhc13OfS0PyUw2oFe/WLBOu5PYMnlgS1PKY6Ds=";
+      rev = "9d368321af86c32c0dc7c4499af09cc0af325db1";
+      hash = "sha256-VX+u8FuOehZgPhhUawMov4uOnf2pL0MrKGjHY5q7BWs=";
     };
 
     prePatch = old.prePatch + ''
