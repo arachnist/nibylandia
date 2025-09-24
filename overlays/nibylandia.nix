@@ -43,8 +43,8 @@ in {
     src = super.fetchFromGitHub {
       owner = "arachnist";
       repo = "OrcaSlicer";
-      rev = "9d368321af86c32c0dc7c4499af09cc0af325db1";
-      hash = "sha256-VX+u8FuOehZgPhhUawMov4uOnf2pL0MrKGjHY5q7BWs=";
+      rev = "c59255a60519b9d1604bea2cb671d12382490359";
+      hash = "sha256-lEjaAhdcnrM9trBuDMitkJ/GHtkJ3gEB4Ijhh2z66tU=";
     };
 
     prePatch = old.prePatch + ''
