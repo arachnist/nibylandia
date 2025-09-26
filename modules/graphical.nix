@@ -253,7 +253,7 @@ in {
     rustlings
     go
     rubyPackages.pry
-    rubyPackages.irb
+    # rubyPackages.irb
 
     (signal-desktop.overrideAttrs (old:
       {
