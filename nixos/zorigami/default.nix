@@ -7,6 +7,7 @@
       secureboot
       monitoring
       ci-runners
+      factorio
 
       ./hardware.nix
     ]);

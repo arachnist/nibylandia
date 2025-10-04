@@ -120,4 +120,6 @@ in {
     ++ [ meta.hosts.zorigami.publicKey ];
   "secrets/zorigami-initrd-ssh.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.zorigami.publicKey ];
+  "secrets/factorio-server-password-zorigami.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.zorigami.publicKey ];
 }
