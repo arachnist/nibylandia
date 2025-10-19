@@ -36,26 +36,4 @@ in {
     self.py311MCOPackages.callPackage ../pkgs/minecraft-overviewer.nix {
       python3 = self.python311MCOverviewer;
     };
-
-  orca-slicer = super.orca-slicer.overrideAttrs (old: {
-    version = "v2.3.1-git-2025-09-23";
-
-    src = super.fetchFromGitHub {
-      owner = "arachnist";
-      repo = "OrcaSlicer";
-      rev = "c59255a60519b9d1604bea2cb671d12382490359";
-      hash = "sha256-lEjaAhdcnrM9trBuDMitkJ/GHtkJ3gEB4Ijhh2z66tU=";
-    };
-
-    prePatch = old.prePatch + ''
-      sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/Feature/FuzzySkin/FuzzySkin.cpp
-    '';
-
-    patches = (lib.filter (x:
-      (builtins.match ".*(no-osmesa|dont-link-opencv-world-orca)[.]patch"
-        "${x}") == null) super.orca-slicer.patches)
-      ++ [ ../pkgs/orca-slicer-dont-link-opencv-world.patch ];
-
-    postBuild = "( cd .. && ./scripts/run_gettext.sh )";
-  });
 }
