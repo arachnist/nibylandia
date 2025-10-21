@@ -28,7 +28,7 @@
           mkdir $out
           cp $src/*zip $out/
         '';
-        deps = [];
+        deps = [ ];
       })
     ];
   };
