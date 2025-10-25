@@ -143,6 +143,12 @@ in {
         ];
         static_configs = [{ targets = [ "iot.waw.hackerspace.pl" ]; }];
       }
+      {
+        job_name = "hswaw_cardea";
+        scheme = "http";
+        metrics_path = "/metrics/cardea";
+        static_configs = [{ targets = [ "customs.hackerspace.pl" ]; }];
+      }
     ];
     systemd.services.victoriametrics = {
       preStart = ''
