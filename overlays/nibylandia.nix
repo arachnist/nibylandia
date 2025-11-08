@@ -36,4 +36,12 @@ in {
     self.py311MCOPackages.callPackage ../pkgs/minecraft-overviewer.nix {
       python3 = self.python311MCOverviewer;
     };
+
+  okular_no_perms = super.kdePackages.okular.override {
+    poppler = super.kdePackages.poppler.overrideAttrs (old: {
+      patches = [ ../pkgs/poppler-neuter-permissions.diff ]
+        ++ (old.patches or [ ]);
+      doCheck = false;
+    });
+  };
 }

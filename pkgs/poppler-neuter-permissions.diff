@@ -1,0 +1,75 @@
+commit 4ebcee9ffefcbc4c0c8328063d87eb8df4b45167
+Author: Ari Gato <ari@is-a.cat>
+Date:   Sat Nov 8 14:59:15 2025 +0100
+
+    poppler/XRef: neuter the permission system
+
+diff --git a/poppler/XRef.cc b/poppler/XRef.cc
+index 859008ba..f70394f7 100644
+--- a/poppler/XRef.cc
++++ b/poppler/XRef.cc
+@@ -1126,7 +1126,7 @@ bool XRef::isRefEncrypted(Ref r)
+ 
+ bool XRef::okToPrint(bool ignoreOwnerPW) const
+ {
+-    return (!ignoreOwnerPW && ownerPasswordOk) || (permFlags & permPrint);
++    return true;
+ }
+ 
+ // we can print at high res if we are only doing security handler revision
+@@ -1134,48 +1134,37 @@ bool XRef::okToPrint(bool ignoreOwnerPW) const
+ // 3 and we are allowed to print, and bit 12 is set.
+ bool XRef::okToPrintHighRes(bool ignoreOwnerPW) const
+ {
+-    if (encrypted) {
+-        if (2 == encRevision) {
+-            return (okToPrint(ignoreOwnerPW));
+-        } else if (encRevision >= 3) {
+-            return (okToPrint(ignoreOwnerPW) && (permFlags & permHighResPrint));
+-        } else {
+-            // something weird - unknown security handler version
+-            return false;
+-        }
+-    } else {
+-        return true;
+-    }
++    return true;
+ }
+ 
+ bool XRef::okToChange(bool ignoreOwnerPW) const
+ {
+-    return (!ignoreOwnerPW && ownerPasswordOk) || (permFlags & permChange);
++    return true;
+ }
+ 
+ bool XRef::okToCopy(bool ignoreOwnerPW) const
+ {
+-    return (!ignoreOwnerPW && ownerPasswordOk) || (permFlags & permCopy);
++    return true;
+ }
+ 
+ bool XRef::okToAddNotes(bool ignoreOwnerPW) const
+ {
+-    return (!ignoreOwnerPW && ownerPasswordOk) || (permFlags & permNotes);
++    return true;
+ }
+ 
+ bool XRef::okToFillForm(bool ignoreOwnerPW) const
+ {
+-    return (!ignoreOwnerPW && ownerPasswordOk) || (permFlags & permFillForm);
++    return true;
+ }
+ 
+ bool XRef::okToAccessibility(bool ignoreOwnerPW) const
+ {
+-    return (!ignoreOwnerPW && ownerPasswordOk) || (permFlags & permAccessibility);
++    return true;
+ }
+ 
+ bool XRef::okToAssemble(bool ignoreOwnerPW) const
+ {
+-    return (!ignoreOwnerPW && ownerPasswordOk) || (permFlags & permAssemble);
++    return true;
+ }
+ 
+ Object XRef::getCatalog()
