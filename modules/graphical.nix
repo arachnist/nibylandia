@@ -139,7 +139,7 @@ in {
       terminus_font
       terminus_font_ttf
       noto-fonts-cjk-sans
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       noto-fonts-emoji-blob-bin
       joypixels
       twemoji-color-font

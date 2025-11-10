@@ -16,9 +16,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     simple-nixos-mailserver = {
-      url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver?ref=master";
       # url = "github:arachnist/nixos-mailserver";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
