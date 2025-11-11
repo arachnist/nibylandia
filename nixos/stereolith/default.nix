@@ -330,6 +330,7 @@
       pex-enabled = false;
     };
     webHome = pkgs.flood-for-transmission;
+    package = pkgs.transmission_4;
   };
 
   virtualisation.oci-containers.containers = {
