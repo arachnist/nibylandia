@@ -11,13 +11,13 @@ in rustPlatform.buildRustPackage rec {
     owner = "ar";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "8aebf44d181b87458848e4c192d91dace835b142";
-    hash = "sha256-yKQJRg42n/Phei4BNfVe8f2qnhbLCWPA8X3YXOlP/YE=";
+    rev = "ba2de982d4cdf9438e13a7d16446a6dfc081835e";
+    hash = "sha256-N8R6agzmP54iO0d1ycaUvyZ/NuunFrOK2/+7owQPv9A=";
   };
   /*/
   src = builtins.fetchGit {
     url = "file:///home/ar/scm/notbot";
-    rev = "8aebf44d181b87458848e4c192d91dace835b142";
+    rev = "ba2de982d4cdf9438e13a7d16446a6dfc081835e";
     ref = "riir";
   };*/
 
