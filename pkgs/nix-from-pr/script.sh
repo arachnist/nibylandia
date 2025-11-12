@@ -7,6 +7,7 @@ while true; do
 		output="$2"
 		shift
 		shift
+		set -x
 		;;
 	-*)
 		echo "unknown argument: $1"
@@ -33,7 +34,8 @@ cat > "$output" <<EOF
 {
   fetchpatch2,
   fetchurl,
-}: {
+}:
+{
   patches = [
 EOF
 
@@ -44,7 +46,14 @@ jq -r 'map(.sha) | .[]' | \
 while read -r sha; do
 	url="https://github.com/${repo}/commit/${sha}.patch?full_index=1"
 	for _ in {0..2}; do
-		hash="$(nix-prefetch fetchpatch2 --name "$sha.patch" --url "$url" || true)"
+		# hash="$(nix-prefetch fetchpatch2 --name "$sha.patch" --url "$url" || true)"
+		hash="$(
+			nix build --impure --expr '
+				(import <nixpkgs> { }).fetchpatch2 {
+					name = "'"${sha}.patch"'";
+					url = "'"${url}"'";
+				}' 2>&1 | grep got: | awk '{ print $2 }' || true
+		)"
 		if [[ -z "$hash" ]]; then
 			echo "waiting before retry..."
 			sleep 10
