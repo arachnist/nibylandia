@@ -89,7 +89,7 @@ in {
   nixpkgs.config.allowBroken = true;
   nixpkgs.overlays = [ inputs.self.overlays.nibylandia ];
   nixpkgs.config.permittedInsecurePackages = [
-    "jitsi-meet-1.0.8043"
+    "jitsi-meet-${pkgs.jitsi-meet.version}"
     "olm-3.2.16"
     "cinny-${pkgs.cinny.version}"
     "cinny-unwrapped-${pkgs.cinny-unwrapped.version}"
