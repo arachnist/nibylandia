@@ -1,7 +1,8 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p curl jq coreutils nix-prefetch-github gnused bundix yarn-berry.passthru.yarn-berry-fetcher 'callPackage ../nix-from-pr { }'
+#! nix-shell -i bash -p curl jq coreutils nix-prefetch-github gnused cacert bundix yarn-berry_4.yarn-berry-fetcher 'callPackage ../nix-from-pr { }'
 
 set -e
+set -x
 
 cd "$(dirname "$0")"
 
@@ -17,7 +18,7 @@ sed -i -Ee "s|^( *rev = )\".*\";|\\1\"$rev\";|g;" ./source.nix
 sed -i -Ee "s|^( *hash = )\".*\";|\\1\"$hash\";|g;" ./source.nix
 sed -i -Ee "s|^( *version = )\".*\";|\\1\"unstable-$date\";|g;" ./source.nix
 
-nix-from-pr -o emoji.nix glitch-soc/mastodon 2462
+# nix-from-pr -o emoji.nix glitch-soc/mastodon 2462
 
 echo "building source"
 # do this to make sure all patches are applied before generating the gemset

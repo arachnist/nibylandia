@@ -5,7 +5,7 @@
 
 buildPythonApplication {
   pname = "Minecraft-Overviewer";
-  version = "2025-03-28";
+  version = "2025-10-15";
   format = "other";
 
   build-system = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonApplication {
     zipp
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${pillow_with_headers}/include/libImaging";
+  env.NIX_CFLAGS_COMPILE = "-Wno-int-conversion -I${pillow_with_headers}/include/libImaging";
 
   installPhase = ''
     python setup.py install --prefix=$out --install-lib=$out/${python3.sitePackages}
@@ -39,8 +39,8 @@ buildPythonApplication {
   src = fetchFromGitHub {
     owner = "GregoryAM-SP";
     repo = "The-Minecraft-Overviewer";
-    rev = "fed92af78752f0cfde9e94abf53ffb56ffba5435";
-    sha256 = "sha256-RGjOW4+aJF0L+mUU7Mg0ZhN+PfzZZSS2pZ4hXkuqQU8=";
+    rev = "97b26646ccea267ea6a59902cc95a4914054df24";
+    hash = "sha256-G6lQNepMOcBto//GME2As/6w2Gdky0TZtUqgcKLCQks=";
   };
 
   patches = [

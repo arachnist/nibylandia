@@ -3,7 +3,8 @@
 {
   fetchpatch2,
   fetchurl,
-}: {
+}:
+{
   patches = [
     (fetchpatch2 {
       name = "2aae4ffc3f7e76a968eebf9958ff03fae0929430.patch";
