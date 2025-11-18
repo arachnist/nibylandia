@@ -44,4 +44,6 @@ in {
       doCheck = false;
     });
   };
+
+  sound-theme-undertunes = super.callPackage ../pkgs/sound-theme-undertunes.nix { };
 }

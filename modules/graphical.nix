@@ -334,6 +334,8 @@ in {
     python3Packages.ipython
     python3Packages.black
     python3Packages.jsonnet
+
+    sound-theme-undertunes
   ]);
 
   services.lact.enable = true;
