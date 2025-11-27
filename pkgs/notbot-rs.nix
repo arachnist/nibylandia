@@ -11,8 +11,8 @@ in rustPlatform.buildRustPackage rec {
     owner = "ar";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "e36bfcf6db7a1d101072eca4c807cfaf0227cb61";
-    hash = "sha256-EAG/jR9Uk2JNOUZ/1oE/FdfxLYLZeF6n6X+i3NpFY0Q=";
+    rev = "a53eb35819d0ad28f8df4c99d3d8cd08b5f0b7b1";
+    hash = "sha256-1IHvQR9N7I2ZiXYbBwPMglDOm0jOwmLzTvllQHrdh9U=";
   };
   /*/
   src = builtins.fetchGit {
