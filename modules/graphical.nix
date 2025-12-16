@@ -101,7 +101,6 @@ in {
   };
 
   services.desktopManager.plasma6.enable = true;
-  services.desktopManager.cosmic.enable = true;
 
   services.xserver = {
     enable = true;
@@ -111,8 +110,13 @@ in {
 
   services.libinput.enable = true;
   services.displayManager = {
-    sddm.enable = false;
-    cosmic-greeter.enable = true;
+    sddm = {
+      enable = true;
+      wayland = {
+        enable = true;
+        compositor = "kwin";
+      };
+    };
     defaultSession = "plasma";
   };
 
