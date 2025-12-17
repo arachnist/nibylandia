@@ -25,8 +25,12 @@ in {
 
   python311MCOverviewer = super.python311.override {
     packageOverrides = pyself: pysuper: {
-      pillow_with_headers =
-        pyself.callPackage ../pkgs/pillow-with-headers.nix { };
+      pillow_with_headers = pyself.pillow.overrideAttrs (oa: {
+        postInstall = (oa.postInstall or "") + ''
+          mkdir -p $out/include/libImaging
+          cp src/libImaging/*.h $out/include/libImaging
+        '';
+      });
     };
   };
 
@@ -35,6 +39,7 @@ in {
   minecraft-overviewer =
     self.py311MCOPackages.callPackage ../pkgs/minecraft-overviewer.nix {
       python3 = self.python311MCOverviewer;
+      pillow = self.python311MCOverviewer.pkgs.pillow_with_headers;
     };
 
   okular_no_perms = super.kdePackages.okular.override {
@@ -45,5 +50,6 @@ in {
     });
   };
 
-  sound-theme-undertunes = super.callPackage ../pkgs/sound-theme-undertunes.nix { };
+  sound-theme-undertunes =
+    super.callPackage ../pkgs/sound-theme-undertunes.nix { };
 }

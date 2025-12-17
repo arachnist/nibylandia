@@ -1,18 +1,18 @@
-{ fetchFromGitHub, pipreqs, pillow_with_headers, buildPythonApplication, python3
+{ fetchFromGitHub, pipreqs, pillow, buildPythonApplication, python3
 , altgraph, certifi, charset-normalizer, distutils, docopt, idna
 , importlib-metadata, nbtlib, numpy, packaging, pefile, requests, setuptools
 , urllib3, yarg, zipp, ... }:
 
 buildPythonApplication {
   pname = "Minecraft-Overviewer";
-  version = "2025-10-15";
+  version = "2025-11-29";
   format = "other";
 
   build-system = [ setuptools ];
 
   dependencies = [
     pipreqs
-    pillow_with_headers
+    pillow
     altgraph
     certifi
     charset-normalizer
@@ -30,7 +30,7 @@ buildPythonApplication {
     zipp
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-int-conversion -I${pillow_with_headers}/include/libImaging";
+  env.NIX_CFLAGS_COMPILE = "-Wno-int-conversion -I${pillow}/include/libImaging";
 
   installPhase = ''
     python setup.py install --prefix=$out --install-lib=$out/${python3.sitePackages}
@@ -39,8 +39,8 @@ buildPythonApplication {
   src = fetchFromGitHub {
     owner = "GregoryAM-SP";
     repo = "The-Minecraft-Overviewer";
-    rev = "97b26646ccea267ea6a59902cc95a4914054df24";
-    hash = "sha256-G6lQNepMOcBto//GME2As/6w2Gdky0TZtUqgcKLCQks=";
+    rev = "f62db09399b3cfe5a6f1894f71adb388747537bb";
+    hash = "sha256-K7AKTCS9yPIDhRw2EU2pUtl94pD+o0Yganml1o2P8Xc=";
   };
 
   patches = [
