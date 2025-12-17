@@ -42,8 +42,4 @@ buildPythonApplication {
     rev = "f62db09399b3cfe5a6f1894f71adb388747537bb";
     hash = "sha256-K7AKTCS9yPIDhRw2EU2pUtl94pD+o0Yganml1o2P8Xc=";
   };
-
-  patches = [
-    ./minecraft-overviewer.patch
-  ];
 }

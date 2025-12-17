@@ -25,7 +25,32 @@ in {
 
   python311MCOverviewer = super.python311.override {
     packageOverrides = pyself: pysuper: {
-      pillow_with_headers = pyself.pillow.overrideAttrs (oa: {
+      pillow_with_headers = pysuper.pillow.overrideAttrs (oa: rec {
+        version = "10.3.0";
+        src = super.fetchFromGitHub {
+          owner = "python-pillow";
+          repo = "pillow";
+          tag = version;
+          hash = "sha256-CfnIdutrayXqAeMpmruDkshlbfF+pSGb3IjaA1vUnKU=";
+        };
+        preConfigure = let
+          getLibAndInclude = pkg:
+            ''"${pkg.out}/lib", "${lib.getDev pkg}/include"'';
+        in with super; ''
+          # The build process fails to find the pkg-config files for these dependencies
+          substituteInPlace setup.py \
+            --replace-fail 'IMAGEQUANT_ROOT = None' 'IMAGEQUANT_ROOT = ${
+              getLibAndInclude libimagequant
+            }' \
+            --replace-fail 'JPEG2K_ROOT = None' 'JPEG2K_ROOT = ${
+              getLibAndInclude openjpeg
+            }'
+
+          # Build with X11 support
+          export LDFLAGS="$LDFLAGS -L${libxcb}/lib"
+          export CFLAGS="$CFLAGS -I${libxcb.dev}/include"
+        '';
+
         postInstall = (oa.postInstall or "") + ''
           mkdir -p $out/include/libImaging
           cp src/libImaging/*.h $out/include/libImaging
