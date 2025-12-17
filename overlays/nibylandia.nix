@@ -25,6 +25,7 @@ in {
 
   python311MCOverviewer = super.python311.override {
     packageOverrides = pyself: pysuper: {
+      numpy = pysuper.numpy_1;
       pillow_with_headers = pysuper.pillow.overrideAttrs (oa: rec {
         version = "10.3.0";
         src = super.fetchFromGitHub {
