@@ -90,6 +90,8 @@ in {
           "edge01.waw.bgp.wtf"
           "1.1.1.1"
           "185.236.240.143"
+          "eos.hexi.co"
+          "eos.ipv6.hexi.co"
         ];
       };
       ipmi = {
