@@ -22,7 +22,7 @@ in
     graphical
     laptop
     secureboot
-    gaming
+    # gaming
   ];
 
   # boot.kernelParams = [ "nohz_full=1-15" ];

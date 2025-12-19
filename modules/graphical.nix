@@ -242,7 +242,7 @@ in {
     yt-dlp
     element-desktop
     scrcpy
-    krita
+    # krita
     vlc
     libreoffice-qt6
     freecad

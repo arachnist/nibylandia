@@ -9,7 +9,7 @@
     graphical
     laptop
     secureboot
-    gaming
+    # gaming
   ];
 
   # nixpkgs.overlays = [ inputs.nix-comfyui.overlays.default ];
@@ -51,6 +51,8 @@
     autoconf
     automake
     libtool
+
+    krita
   ];
 
   services.displayManager.sddm.settings.Fingerprintlogin = {
