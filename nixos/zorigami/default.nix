@@ -485,6 +485,24 @@
         prefixLength = 27;
       }];
     };
+    virbr0 = {
+      ipv4.routes = [
+        {
+          address = "185.236.240.154";
+          prefixLength = 32;
+        }
+      ];
+      ipv6.addresses = [{
+        address = "2a0d:eb00:8007:4001::1";
+        prefixLength = 64;
+      }];
+      ipv6.routes = [
+        {
+          address = "2a0d:eb00:8007:4001::";
+          prefixLength = 64;
+        }
+      ];
+    };
   };
 
   networking.nameservers = [
@@ -499,6 +517,7 @@
     "net.ipv6.conf.all.accept_ra" = false;
     "net.ipv6.conf.default.accept_ra" = false;
     "net.ipv4.conf.all.forwarding" = true;
+    "net.ipv6.conf.all.forwarding" = true;
   };
   networking.wireguard.interfaces = {
     wg-nibylandia = {
@@ -780,6 +799,8 @@
       fira-code-symbols
     ];
   };
+
+  virtualisation.libvirtd.enable = true;
 
   users.groups.domi = { gid = 1004; };
   users.users.domi = {
