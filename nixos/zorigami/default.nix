@@ -301,7 +301,6 @@
     stateVersion = 3;
     fqdn = "is-a.cat";
     domains = [ "is-a.cat" "i.am-a.cat" "rsg.enterprises" ];
-    certificateScheme = "acme-nginx";
     enableManageSieve = true;
     fullTextSearch = {
       enable = true;
@@ -312,6 +311,7 @@
     borgbackup.enable = false;
     backup.enable = false;
     messageSizeLimit = 41943040;
+    x509.useACMEHost = "is-a.cat";
     loginAccounts = {
       "ar@is-a.cat" = {
         aliases = [
@@ -338,7 +338,6 @@
   };
   services.dovecot2 = {
     sieve.extensions = [ "fileinto" ];
-    hasNewUnitName = true;
   };
 
   # is-a.cat
