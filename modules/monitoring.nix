@@ -151,6 +151,29 @@ in {
         metrics_path = "/metrics/cardea";
         static_configs = [{ targets = [ "customs.hackerspace.pl" ]; }];
       }
+      {
+        job_name = "hswaw_klipper";
+        scrape_interval = "5s";
+        metrics_path = "/metrics/klipper/probe";
+        static_configs = [{ targets = [ "inari.waw.hackerspace.pl" ]; }];
+        params.modules = [
+          "process_stats" "job_queue" "system_info" "network_stats" "directory_info" "printer_objects" "history"
+        ];
+        relabel_configs = [
+          {
+            source_labels = ["__address__"];
+            target_label = "__param_target";
+          }
+          {
+            source_labels = ["__param_target"];
+            target_label = "instance";
+          }
+          {
+            target_label = "__address__";
+            replacement = "customs.hackerspace.pl";
+          }
+        ];
+      }
     ];
     systemd.services.victoriametrics = {
       preStart = ''
