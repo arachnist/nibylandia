@@ -747,7 +747,7 @@
       enableACME = true;
       forceSSL = true;
       locations."/" = {
-        return = "301 https://pl.wikipedia.org/wiki/Praga-Po%C5%82udnie";
+        return = "301 https://pl.wikipedia.org/wiki/Praga-P%C3%B3%C5%82noc";
       };
     };
     "wildcard.zajeba.li" = {
