@@ -31,6 +31,7 @@
   environment.systemPackages = with pkgs; [
     maliit-keyboard
     maliit-framework
+    kdePackages.plasma-keyboard
 
     iio-sensor-proxy
     xournalpp
