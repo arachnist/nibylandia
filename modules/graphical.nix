@@ -342,5 +342,9 @@ in {
     sound-theme-undertunes
   ]);
 
+  networking.networkmanager.plugins = with pkgs; [
+    networkmanager-openvpn
+  ];
+
   services.lact.enable = true;
 }
