@@ -757,16 +757,31 @@
       serverAliases = [ "~^(.*).zajeba.li$" ];
       root = "/srv/www/wildcard_zajeba.li/$1";
     };
-  };
-  security.acme.certs."wildcard.zajeba.li" = {
-    extraDomainNames = lib.mkForce [ ];
-    domain = "*.zajeba.li";
-    dnsProvider = "cloudflare";
-    webroot = lib.mkForce null;
-    credentialFiles = {
-      CLOUDFLARE_DNS_API_TOKEN_FILE =
-        config.age.secrets.acmeZorigamiZajebaLi.path;
+    "wildcard.nie.zajeba.li" = {
+      enableACME = true;
+      forceSSL = true;
+
+      serverAliases = [ "~^(.*).nie.zajeba.li$" ];
+      root = "/srv/www/wildcard_nie.zajeba.li/$1";
     };
+  };
+  security.acme.certs = let
+    cloudflareDefaults = {
+      extraDomainNames = lib.mkForce [ ];
+      dnsProvider = "cloudflare";
+      webroot = lib.mkForce null;
+      credentialFiles = {
+        CLOUDFLARE_DNS_API_TOKEN_FILE =
+          config.age.secrets.acmeZorigamiZajebaLi.path;
+      };
+    };
+  in {
+    "wildcard.zajeba.li" = {
+      domain = "*.zajeba.li";
+    } // cloudflareDefaults;
+    "wildcard.nie.zajeba.li" = {
+      domain = "*.nie.zajeba.li";
+    } // cloudflareDefaults;
   };
 
   services.oidentd.enable = true;
