@@ -84,6 +84,31 @@
   };
   systemd.network.wait-online.enable = false;
 
+  # silly NIC networking
+  networking.interfaces.ens33.ipv4 = {
+    addresses = [{
+      address = "10.69.0.254";
+      prefixLength = 24;
+    }];
+  };
+  services.dnsmasq = {
+    enable = true;
+    settings = {
+      no-resolv = true;
+      port = 553;
+      listen-address = "10.69.0.254";
+      dhcp-range = "10.69.0.10,10.69.0.250,5m";
+      enable-ra = true;
+      
+      enable-tftp = true;
+      tftp-root = "/stereolith/crap/tftp";
+      tftp-no-fail = true;
+      
+      log-queries = true;
+      log-dhcp = true;
+    };
+  };
+
   networking.firewall.allowedTCPPorts = [ 22 80 443 1688 2005 2582 3000 ]
     ++ (map (x: 9091 + x) (lib.range (0 - 2) 10))
     ++ (map (x: 51413 + x) (lib.range (0 - 2) 10)) ++ [ 137 139 445 631 ]
