@@ -181,7 +181,6 @@ in {
       enableSSHSupport = true;
       pinentryPackage = pkgs.pinentry-qt;
     };
-    adb.enable = true;
     fuse.userAllowOther = true;
     dconf.enable = true;
     mosh.enable = true;
@@ -220,6 +219,7 @@ in {
     discover
     kleopatra
   ]) ++ (with pkgs; [
+    android-tools
     okular_no_perms
     chromium
     ffmpeg-full
