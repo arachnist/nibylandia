@@ -24,6 +24,8 @@ in {
     ++ [ meta.hosts.amanojaku.publicKey ];
   "secrets/kyorinrin-ar.age".publicKeys = meta.users.ar
     ++ [ meta.hosts.kyorinrin.publicKey ];
+  "secrets/stereolith-root.age".publicKeys = meta.users.ar
+    ++ [ meta.hosts.stereolith.publicKey ];
   "secrets/nix-store.age".publicKeys = meta.users.ar ++ (with meta.hosts; [
     zorigami.publicKey
     scylla.publicKey

@@ -8,6 +8,9 @@
   };
   age.secrets.mastodonActiveRecordSecrets.file =
     ../../secrets/mastodon-qa-activerecord.age;
+  age.secrets.root-password.file = ../../secrets/stereolith-root.age;
+
+  users.users.root.hashedPasswordFile = config.age.secrets.root-password.path;
 
   networking.hostName = "stereolith";
   networking.hostId = "adcad022";
@@ -68,7 +71,7 @@
   networking.useDHCP = false;
   networking.wireless.enable = false;
   networking.nameservers = [ "192.168.20.1" ];
-  networking.interfaces.enp9s0.ipv4 = {
+  networking.interfaces.enp12s0.ipv4 = {
     addresses = [{
       address = "192.168.20.31";
       prefixLength = 24;
