@@ -108,6 +108,7 @@
       log-dhcp = true;
     };
   };
+  networking.firewall.trustedInterfaces = [ "ens33" ];
 
   networking.firewall.allowedTCPPorts = [ 22 80 443 1688 2005 2582 3000 ]
     ++ (map (x: 9091 + x) (lib.range (0 - 2) 10))
@@ -339,7 +340,7 @@
     };
   };
   systemd.tmpfiles.rules = [ "d /var/spool/samba 1777 root root -" ];
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   services.xserver.enable = false;
   systemd.services.mdmonitor.enable = false;
 
