@@ -219,6 +219,7 @@ in {
     discover
     kleopatra
   ]) ++ (with pkgs; [
+    masscan
     android-tools
     okular_no_perms
     chromium
