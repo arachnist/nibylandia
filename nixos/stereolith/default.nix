@@ -55,6 +55,7 @@
     tcpdump
     sysstat
     samba
+    masscan
   ];
 
   programs = {
@@ -91,13 +92,24 @@
       prefixLength = 24;
     }];
   };
+  networking.interfaces.enp2s0f0u11i1.ipv4 = {
+    addresses = [{
+      address = "10.70.0.254";
+      prefixLength = 24;
+    }];
+  };
   services.dnsmasq = {
     enable = true;
     settings = {
+      interface = [ "ens33" "enp2s0f0u11i1" ];
+
       no-resolv = true;
       port = 553;
-      listen-address = "10.69.0.254";
-      dhcp-range = "10.69.0.10,10.69.0.250,5m";
+      listen-address = [ "10.69.0.254" "10.70.0.254" ];
+      dhcp-range = [
+        "ens33,10.69.0.10,10.69.0.250,5m"
+        "enp2s0f0u11i1,10.70.0.10,10.70.0.250,5m"
+      ];
       enable-ra = true;
       
       enable-tftp = true;
@@ -108,7 +120,14 @@
       log-dhcp = true;
     };
   };
-  networking.firewall.trustedInterfaces = [ "ens33" ];
+  networking.firewall.trustedInterfaces = [ "ens33" "enp2s0f0u11i1" ];
+  boot.kernel.sysctl = {
+    "net.ipv4.conf.ens33.forwarding" = 0;
+    "net.ipv4.conf.enp2s0f0u11i1.forwarding" = 0;
+
+    "net.ipv6.conf.ens33.forwarding" = 0;
+    "net.ipv6.conf.enp2s0f0u11i1.forwarding" = 0;
+  };
 
   networking.firewall.allowedTCPPorts = [ 22 80 443 1688 2005 2582 3000 ]
     ++ (map (x: 9091 + x) (lib.range (0 - 2) 10))
@@ -362,6 +381,7 @@
     package = pkgs.transmission_4;
   };
 
+  /*
   virtualisation.oci-containers.containers = {
     octoprint = {
       image = "octoprint/octoprint";
@@ -378,6 +398,7 @@
       };
     };
   };
+  */
 
   security.polkit.enable = true;
   virtualisation.libvirtd.enable = true;
