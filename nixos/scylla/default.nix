@@ -474,5 +474,5 @@ in {
   nixpkgs.overlays =
     [ (self: super: { restool = self.callPackage ./pkgs/restool { }; }) ];
 
-  environment.systemPackages = with pkgs; [ restool ethtool ];
+  environment.systemPackages = with pkgs; [ masscan restool ethtool ];
 }
