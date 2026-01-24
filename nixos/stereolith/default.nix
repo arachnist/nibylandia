@@ -27,6 +27,8 @@
   boot.kernelPackages = pkgs.linuxPackages;
   boot.zfs.package = pkgs.zfs_unstable;
   boot.extraModulePackages = with config.boot.kernelPackages; [ zfs_unstable ];
+  # machine has buggy firmware, tpm2 initialization by systemd stalls boot for 90s
+  systemd.package = pkgs.systemd.override { withTpm2Tss = false; };
 
   boot.enableContainers = true;
   boot.zfs.extraPools = [ config.networking.hostName ];
@@ -70,64 +72,26 @@
   };
 
   networking.useDHCP = false;
+  networking.useNetworkd = true;
   networking.wireless.enable = false;
+  systemd.network.links.net.matchConfig.MACAddress = [ "00:02:c9:53:9a:c2" ];
   networking.nameservers = [ "192.168.20.1" ];
-  networking.interfaces.enp12s0.ipv4 = {
-    addresses = [{
-      address = "192.168.20.31";
-      prefixLength = 24;
-    }];
-    routes = [{
-      address = "0.0.0.0";
-      prefixLength = 0;
-      via = "192.168.20.1";
-    }];
-  };
-  systemd.network.wait-online.enable = false;
-
-  # silly NIC networking
-  networking.interfaces.ens33.ipv4 = {
-    addresses = [{
-      address = "10.69.0.254";
-      prefixLength = 24;
-    }];
-  };
-  networking.interfaces.enp2s0f0u4i1.ipv4 = {
-    addresses = [{
-      address = "10.70.0.254";
-      prefixLength = 24;
-    }];
-  };
-  services.dnsmasq = {
-    enable = true;
-    settings = {
-      interface = [ "ens33" "enp2s0f0u4i1" ];
-
-      no-resolv = true;
-      port = 553;
-      listen-address = [ "10.69.0.254" "10.70.0.254" ];
-      dhcp-range = [
-        "ens33,10.69.0.10,10.69.0.250,5m"
-        "enp2s0f0u4i1,10.70.0.10,10.70.0.250,5m"
-      ];
-      enable-ra = true;
-      
-      enable-tftp = true;
-      tftp-root = "/stereolith/crap/tftp";
-      tftp-no-fail = true;
-      
-      log-queries = true;
-      log-dhcp = true;
+  networking.interfaces = {
+    net = {
+      ipv4 = {
+        addresses = [{
+          address = "192.168.20.31";
+          prefixLength = 24;
+        }];
+        routes = [{
+          address = "0.0.0.0";
+          prefixLength = 0;
+          via = "192.168.20.1";
+        }];
+      };
     };
   };
-  networking.firewall.trustedInterfaces = [ "ens33" "enp2s0f0u4i1" ];
-  boot.kernel.sysctl = {
-    "net.ipv4.conf.ens33.forwarding" = 0;
-    "net.ipv4.conf.enp2s0f0u4i1.forwarding" = 0;
-
-    "net.ipv6.conf.ens33.forwarding" = 0;
-    "net.ipv6.conf.enp2s0f0u4i1.forwarding" = 0;
-  };
+  systemd.network.wait-online.enable = false;
 
   networking.firewall.allowedTCPPorts = [ 22 80 443 1688 2005 2582 3000 ]
     ++ (map (x: 9091 + x) (lib.range (0 - 2) 10))
@@ -381,7 +345,6 @@
     package = pkgs.transmission_4;
   };
 
-  /*
   virtualisation.oci-containers.containers = {
     octoprint = {
       image = "octoprint/octoprint";
@@ -389,8 +352,9 @@
       ports = [ "5001:80" ];
       extraOptions = [
         "--device=/dev/ttyACM0:/dev/ttyACM0"
-        "--device=/dev/video0:/dev/video0"
-        "--device=/dev/video1:/dev/video1"
+        # webcam stolen for work purposes
+        # "--device=/dev/video0:/dev/video0"
+        # "--device=/dev/video1:/dev/video1"
       ];
       environment = {
         ENABLE_MJPG_STREAMER = "true";
@@ -398,7 +362,6 @@
       };
     };
   };
-  */
 
   security.polkit.enable = true;
   virtualisation.libvirtd.enable = true;
