@@ -215,13 +215,12 @@ in {
     tokodon
     neochat
     kolourpaint
-    # okular
+    okular
     discover
     kleopatra
   ]) ++ (with pkgs; [
     masscan
     android-tools
-    okular_no_perms
     chromium
     ffmpeg-full
     floorp-bin
