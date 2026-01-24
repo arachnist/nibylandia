@@ -61,47 +61,40 @@
     User = "ar";
   };
 
-  # hardware.graphics.extraPackages = with pkgs; [ rocmPackages.clr.icd ];
-  #
-  # systemd.tmpfiles.rules = let
-  #   rocmEnv = pkgs.symlinkJoin {
-  #     name = "rocm-combined";
-  #     paths = with pkgs.rocmPackages; [ rocblas hipblas clr ];
-  #   };
-  # in [ "L+    /opt/rocm   -    -    -     -    ${rocmEnv}" ];
-  networking.networkmanager.ensureProfiles.profiles = {
-    "39C3" = {
-      connection = {
-        id = "39C3";
-        type = "wifi";
-      };
-      wifi = {
-        mode = "infrastructure";
-        ssid = "39C3";
-      };
-      wifi-security = {
-        auth-alg = "open";
-        key-mgmt = "wpa-eap";
-      };
-      "802-1x" = {
-        anonymous-identity = "39C3";
-        eap = "ttls;";
-        identity = "39C3";
-        password = "39C3";
-        phase2-auth = "pap";
-        altsubject-matches = "DNS:radius.c3noc.net";
-        ca-cert = "${builtins.fetchurl {
-          url = "https://letsencrypt.org/certs/isrgrootx1.pem";
-          sha256 = "sha256:1la36n2f31j9s03v847ig6ny9lr875q3g7smnq33dcsmf2i5gd92";
-        }}";
-      };
-      ipv4 = {
-        method = "auto";
-      };
-      ipv6 = {
-        addr-gen-mode = "default";
-        method = "auto";
-      };
+  # silly NIC networking
+  networking.interfaces.enp198s0f4u1i1.ipv4 = {
+    addresses = [{
+      address = "10.70.0.254";
+      prefixLength = 24;
+    }];
+  };
+  services.dnsmasq = {
+    enable = true;
+    settings = {
+      interface = [ "enp2s0f0u4i1" ];
+
+      no-resolv = true;
+      port = 553;
+      listen-address = [ "10.70.0.254" ];
+      dhcp-range = [
+        "enp198s0f4u1i1,10.70.0.10,10.70.0.250,5m"
+      ];
+      enable-ra = true;
+
+      enable-tftp = true;
+      tftp-root = "/stereolith/crap/tftp";
+      tftp-no-fail = true;
+
+      log-queries = true;
+      log-dhcp = true;
     };
   };
+  networking.firewall.trustedInterfaces = [ "enp2s0f0u4i1" ];
+  boot.kernel.sysctl = {
+    "net.ipv4.conf.enp198s0f4u1i1.forwarding" = 0;
+
+    "net.ipv6.conf.enp198s0f4u1i1.forwarding" = 0;
+  };
+
+  networking.networkmanager.unmanaged = [ "enp2s0f0u4i1" ];
 }
