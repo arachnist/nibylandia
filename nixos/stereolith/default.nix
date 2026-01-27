@@ -74,10 +74,9 @@
   networking.useDHCP = false;
   networking.useNetworkd = true;
   networking.wireless.enable = false;
-  systemd.network.links.net.matchConfig.MACAddress = [ "00:02:c9:53:9a:c2" ];
   networking.nameservers = [ "192.168.20.1" ];
   networking.interfaces = {
-    net = {
+    enp9s0 = {
       ipv4 = {
         addresses = [{
           address = "192.168.20.31";
@@ -92,6 +91,8 @@
     };
   };
   systemd.network.wait-online.enable = false;
+  boot.initrd.systemd.network.enable = true;
+  boot.initrd.systemd.enable = true;
 
   networking.firewall.allowedTCPPorts = [ 22 80 443 1688 2005 2582 3000 ]
     ++ (map (x: 9091 + x) (lib.range (0 - 2) 10))
