@@ -347,4 +347,6 @@ in {
   ];
 
   services.lact.enable = true;
+
+  hardware.keyboard.zsa.enable = true;
 }
