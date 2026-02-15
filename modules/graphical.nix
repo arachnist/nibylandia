@@ -152,6 +152,7 @@ in {
       fira-code
       fira-code-symbols
     ];
+    fontconfig.useEmbeddedBitmaps = true;
   };
 
   # i18n.inputMethod = {
