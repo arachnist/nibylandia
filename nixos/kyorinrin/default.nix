@@ -1,5 +1,8 @@
 { config, inputs, pkgs, ... }:
 
+let
+  pkgsOld = inputs.nixpkgsOld.legacyPackages.x86_64-linux;
+in
 {
   networking.hostName = "kyorinrin";
 
@@ -53,8 +56,10 @@
     automake
     libtool
 
+    # krita
+  ] ++ (with pkgsOld; [
     krita
-  ];
+  ]);
 
   services.displayManager.sddm.settings.Fingerprintlogin = {
     Session = "plasma";
