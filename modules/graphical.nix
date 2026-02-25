@@ -33,6 +33,7 @@ let
           }
       '';
     };
+  pkgsOld = inputs.nixpkgsOld.legacyPackages.x86_64-linux;
 in {
   imports = [ inputs.self.nixosModules.common ];
 
@@ -212,7 +213,9 @@ in {
     inputs.agenix.packages.${pkgs.system}.default
     # inputs.colmena.packages.${pkgs.system}.colmena -- TODO: deal with colmena 0.5 compatibility later
     kate-dev
-  ] ++ (with pkgs.kdePackages; [
+  ] ++ (with pkgsOld; [
+    freecad
+  ]) ++ (with pkgs.kdePackages; [
     tokodon
     neochat
     kolourpaint
@@ -246,7 +249,7 @@ in {
     # krita
     vlc
     libreoffice-qt6
-    freecad
+    # freecad
     neofetch
     wprs
 
