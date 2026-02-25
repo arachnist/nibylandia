@@ -1,5 +1,8 @@
 { config, inputs, lib, pkgs, ... }:
 
+let
+  pkgsOld = inputs.nixpkgsOld.legacyPackages.x86_64-linux;
+in
 {
   age.secrets.mastodonPlainMail = {
     group = "mastodon";
@@ -343,11 +346,11 @@
       pex-enabled = false;
     };
     webHome = pkgs.flood-for-transmission;
-    package = pkgs.transmission_4.overrideAttrs (o: {
+    package = pkgsOld.transmission_4.overrideAttrs (o: {
       name = "transmission";
       version = "4.0.5";
 
-      src = pkgs.fetchFromGitHub {
+      src = pkgsOld.fetchFromGitHub {
         owner = "transmission";
         repo = "transmission";
         rev = "4.0.5";

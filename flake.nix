@@ -4,6 +4,8 @@
   inputs = {
     # nixpkgs.url = "git+file:///home/ar/scm/nixpkgs";
     nixpkgs.url = "github:arachnist/nixpkgs/ar-patchset-unstable";
+    # nixpkgs old for transmission
+    nixpkgsOld.url = "github:nixos/nixpkgs/540d7365649d7de2a14725a0c270ef7af931a55a";
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
     deploy-rs.url = "github:serokell/deploy-rs";
     colmena.url = "github:zhaofengli/colmena/main";
