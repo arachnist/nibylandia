@@ -78,4 +78,6 @@ in {
 
   sound-theme-undertunes =
     super.callPackage ../pkgs/sound-theme-undertunes.nix { };
+
+  probe-rs-rules = super.callPackage ../pkgs/probe-rs-rules { };
 }
