@@ -214,7 +214,7 @@ in {
     # inputs.colmena.packages.${pkgs.system}.colmena -- TODO: deal with colmena 0.5 compatibility later
     kate-dev
   ] ++ (with pkgsOld; [
-    freecad
+    # freecad
   ]) ++ (with pkgs.kdePackages; [
     tokodon
     neochat
@@ -249,8 +249,8 @@ in {
     # krita
     vlc
     libreoffice-qt6
-    # freecad
-    neofetch
+    freecad
+    fastfetch
     wprs
 
     nheko

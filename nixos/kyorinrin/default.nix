@@ -56,9 +56,9 @@ in
     automake
     libtool
 
-    # krita
-  ] ++ (with pkgsOld; [
     krita
+  ] ++ (with pkgsOld; [
+    # krita
   ]);
 
   services.displayManager.sddm.settings.Fingerprintlogin = {
