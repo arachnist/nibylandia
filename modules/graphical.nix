@@ -352,7 +352,29 @@ in {
     python3Packages.jsonnet
 
     sound-theme-undertunes
+
+    openocd
+    rust-analyzer
+    rustfmt
+    flip-link
+    probe-rs-tools
+    elf2uf2-rs
+    picotool
+  ]) ++ (with pkgs.pkgsCross.arm-embedded.buildPackages; [
+    gdb
+    stdenv.cc
   ]);
+  /* ++ (with pkgs; [
+    (pkgsCross.arm-embedded.stdenv.mkDerivation {
+      name = "env";
+      buildInputs = with pkgsCross.arm-embedded.buildPackages; [
+        gdb
+      ];
+      
+      postInstall = ''
+      '';
+    })
+  ]) */
 
   networking.networkmanager.plugins = with pkgs; [
     networkmanager-openvpn

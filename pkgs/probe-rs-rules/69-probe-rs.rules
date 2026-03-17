@@ -128,6 +128,8 @@ ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1002", TAG+="uaccess"
 
 # rp2 devboards
 ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="0009", TAG+="uaccess"
+ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="000f", TAG+="uaccess"
+ATTRS{idVendor}=="f569", ATTRS{idProduct}=="0001", TAG+="uaccess"
 
 # CMSIS-DAP compatible adapters
 ATTRS{product}=="*CMSIS-DAP*", TAG+="uaccess"
