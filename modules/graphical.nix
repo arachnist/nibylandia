@@ -249,15 +249,7 @@ in {
     # krita
     vlc
     libreoffice-qt6
-    (freecad.overrideAttrs (o: {
-      patches = (o.patches or []) ++ [
-        # Fix transparency issues; see https://is-a.cat/@ar/116238609907729115
-        (fetchpatch {
-          url = "https://github.com/FreeCAD/FreeCAD/commit/cb8c193408b82e208504f22fa75aa0a4609b00cb.patch?full_index=1";
-          hash = "sha256-e4Ki1zGZveEMXCxXwgwbd9f2KTJi648M9WIc1Vn9YQM=";
-        })
-      ];
-    }))
+    freecad
     fastfetch
     wprs
 
