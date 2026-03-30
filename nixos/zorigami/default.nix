@@ -83,6 +83,9 @@
     appendHttpConfig = ''
       disable_symlinks off;
     '';
+    commonHttpConfig = ''
+      add_header X-Clacks-Overhead "GNU Terry Pratchett";
+    '';
   };
 
   security.acme.acceptTerms = true;
