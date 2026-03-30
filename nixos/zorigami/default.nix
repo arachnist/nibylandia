@@ -1,5 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 
+let
+  theCow = pkgs.writeText "cow.txt" (builtins.readFile ./cow.txt);
+in
 {
   imports = [ inputs.simple-nixos-mailserver.nixosModule ]
     ++ (with inputs.self.nixosModules; [
@@ -582,9 +585,6 @@
         max_fails = 1;
         fail_timeout = "5s";
       };
-      /* "khas.tail412c1.ts.net:6543" = { max_fails = 1; fail_timeout = "5s"; };
-         "kyorinrin.tail412c1.ts.net:6543" = { max_fails = 1; fail_timeout = "5s"; };
-      */
     };
   };
   services.nginx.virtualHosts = {
@@ -592,6 +592,9 @@
       forceSSL = true;
       enableACME = true;
       root = "/srv/www/s.nork.club";
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
     "ar.is-a.cat" = {
       forceSSL = true;
@@ -615,6 +618,9 @@
           proxy_read_timeout "9000s";
         '';
       };
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
     "notbot-test.is-a.cat" = {
       forceSSL = true;
@@ -622,6 +628,9 @@
       locations."/" = {
         proxyPass = "http://notbot-test";
         recommendedProxySettings = true;
+      };
+      locations."=/cow.txt" = {
+        alias = theCow;
       };
     };
     "notbot.is-a.cat" = {
@@ -631,16 +640,25 @@
         proxyPass = "http://127.0.0.1:6543";
         recommendedProxySettings = true;
       };
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
     "arachnist.is-a.cat" = {
       forceSSL = true;
       enableACME = true;
       locations."/" = { root = "/srv/www/arachnist.is-a.cat"; };
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
     "brata.zajeba.li" = {
       forceSSL = true;
       enableACME = true;
       locations."/" = { root = "/srv/www/brata.zajeba.li"; };
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
     "irc.is-a.cat" = {
       forceSSL = true;
@@ -650,6 +668,9 @@
         proxyWebsockets = true;
       };
       locations."/" = { root = pkgs.glowing-bear; };
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
     "cloud.is-a.cat" = {
       forceSSL = true;
@@ -693,6 +714,9 @@
              200 "{\"m.server\":\"${config.services.matrix-synapse.settings.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://${config.services.matrix-synapse.settings.server_name}\"}}"'';
          };
       */
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
     "matrix.${config.services.matrix-synapse.settings.server_name}" = {
       enableACME = true;
@@ -719,6 +743,9 @@
           rewrite ^/assets/(.*)$ /assets/$1 break;
           rewrite ^(.+)$ /index.html break;
         '';
+      };
+      locations."=/cow.txt" = {
+        alias = theCow;
       };
     };
     /* ${config.services.dendrite.settings.global.server_name} = {
@@ -752,6 +779,9 @@
       locations."/" = {
         return = "301 https://pl.wikipedia.org/wiki/Praga-P%C3%B3%C5%82noc";
       };
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
     "wildcard.zajeba.li" = {
       enableACME = true;
@@ -759,6 +789,9 @@
 
       serverAliases = [ "~^(.*).zajeba.li$" ];
       root = "/srv/www/wildcard_zajeba.li/$1";
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
     "wildcard.nie.zajeba.li" = {
       enableACME = true;
@@ -766,6 +799,9 @@
 
       serverAliases = [ "~^(.*).nie.zajeba.li$" ];
       root = "/srv/www/wildcard_nie.zajeba.li/$1";
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
     };
   };
   security.acme.certs = let
