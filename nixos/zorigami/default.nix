@@ -312,7 +312,7 @@
     backup.enable = false;
     messageSizeLimit = 41943040;
     x509.useACMEHost = "is-a.cat";
-    loginAccounts = {
+    accounts = {
       "ar@is-a.cat" = {
         aliases = [
           "arachnist@is-a.cat"
