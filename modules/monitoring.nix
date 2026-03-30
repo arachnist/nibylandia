@@ -66,6 +66,7 @@ in {
         type = "postgres";
         host = "/run/postgresql";
       };
+      security.secret_key = "SW2YcwTIb9zpOOhoPsMm";
     };
 
     services.postgresql.ensureDatabases = [ "grafana" ];
