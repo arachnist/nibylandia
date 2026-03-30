@@ -1,7 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let cfg = config.boot;
-in {
+let
+  cfg = config.boot;
+in
+{
   options.boot = {
     uefi.enable = lib.mkEnableOption "Boot via UEFI";
     ryzen.enable = lib.mkEnableOption "Enable AMD Ryzen-specific options";
@@ -16,7 +23,10 @@ in {
       boot = {
         extraModulePackages = with config.boot.kernelPackages; [ zenpower ];
         blacklistedKernelModules = [ "k10temp" ];
-        kernelModules = [ "zenpower" "kvm-amd" ];
+        kernelModules = [
+          "zenpower"
+          "kvm-amd"
+        ];
       };
     })
     { boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest; }

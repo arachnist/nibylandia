@@ -1,44 +1,66 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.nibylandia.monitoring-server;
   grafana = config.services.grafana.settings.server;
-  filterValidPrometheus =
-    filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
-  filterAttrsListRecursive = pred: x:
+  filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
+  filterAttrsListRecursive =
+    pred: x:
     if lib.isAttrs x then
-      lib.listToAttrs (lib.concatMap (name:
-        let v = x.${name};
-        in if pred name v then
-          [ (lib.nameValuePair name (filterAttrsListRecursive pred v)) ]
-        else
-          [ ]) (lib.attrNames x))
+      lib.listToAttrs (
+        lib.concatMap (
+          name:
+          let
+            v = x.${name};
+          in
+          if pred name v then [ (lib.nameValuePair name (filterAttrsListRecursive pred v)) ] else [ ]
+        ) (lib.attrNames x)
+      )
     else if lib.isList x then
       map (filterAttrsListRecursive pred) x
     else
       x;
-  writePrettyJSON = name: x:
+  writePrettyJSON =
+    name: x:
     pkgs.runCommandLocal name { } ''
       echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
     '';
   vmConfig = {
-    scrape_configs =
-      filterValidPrometheus config.services.prometheus.scrapeConfigs;
+    scrape_configs = filterValidPrometheus config.services.prometheus.scrapeConfigs;
   };
   generatedPrometheusYml = writePrettyJSON "prometheus.yml" vmConfig;
-  getEnabled = x:
-    lib.concatMap (name:
-      let v = x.${name};
-      in if (!builtins.elem name [ "minio" "tor" ]) && builtins.typeOf v
-      == "set" && v.enable then
+  getEnabled =
+    x:
+    lib.concatMap (
+      name:
+      let
+        v = x.${name};
+      in
+      if
+        (
+          !builtins.elem name [
+            "minio"
+            "tor"
+          ]
+        )
+        && builtins.typeOf v == "set"
+        && v.enable
+      then
         [ v ]
       else
-        [ ]) (lib.attrNames x);
+        [ ]
+    ) (lib.attrNames x);
   # TODO: add some magic to configure endpoints for all the other exporters
-  localExporterEndpoints =
-    map (x: x.listenAddress + ":" + builtins.toString x.port)
-    (getEnabled config.services.prometheus.exporters);
-in {
+  localExporterEndpoints = map (x: x.listenAddress + ":" + builtins.toString x.port) (
+    getEnabled config.services.prometheus.exporters
+  );
+in
+{
   options = {
     nibylandia.monitoring-server = {
       domain = lib.mkOption {
@@ -70,10 +92,12 @@ in {
     };
 
     services.postgresql.ensureDatabases = [ "grafana" ];
-    services.postgresql.ensureUsers = [{
-      name = "grafana";
-      ensureDBOwnership = true;
-    }];
+    services.postgresql.ensureUsers = [
+      {
+        name = "grafana";
+        ensureDBOwnership = true;
+      }
+    ];
 
     services.prometheus.exporters = {
       node = {
@@ -102,7 +126,10 @@ in {
       };
     };
     systemd.services.prometheus-ipmi-exporter.serviceConfig = {
-      DeviceAllow = [ "" "/dev/ipmi0" ];
+      DeviceAllow = [
+        ""
+        "/dev/ipmi0"
+      ];
       DynamicUser = false;
       PrivateDevices = lib.mkForce false;
       RestrictSUIDSGID = lib.mkForce false;
@@ -117,20 +144,19 @@ in {
       {
         job_name = "local_exporters";
         scrape_interval = "10s";
-        static_configs =
-          [{ targets = localExporterEndpoints ++ [ "127.0.0.1:6543" ]; }];
+        static_configs = [ { targets = localExporterEndpoints ++ [ "127.0.0.1:6543" ]; } ];
       }
       {
         job_name = "https_exporters";
         scrape_interval = "10s";
         scheme = "https";
-        static_configs = [{ targets = [ "at.hackerspace.pl" ]; }];
+        static_configs = [ { targets = [ "at.hackerspace.pl" ]; } ];
       }
       {
         job_name = "spejsiot";
         metrics_path = "/metrics/spejsiot";
         scrape_interval = "10s";
-        static_configs = [{ targets = [ "customs.hackerspace.pl" ]; }];
+        static_configs = [ { targets = [ "customs.hackerspace.pl" ]; } ];
       }
       {
         job_name = "hswaw_hass";
@@ -144,29 +170,35 @@ in {
         headers = [
           "#hswaw_hass_bearer#"
         ];
-        static_configs = [{ targets = [ "iot.waw.hackerspace.pl" ]; }];
+        static_configs = [ { targets = [ "iot.waw.hackerspace.pl" ]; } ];
       }
       {
         job_name = "hswaw_cardea";
         scheme = "http";
         metrics_path = "/metrics/cardea";
-        static_configs = [{ targets = [ "customs.hackerspace.pl" ]; }];
+        static_configs = [ { targets = [ "customs.hackerspace.pl" ]; } ];
       }
       {
         job_name = "hswaw_klipper";
         scrape_interval = "5s";
         metrics_path = "/metrics/klipper/probe";
-        static_configs = [{ targets = [ "inari.waw.hackerspace.pl" ]; }];
+        static_configs = [ { targets = [ "inari.waw.hackerspace.pl" ]; } ];
         params.modules = [
-          "process_stats" "job_queue" "system_info" "network_stats" "directory_info" "printer_objects" "history"
+          "process_stats"
+          "job_queue"
+          "system_info"
+          "network_stats"
+          "directory_info"
+          "printer_objects"
+          "history"
         ];
         relabel_configs = [
           {
-            source_labels = ["__address__"];
+            source_labels = [ "__address__" ];
             target_label = "__param_target";
           }
           {
-            source_labels = ["__param_target"];
+            source_labels = [ "__param_target" ];
             target_label = "instance";
           }
           {
@@ -204,8 +236,7 @@ in {
       forceSSL = true;
       enableACME = true;
       locations."/" = {
-        proxyPass =
-          "http://${grafana.http_addr}:${builtins.toString grafana.http_port}";
+        proxyPass = "http://${grafana.http_addr}:${builtins.toString grafana.http_port}";
         proxyWebsockets = true;
       };
     };

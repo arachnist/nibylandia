@@ -1,10 +1,17 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
   flakes = lib.filterAttrs (name: value: value ? outputs) inputs;
   nixRegistry = builtins.mapAttrs (name: v: { flake = v; }) flakes;
   # rfkill block 0; rmmod btusb btintel; systemctl restart bluetooth.service; modprobe btintel; modprobe btusb; systemctl restart bluetooth.service; rfkill unblock 0
-  bt-unfuck = with pkgs;
+  bt-unfuck =
+    with pkgs;
     writeScriptBin "bt-unfuck" ''
       #!${runtimeShell}
       ${util-linux}/bin/rfkill block 0
@@ -17,10 +24,19 @@ let
       ${util-linux}/bin/rfkill unblock 0
     '';
   # wrap pkgs.kdePackages.kate with a bunch of C deps so we don't need to remember about nix-shell and stuff
-  devDeps = with pkgs; [ openssl sqlite luajit_2_1 fontconfig freetype ];
-  kate-dev = with pkgs;
-    let unwrapped = kdePackages.kate;
-    in stdenvNoCC.mkDerivation {
+  devDeps = with pkgs; [
+    openssl
+    sqlite
+    luajit_2_1
+    fontconfig
+    freetype
+  ];
+  kate-dev =
+    with pkgs;
+    let
+      unwrapped = kdePackages.kate;
+    in
+    stdenvNoCC.mkDerivation {
       pname = "kate-dev-wrapped";
       inherit (unwrapped) version;
 
@@ -28,13 +44,12 @@ let
 
       buildCommand = ''
         makeWrapper ${unwrapped}/bin/kate $out/bin/kate \
-          --prefix PKG_CONFIG_PATH ":" ${
-            lib.makeSearchPath "lib/pkgconfig" (map (x: x.dev or x) devDeps)
-          }
+          --prefix PKG_CONFIG_PATH ":" ${lib.makeSearchPath "lib/pkgconfig" (map (x: x.dev or x) devDeps)}
       '';
     };
   pkgsOld = inputs.nixpkgsOld.legacyPackages.x86_64-linux;
-in {
+in
+{
   imports = [ inputs.self.nixosModules.common ];
 
   nix.registry = nixRegistry;
@@ -44,7 +59,9 @@ in {
     extraModprobeConfig = ''
       options v4l2loopback devices=4 exclusive_caps=1
     '';
-    kernel.sysctl = { "vm.swappiness" = 160; };
+    kernel.sysctl = {
+      "vm.swappiness" = 160;
+    };
   };
 
   zramSwap.enable = true;
@@ -79,8 +96,10 @@ in {
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.backend = "wpa_supplicant";
   systemd.network.wait-online.enable = false;
-  systemd.services.NetworkManager-wait-online.serviceConfig.ExecStart =
-    lib.mkForce [ "" "${pkgs.networkmanager}/bin/nm-online" ];
+  systemd.services.NetworkManager-wait-online.serviceConfig.ExecStart = lib.mkForce [
+    ""
+    "${pkgs.networkmanager}/bin/nm-online"
+  ];
 
   # hardware.glasgow.enable = true;
   hardware.nitrokey.enable = true;
@@ -198,14 +217,21 @@ in {
       enable = true;
       binfmt = true;
       package = pkgs.appimage-run.override {
-        extraPkgs = pkgs: [ pkgs.icu pkgs.protontricks ];
+        extraPkgs = pkgs: [
+          pkgs.icu
+          pkgs.protontricks
+        ];
       };
     };
   };
 
-  nixpkgs.config = { joypixels.acceptLicense = true; };
+  nixpkgs.config = {
+    joypixels.acceptLicense = true;
+  };
 
-  environment.sessionVariables = { MOZ_ENABLE_WAYLAND = "1"; };
+  environment.sessionVariables = {
+    MOZ_ENABLE_WAYLAND = "1";
+  };
 
   nixpkgs.overlays = [ inputs.fenix.overlays.default ];
 
@@ -213,16 +239,19 @@ in {
     inputs.agenix.packages.${pkgs.system}.default
     # inputs.colmena.packages.${pkgs.system}.colmena -- TODO: deal with colmena 0.5 compatibility later
     kate-dev
-  ] ++ (with pkgsOld; [
+  ]
+  ++ (with pkgsOld; [
     # freecad
-  ]) ++ (with pkgs.kdePackages; [
+  ])
+  ++ (with pkgs.kdePackages; [
     tokodon
     neochat
     kolourpaint
     okular
     discover
     kleopatra
-  ]) ++ (with pkgs; [
+  ])
+  ++ (with pkgs; [
     masscan
     android-tools
     chromium
@@ -264,15 +293,14 @@ in {
     rubyPackages.pry
     # rubyPackages.irb
 
-    (signal-desktop.overrideAttrs (old:
-      {
-        # preFixup = ''
-        #   gappsWrapperArgs+=(
-        #     --add-flags "--enable-features=UseOzonePlatform"
-        #     --add-flags "--ozone-platform=wayland"
-        #   )
-        # '' + old.preFixup;
-      }))
+    (signal-desktop.overrideAttrs (old: {
+      # preFixup = ''
+      #   gappsWrapperArgs+=(
+      #     --add-flags "--enable-features=UseOzonePlatform"
+      #     --add-flags "--ozone-platform=wayland"
+      #   )
+      # '' + old.preFixup;
+    }))
 
     prusa-slicer
     orca-slicer
@@ -289,7 +317,8 @@ in {
     wl-clipboard-rs
     amdgpu_top
     radeontop
-  ]) ++ (with pkgs; [
+  ])
+  ++ (with pkgs; [
     nix-output-monitor
     nix-fast-build
 
@@ -352,21 +381,24 @@ in {
     probe-rs-tools
     elf2uf2-rs
     picotool
-  ]) ++ (with pkgs.pkgsCross.arm-embedded.buildPackages; [
+  ])
+  ++ (with pkgs.pkgsCross.arm-embedded.buildPackages; [
     gdb
     stdenv.cc
   ]);
-  /* ++ (with pkgs; [
-    (pkgsCross.arm-embedded.stdenv.mkDerivation {
-      name = "env";
-      buildInputs = with pkgsCross.arm-embedded.buildPackages; [
-        gdb
-      ];
-      
-      postInstall = ''
-      '';
-    })
-  ]) */
+  /*
+    ++ (with pkgs; [
+      (pkgsCross.arm-embedded.stdenv.mkDerivation {
+        name = "env";
+        buildInputs = with pkgsCross.arm-embedded.buildPackages; [
+          gdb
+        ];
+
+        postInstall = ''
+        '';
+      })
+    ])
+  */
 
   networking.networkmanager.plugins = with pkgs; [
     networkmanager-openvpn

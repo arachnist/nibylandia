@@ -1,4 +1,10 @@
-{ config, inputs, lib, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   networking.hostName = "homekitty";
@@ -22,7 +28,10 @@
   virtualisation.docker.enable = true;
   virtualisation.waydroid.enable = true;
 
-  networking.firewall.allowedTCPPorts = [ 8000 8080 ];
+  networking.firewall.allowedTCPPorts = [
+    8000
+    8080
+  ];
   hardware.sensor.iio.enable = true;
 
   environment.systemPackages = with pkgs; [
@@ -52,7 +61,9 @@
 
   users.mutableUsers = lib.mkForce true;
 
-  users.groups.miau = { gid = 1001; };
+  users.groups.miau = {
+    gid = 1001;
+  };
   users.users.miau = {
     isNormalUser = true;
     uid = 1001;

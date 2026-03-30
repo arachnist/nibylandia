@@ -24,13 +24,14 @@ let
     "self-hosted-${pkgs.system}"
     "self-hosted"
   ];
-in {
+in
+{
   age.secrets = {
-    gitea-runner-token.file =
-      ../secrets/gitea-runner-token-${config.networking.hostName}.age;
+    gitea-runner-token.file = ../secrets/gitea-runner-token-${config.networking.hostName}.age;
     # github-runner-token.file =
     #   ../secrets/github-runner-token-${config.networking.hostName}.age;
-    ci-secrets = { # for printer host sd images
+    ci-secrets = {
+      # for printer host sd images
       file = ../secrets/ci-secrets.age;
       mode = "444";
     };
@@ -70,6 +71,7 @@ in {
     protocol = "ssh";
     keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILeC/Nr7STpYEZ50p7X+XrFdeaIfib60tt2QN4Kvxscr"
-    ] ++ meta.users.ar;
+    ]
+    ++ meta.users.ar;
   };
 }

@@ -1,16 +1,33 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
-  keaJsonWithIncludes = name: value:
-    pkgs.callPackage ({ runCommand, jq, gnused }:
-      runCommand name {
-        nativeBuildInputs = [ jq gnused ];
-        value = builtins.toJSON value;
-        passAsFile = [ "value" ];
-      } ''
-        jq . "$valuePath" | \
-          sed -r -e 's@["]__keaInclude ([^"]+)["]@<?include "\1"?>@g'> $out
-      '') { };
+  keaJsonWithIncludes =
+    name: value:
+    pkgs.callPackage (
+      {
+        runCommand,
+        jq,
+        gnused,
+      }:
+      runCommand name
+        {
+          nativeBuildInputs = [
+            jq
+            gnused
+          ];
+          value = builtins.toJSON value;
+          passAsFile = [ "value" ];
+        }
+        ''
+          jq . "$valuePath" | \
+            sed -r -e 's@["]__keaInclude ([^"]+)["]@<?include "\1"?>@g'> $out
+        ''
+    ) { };
 
   dn42_roa_update = pkgs.writeShellScriptBin "dn42_roa_update" ''
     mkdir -p /etc/bird/
@@ -20,7 +37,8 @@ let
     ${pkgs.bird3}/bin/birdc reload in all
   '';
   pub_ip4 = "176.241.241.177";
-in {
+in
+{
   imports = with inputs.self.nixosModules; [
     ./hardware-configuration.nix
 
@@ -32,8 +50,11 @@ in {
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams =
-      [ "arm-smmu.disable_bypass=0" "pci=pcie_bus_perf" "iommu.passthrough=1" ];
+    kernelParams = [
+      "arm-smmu.disable_bypass=0"
+      "pci=pcie_bus_perf"
+      "iommu.passthrough=1"
+    ];
     # Setup SFP+ network interfaces early so systemd can pick everything up.
     initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.restool}/bin/restool
@@ -87,16 +108,20 @@ in {
       macAddress = "50:7b:9d:b5:fa:e8";
     };
     lan = {
-      ipv4.addresses = [{
-        address = "192.168.24.1";
-        prefixLength = 24;
-      }];
+      ipv4.addresses = [
+        {
+          address = "192.168.24.1";
+          prefixLength = 24;
+        }
+      ];
     };
     eth1 = {
-      ipv4.addresses = [{
-        address = "192.168.20.1";
-        prefixLength = 24;
-      }];
+      ipv4.addresses = [
+        {
+          address = "192.168.20.1";
+          prefixLength = 24;
+        }
+      ];
     };
   };
   networking.nameservers = [ "192.168.20.1" ];
@@ -113,33 +138,45 @@ in {
       listenPort = 51315;
       allowedIPsAsRoutes = true;
 
-      peers = [{
-        publicKey = "xwTYtejNZCtOyPMNcZVlsBIGYae6aUQczh7UwujLxXg=";
-        allowedIPs = [ "10.255.255.0/24" ];
-        # endpoint = "zorigami.is-a.cat:51315";
-        endpoint = "185.236.240.137:51315";
-        persistentKeepalive = 15;
-      }];
+      peers = [
+        {
+          publicKey = "xwTYtejNZCtOyPMNcZVlsBIGYae6aUQczh7UwujLxXg=";
+          allowedIPs = [ "10.255.255.0/24" ];
+          # endpoint = "zorigami.is-a.cat:51315";
+          endpoint = "185.236.240.137:51315";
+          persistentKeepalive = 15;
+        }
+      ];
     };
     dn42_w1kl4s_1 = {
-      ips = [ "fd25:af2d:1f51:255::1/64" "fe80::255:acab/64" ];
+      ips = [
+        "fd25:af2d:1f51:255::1/64"
+        "fe80::255:acab/64"
+      ];
       privateKeyFile = config.age.secrets.wgDN42Scylla.path;
       listenPort = 51516;
       allowedIPsAsRoutes = false;
 
-      peers = [{
-        publicKey = "zNP632K1qrezFIl8NQK1tR3XEdYHat/YgzdCXnFIWDE=";
-        allowedIPs = [ "0.0.0.0/0" "::/0" ];
-        endpoint = "193.31.26.15:53137";
-      }];
+      peers = [
+        {
+          publicKey = "zNP632K1qrezFIl8NQK1tR3XEdYHat/YgzdCXnFIWDE=";
+          allowedIPs = [
+            "0.0.0.0/0"
+            "::/0"
+          ];
+          endpoint = "193.31.26.15:53137";
+        }
+      ];
     };
   };
   systemd.network.networks.dn42_w1kl4s_1 = {
     matchConfig.Name = "dn42_w1kl4s_1";
-    addresses = [{
-      Address = "172.20.148.161";
-      Peer = "172.23.193.2/32";
-    }];
+    addresses = [
+      {
+        Address = "172.20.148.161";
+        Peer = "172.23.193.2/32";
+      }
+    ];
   };
 
   networking.firewall.enable = true;
@@ -147,7 +184,12 @@ in {
   networking.nat = {
     enable = true;
     externalInterface = "eth0";
-    internalInterfaces = [ "lan" "eth1" "virbr1" "virbr2" ];
+    internalInterfaces = [
+      "lan"
+      "eth1"
+      "virbr1"
+      "virbr2"
+    ];
     forwardPorts = [
       {
         loopbackIPs = [ pub_ip4 ];
@@ -249,7 +291,10 @@ in {
       enable = true;
       settings = {
         interfaces-config = {
-          interfaces = [ "lan/192.168.24.1" "eth1/192.168.20.1" ];
+          interfaces = [
+            "lan/192.168.24.1"
+            "eth1/192.168.20.1"
+          ];
         };
 
         lease-database = {
@@ -280,7 +325,7 @@ in {
           {
             id = 1;
             subnet = "192.168.24.0/24";
-            pools = [{ pool = "192.168.24.40 - 192.168.24.240"; }];
+            pools = [ { pool = "192.168.24.40 - 192.168.24.240"; } ];
             reservations-out-of-pool = true;
             reservations-in-subnet = true;
             ddns-qualifying-suffix = "nibylandia.lan.";
@@ -295,16 +340,18 @@ in {
               }
             ];
 
-            reservations = [{
-              hw-address = "34:15:13:b6:2a:e7";
-              hostname = "yamaha";
-              ip-address = "192.168.24.11";
-            }];
+            reservations = [
+              {
+                hw-address = "34:15:13:b6:2a:e7";
+                hostname = "yamaha";
+                ip-address = "192.168.24.11";
+              }
+            ];
           }
           {
             id = 2;
             subnet = "192.168.20.0/24";
-            pools = [{ pool = "192.168.20.40 - 192.168.20.240"; }];
+            pools = [ { pool = "192.168.20.40 - 192.168.20.240"; } ];
             reservations-out-of-pool = true;
             reservations-in-subnet = true;
             ddns-qualifying-suffix = "nibylandia.lan.";
@@ -346,31 +393,35 @@ in {
           ncr-format = "JSON";
           ncr-protocol = "UDP";
           forward-ddns = {
-            ddns-domains = [{
-              key-name = "bind-key-2021-12-27";
-              dns-servers = [{ ip-address = "192.168.20.1"; }];
-              name = "nibylandia.lan.";
-            }];
+            ddns-domains = [
+              {
+                key-name = "bind-key-2021-12-27";
+                dns-servers = [ { ip-address = "192.168.20.1"; } ];
+                name = "nibylandia.lan.";
+              }
+            ];
           };
           reverse-ddns = {
             ddns-domains = [
               {
                 key-name = "bind-key-2021-12-27";
-                dns-servers = [{ ip-address = "192.168.20.1"; }];
+                dns-servers = [ { ip-address = "192.168.20.1"; } ];
                 name = "20.168.192.in-addr.arpa.";
               }
               {
                 key-name = "bind-key-2021-12-27";
-                dns-servers = [{ ip-address = "192.168.20.1"; }];
+                dns-servers = [ { ip-address = "192.168.20.1"; } ];
                 name = "24.168.192.in-addr.arpa.";
               }
             ];
           };
-          tsig-keys = [{
-            name = "bind-key-2021-12-27";
-            algorithm = "HMAC-SHA512";
-            secret = "__keaInclude ${config.age.secrets.ddnsKeyKea.path}";
-          }];
+          tsig-keys = [
+            {
+              name = "bind-key-2021-12-27";
+              algorithm = "HMAC-SHA512";
+              secret = "__keaInclude ${config.age.secrets.ddnsKeyKea.path}";
+            }
+          ];
         };
       };
     };
@@ -378,9 +429,20 @@ in {
 
   services.bind = {
     enable = true;
-    listenOn = [ "192.168.20.1" "192.168.24.1" ];
-    forwarders = [ "8.8.8.8" "1.1.1.1" "8.8.4.4" "1.0.0.1" ];
-    cacheNetworks = [ "192.168.20.0/24" "192.168.24.0/24" ];
+    listenOn = [
+      "192.168.20.1"
+      "192.168.24.1"
+    ];
+    forwarders = [
+      "8.8.8.8"
+      "1.1.1.1"
+      "8.8.4.4"
+      "1.0.0.1"
+    ];
+    cacheNetworks = [
+      "192.168.20.0/24"
+      "192.168.24.0/24"
+    ];
     checkConfig = false;
     zones = {
       "nibylandia.lan" = {
@@ -451,8 +513,12 @@ in {
     dn42-roa = {
       after = [ "network.target" ];
       description = "DN42 ROA Updated";
-      unitConfig = { Type = "one-shot"; };
-      serviceConfig = { ExecStart = "${dn42_roa_update}/bin/dn42_roa_update"; };
+      unitConfig = {
+        Type = "one-shot";
+      };
+      serviceConfig = {
+        ExecStart = "${dn42_roa_update}/bin/dn42_roa_update";
+      };
     };
   };
 
@@ -467,13 +533,19 @@ in {
   services.avahi = {
     enable = true;
     reflector = true;
-    allowInterfaces = [ "lan" "eth1" ];
+    allowInterfaces = [
+      "lan"
+      "eth1"
+    ];
   };
 
   nixpkgs.config.allowUnfree = true;
 
-  nixpkgs.overlays =
-    [ (self: super: { restool = self.callPackage ./pkgs/restool { }; }) ];
+  nixpkgs.overlays = [ (self: super: { restool = self.callPackage ./pkgs/restool { }; }) ];
 
-  environment.systemPackages = with pkgs; [ masscan restool ethtool ];
+  environment.systemPackages = with pkgs; [
+    masscan
+    restool
+    ethtool
+  ];
 }

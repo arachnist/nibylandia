@@ -1,10 +1,21 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
   networking.hostName = "amanojaku";
 
-  imports = [ inputs.jovian-nixos.nixosModules.default ]
-    ++ (with inputs.self.nixosModules; [ graphical laptop ]);
+  imports = [
+    inputs.jovian-nixos.nixosModules.default
+  ]
+  ++ (with inputs.self.nixosModules; [
+    graphical
+    laptop
+  ]);
 
   boot.uefi.enable = true;
   boot.kernelPackages = lib.mkForce pkgs.linuxPackages_jovian;
@@ -24,7 +35,11 @@
   hardware.pulseaudio.enable = false;
   jovian.devices.steamdeck.enable = true;
 
-  environment.systemPackages = with pkgs; [ maliit-keyboard maliit-framework kdePackages.plasma-keyboard ];
+  environment.systemPackages = with pkgs; [
+    maliit-keyboard
+    maliit-framework
+    kdePackages.plasma-keyboard
+  ];
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";

@@ -1,16 +1,28 @@
 # this is mostly copied from upstream mastodon packaging, but modified for yarn-berry deps
-{ stdenv, nodejs-slim, yarn-berry, brotli,
-# previous inputs
-glitch-1, yarn-deps, }:
+{
+  stdenv,
+  nodejs-slim,
+  yarn-berry,
+  brotli,
+  # previous inputs
+  glitch-1,
+  yarn-deps,
+}:
 stdenv.mkDerivation {
   pname = "glitch-modules";
   inherit (glitch-1) src version;
 
   yarnOfflineCache = yarn-deps;
 
-  nativeBuildInputs =
-    [ glitch-1.mastodonGems glitch-1.mastodonGems.wrappedRuby ]
-    ++ [ nodejs-slim yarn-berry brotli ];
+  nativeBuildInputs = [
+    glitch-1.mastodonGems
+    glitch-1.mastodonGems.wrappedRuby
+  ]
+  ++ [
+    nodejs-slim
+    yarn-berry
+    brotli
+  ];
 
   RAILS_ENV = "production";
   NODE_ENV = "production";

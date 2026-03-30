@@ -1,7 +1,27 @@
-{ fetchFromGitHub, pipreqs, pillow, buildPythonApplication, python3
-, altgraph, certifi, charset-normalizer, distutils, docopt, idna
-, importlib-metadata, nbtlib, numpy, packaging, pefile, requests, setuptools
-, urllib3, yarg, zipp, ... }:
+{
+  fetchFromGitHub,
+  pipreqs,
+  pillow,
+  buildPythonApplication,
+  python3,
+  altgraph,
+  certifi,
+  charset-normalizer,
+  distutils,
+  docopt,
+  idna,
+  importlib-metadata,
+  nbtlib,
+  numpy,
+  packaging,
+  pefile,
+  requests,
+  setuptools,
+  urllib3,
+  yarg,
+  zipp,
+  ...
+}:
 
 buildPythonApplication {
   pname = "Minecraft-Overviewer";

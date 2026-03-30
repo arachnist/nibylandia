@@ -1,4 +1,9 @@
-{ callPackage, patches ? [ ], srcPostPatch ? "", mastodon, }:
+{
+  callPackage,
+  patches ? [ ],
+  srcPostPatch ? "",
+  mastodon,
+}:
 let
   src = callPackage ./source.nix {
     inherit patches;
@@ -22,5 +27,8 @@ let
 
   modules = callPackage ./modules.nix { inherit glitch-1 yarn-deps; };
 
-  glitch-2 = glitch-1.overrideAttrs (old: { mastodonModules = modules; });
-in glitch-2
+  glitch-2 = glitch-1.overrideAttrs (old: {
+    mastodonModules = modules;
+  });
+in
+glitch-2

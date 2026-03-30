@@ -1,13 +1,26 @@
-{ stdenv, lib, ruby, makeWrapper, getent # /etc/passwd
-, ncurses # tput
-, binutils-unwrapped # strings
-, coreutils, findutils }:
+{
+  stdenv,
+  lib,
+  ruby,
+  makeWrapper,
+  getent, # /etc/passwd
+  ncurses, # tput
+  binutils-unwrapped, # strings
+  coreutils,
+  findutils,
+}:
 
 # No gems used, so mkDerivation is fine.
 let
-  additionalPath =
-    lib.makeBinPath [ getent ncurses binutils-unwrapped coreutils findutils ];
-in stdenv.mkDerivation {
+  additionalPath = lib.makeBinPath [
+    getent
+    ncurses
+    binutils-unwrapped
+    coreutils
+    findutils
+  ];
+in
+stdenv.mkDerivation {
   pname = "nix-top";
   version = "0.3.0";
 
@@ -22,7 +35,8 @@ in stdenv.mkDerivation {
     install -D -m755 ./nix-top $out/bin/nix-top
     wrapProgram $out/bin/nix-top \
       --prefix PATH : "$out/libexec/nix-top:${additionalPath}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  ''
+  + lib.optionalString stdenv.isDarwin ''
     ln -s /bin/stty $out/libexec/nix-top
   '';
 

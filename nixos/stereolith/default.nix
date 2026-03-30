@@ -1,4 +1,10 @@
-{ config, inputs, lib, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   pkgsOld = inputs.nixpkgsOld.legacyPackages.x86_64-linux;
@@ -9,8 +15,7 @@ in
     mode = "440";
     file = ../../secrets/mail/mastodonPlain.age;
   };
-  age.secrets.mastodonActiveRecordSecrets.file =
-    ../../secrets/mastodon-qa-activerecord.age;
+  age.secrets.mastodonActiveRecordSecrets.file = ../../secrets/mastodon-qa-activerecord.age;
   age.secrets.root-password.file = ../../secrets/stereolith-root.age;
 
   users.users.root.hashedPasswordFile = config.age.secrets.root-password.path;
@@ -22,8 +27,14 @@ in
 
   boot.uefi.enable = true;
 
-  boot.initrd.availableKernelModules =
-    [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "ahci"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.supportedFilesystems = [ "zfs" ];
@@ -35,7 +46,9 @@ in
 
   boot.enableContainers = true;
   boot.zfs.extraPools = [ config.networking.hostName ];
-  boot.kernel.sysctl = { "net.ipv4.conf.all.forwarding" = "1"; };
+  boot.kernel.sysctl = {
+    "net.ipv4.conf.all.forwarding" = "1";
+  };
 
   system.stateVersion = lib.mkForce "22.11";
 
@@ -81,15 +94,19 @@ in
   networking.interfaces = {
     enp9s0 = {
       ipv4 = {
-        addresses = [{
-          address = "192.168.20.31";
-          prefixLength = 24;
-        }];
-        routes = [{
-          address = "0.0.0.0";
-          prefixLength = 0;
-          via = "192.168.20.1";
-        }];
+        addresses = [
+          {
+            address = "192.168.20.31";
+            prefixLength = 24;
+          }
+        ];
+        routes = [
+          {
+            address = "0.0.0.0";
+            prefixLength = 0;
+            via = "192.168.20.1";
+          }
+        ];
       };
     };
   };
@@ -97,12 +114,49 @@ in
   boot.initrd.systemd.network.enable = true;
   boot.initrd.systemd.enable = true;
 
-  networking.firewall.allowedTCPPorts = [ 22 80 443 1688 2005 2582 3000 ]
-    ++ (map (x: 9091 + x) (lib.range (0 - 2) 10))
-    ++ (map (x: 51413 + x) (lib.range (0 - 2) 10)) ++ [ 137 139 445 631 ]
-    ++ [ 1143 1025 8080 ] ++ [ 5201 ] ++ [ 4000 4001 4002 ] ++ [ 5001 5050 ];
-  networking.firewall.allowedUDPPorts = [ 69 2005 51820 ]
-    ++ (map (x: 51413 + x) (lib.range (0 - 2) 10)) ++ [ 4000 4001 4002 ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    80
+    443
+    1688
+    2005
+    2582
+    3000
+  ]
+  ++ (map (x: 9091 + x) (lib.range (0 - 2) 10))
+  ++ (map (x: 51413 + x) (lib.range (0 - 2) 10))
+  ++ [
+    137
+    139
+    445
+    631
+  ]
+  ++ [
+    1143
+    1025
+    8080
+  ]
+  ++ [ 5201 ]
+  ++ [
+    4000
+    4001
+    4002
+  ]
+  ++ [
+    5001
+    5050
+  ];
+  networking.firewall.allowedUDPPorts = [
+    69
+    2005
+    51820
+  ]
+  ++ (map (x: 51413 + x) (lib.range (0 - 2) 10))
+  ++ [
+    4000
+    4001
+    4002
+  ];
 
   users.users.minecraft = {
     isNormalUser = true;
@@ -121,17 +175,24 @@ in
     enable = false;
     settings.server_name = "matrix-test.am-a.cat";
     settings.public_baseurl = "https://matrix-test.am-a.cat";
-    settings.listeners = [{
-      port = 8008;
-      bind_addresses = [ "::" ];
-      type = "http";
-      tls = false;
-      x_forwarded = true;
-      resources = [{
-        names = [ "client" "federation" ];
-        compress = true;
-      }];
-    }];
+    settings.listeners = [
+      {
+        port = 8008;
+        bind_addresses = [ "::" ];
+        type = "http";
+        tls = false;
+        x_forwarded = true;
+        resources = [
+          {
+            names = [
+              "client"
+              "federation"
+            ];
+            compress = true;
+          }
+        ];
+      }
+    ];
     extraConfigFiles = [ "/var/lib/secrets/matrix/extraconfig" ];
   };
 
@@ -152,38 +213,41 @@ in
         enableACME = false;
         serverName = "_";
         locations."/".return = "410";
-        locations."/tftp/" = { alias = "/stereolith/crap/tftp/"; };
+        locations."/tftp/" = {
+          alias = "/stereolith/crap/tftp/";
+        };
       };
-      "matrix-test.am-a.cat" = let
-        fqdn = "matrix-test.am-a.cat";
-        baseUrl = "https://${fqdn}";
-        clientConfig."m.homeserver".base_url = baseUrl;
-        serverConfig."m.server" = "${fqdn}:443";
-        mkWellKnown = data: ''
-          default_type application/json;
-          add_header Access-Control-Allow-Origin *;
-          return 200 '${builtins.toJSON data}';
-        '';
-      in {
-        forceSSL = true;
-        enableACME = true;
-        locations."/.well-known/matrix/server".extraConfig =
-          mkWellKnown serverConfig;
-        locations."/.well-known/matrix/client".extraConfig =
-          mkWellKnown clientConfig;
-        locations."/_matrix".proxyPass = "http://[::1]:8008";
-        locations."/_synapse/client".proxyPass = "http://[::1]:8008";
-        locations."/".extraConfig = ''
-          return 404;
-        '';
-        /* extraConfig = ''
-             error_log /var/log/nginx/matrix-test.am-a.cat.error.log debug;
-           '';
-           extraConfig = ''
-             location / { proxy_pass http://[::1]:8008; }
-           '';
-        */
-      };
+      "matrix-test.am-a.cat" =
+        let
+          fqdn = "matrix-test.am-a.cat";
+          baseUrl = "https://${fqdn}";
+          clientConfig."m.homeserver".base_url = baseUrl;
+          serverConfig."m.server" = "${fqdn}:443";
+          mkWellKnown = data: ''
+            default_type application/json;
+            add_header Access-Control-Allow-Origin *;
+            return 200 '${builtins.toJSON data}';
+          '';
+        in
+        {
+          forceSSL = true;
+          enableACME = true;
+          locations."/.well-known/matrix/server".extraConfig = mkWellKnown serverConfig;
+          locations."/.well-known/matrix/client".extraConfig = mkWellKnown clientConfig;
+          locations."/_matrix".proxyPass = "http://[::1]:8008";
+          locations."/_synapse/client".proxyPass = "http://[::1]:8008";
+          locations."/".extraConfig = ''
+            return 404;
+          '';
+          /*
+            extraConfig = ''
+              error_log /var/log/nginx/matrix-test.am-a.cat.error.log debug;
+            '';
+            extraConfig = ''
+              location / { proxy_pass http://[::1]:8008; }
+            '';
+          */
+        };
       "i.am-a.cat" = {
         forceSSL = true;
         enableACME = true;
@@ -237,7 +301,9 @@ in
         forceSSL = true;
         enableACME = true;
         locations = {
-          "/" = { root = "/stereolith/photo/_build"; };
+          "/" = {
+            root = "/stereolith/photo/_build";
+          };
           "/jp-unsorted/" = {
             alias = "/stereolith/photo/unsorted-old/";
             extraConfig = ''
@@ -419,9 +485,11 @@ in
     enable = true;
     package = pkgs.postgresql_16;
     ensureDatabases = [ "mastodon" ];
-    ensureUsers = [{
-      name = "mastodon";
-      ensureDBOwnership = true;
-    }];
+    ensureUsers = [
+      {
+        name = "mastodon";
+        ensureDBOwnership = true;
+      }
+    ];
   };
 }

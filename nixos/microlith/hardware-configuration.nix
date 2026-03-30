@@ -2,8 +2,14 @@ _:
 
 {
   hardware.enableAllFirmware = true;
-  boot.initrd.availableKernelModules =
-    [ "nvme" "xhci_pci" "ahci" "usbhid" "uas" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "ahci"
+    "usbhid"
+    "uas"
+    "sd_mod"
+  ];
 
   boot.kernelParams = [ "pci=realloc,assign-busses,hpbussize=0x33" ];
   services.hardware.bolt.enable = true;

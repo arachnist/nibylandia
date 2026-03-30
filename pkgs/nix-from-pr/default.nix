@@ -23,7 +23,7 @@ writeShellApplication {
       prDataFile:
       let
         prData = lib.callPackageWith { inherit fetchpatch fetchpatch2 fetchurl; } prDataFile { };
-        patches = prData.patches;
+        inherit (prData) patches;
         prePatch = lib.concatMapStringsSep "\n" (f: ''
           mkdir -p "$(dirname "${f.name}")"
           cp -f "${f.src}" "${f.name}"

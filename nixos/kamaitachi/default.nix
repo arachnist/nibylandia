@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   ci-secrets = import ../../ci-secrets.nix;
@@ -15,23 +21,23 @@ let
     ${pkgs.klipperscreen}/bin/KlipperScreen --configfile ${klipperScreenConfig}
   '';
   klipperHostMcu = "${
-      pkgs.klipper-firmware.override {
-        firmwareConfig = ./klipper-rpi.cfg;
-        klipper = klipperOld;
-      }
-    }/klipper.elf";
+    pkgs.klipper-firmware.override {
+      firmwareConfig = ./klipper-rpi.cfg;
+      klipper = klipperOld;
+    }
+  }/klipper.elf";
   klipperOld = pkgs.klipper.overrideAttrs (old: {
     version = "unstable-dc6182f3";
 
     src = pkgs.fetchFromGitHub {
       owner = "KevinOConnor";
       repo = "klipper";
-      rev =
-        "dc6182f3b339b990c8a68940f02a210e332be269"; # 266e96621c0133e1192bbaec5addb6bcf443a203 broke shit in weird ways
+      rev = "dc6182f3b339b990c8a68940f02a210e332be269"; # 266e96621c0133e1192bbaec5addb6bcf443a203 broke shit in weird ways
       sha256 = "sha256-0uoq5bvL/4L9oa/JY54qHMRw5vE7V//HxLFMOEqGUjA=";
     };
   });
-in {
+in
+{
   # https://en.wikipedia.org/wiki/Kamaitachi
   networking.hostName = "kamaitachi";
   deployment.buildOnTarget = lib.mkForce false;
@@ -44,55 +50,56 @@ in {
   # don't want to pull in all of installer stuff, so we need to copy some things from sd-image-aarch64.nix:
   sdImage = {
     compressImage = false;
-    imageName =
-      "${config.sdImage.imageBaseName}-${pkgs.stdenv.hostPlatform.system}-${config.networking.hostName}.img";
-    populateFirmwareCommands = let
-      configTxt = pkgs.writeText "config.txt" ''
-        [pi3]
-        kernel=u-boot-rpi3.bin
+    imageName = "${config.sdImage.imageBaseName}-${pkgs.stdenv.hostPlatform.system}-${config.networking.hostName}.img";
+    populateFirmwareCommands =
+      let
+        configTxt = pkgs.writeText "config.txt" ''
+          [pi3]
+          kernel=u-boot-rpi3.bin
 
-        [pi4]
-        kernel=u-boot-rpi4.bin
-        enable_gic=1
-        armstub=armstub8-gic.bin
+          [pi4]
+          kernel=u-boot-rpi4.bin
+          enable_gic=1
+          armstub=armstub8-gic.bin
 
-        # Otherwise the resolution will be weird in most cases, compared to
-        # what the pi3 firmware does by default.
-        disable_overscan=1
+          # Otherwise the resolution will be weird in most cases, compared to
+          # what the pi3 firmware does by default.
+          disable_overscan=1
 
-        # Supported in newer board revisions
-        arm_boost=1
+          # Supported in newer board revisions
+          arm_boost=1
 
-        [all]
-        # Boot in 64-bit mode.
-        arm_64bit=1
+          [all]
+          # Boot in 64-bit mode.
+          arm_64bit=1
 
-        # U-Boot needs this to work, regardless of whether UART is actually used or not.
-        # Look in arch/arm/mach-bcm283x/Kconfig in the U-Boot tree to see if this is still
-        # a requirement in the future.
-        enable_uart=1
+          # U-Boot needs this to work, regardless of whether UART is actually used or not.
+          # Look in arch/arm/mach-bcm283x/Kconfig in the U-Boot tree to see if this is still
+          # a requirement in the future.
+          enable_uart=1
 
-        # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
-        # when attempting to show low-voltage or overtemperature warnings.
-        avoid_warnings=1
+          # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+          # when attempting to show low-voltage or overtemperature warnings.
+          avoid_warnings=1
+        '';
+      in
+      ''
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+
+        # Add the config
+        cp ${configTxt} firmware/config.txt
+
+        # Add pi3 specific files
+        cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
+
+        # Add pi4 specific files
+        cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
+        cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-400.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4s.dtb firmware/
       '';
-    in ''
-      (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
-
-      # Add the config
-      cp ${configTxt} firmware/config.txt
-
-      # Add pi3 specific files
-      cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
-
-      # Add pi4 specific files
-      cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
-      cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
-      cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
-      cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-400.dtb firmware/
-      cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4.dtb firmware/
-      cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4s.dtb firmware/
-    '';
     populateRootCommands = ''
       mkdir -p ./files/boot
       ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
@@ -100,11 +107,20 @@ in {
   };
 
   hardware.enableRedistributableFirmware = lib.mkForce false;
-  hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
+  hardware.firmware = with pkgs; [
+    raspberrypiWirelessFirmware
+    wireless-regdb
+  ];
   boot = {
     # avoid building zfs
-    supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
-    kernelParams = [ "console=ttyS1,115200n8" "fbcon=rotate:2" ];
+    supportedFilesystems = lib.mkForce [
+      "vfat"
+      "ext4"
+    ];
+    kernelParams = [
+      "console=ttyS1,115200n8"
+      "fbcon=rotate:2"
+    ];
     loader.grub.enable = false;
     loader.generic-extlinux-compatible.enable = true;
   };
@@ -135,19 +151,36 @@ in {
     };
   };
 
-  users.users.root.hashedPassword =
-    "$y$j9T$.1ogQkT5J95hEFkgp9esc0$rneVdOpPwPDsgAckJsXJmzgVEENPkFWHWKgca2mVz6D";
+  users.users.root.hashedPassword = "$y$j9T$.1ogQkT5J95hEFkgp9esc0$rneVdOpPwPDsgAckJsXJmzgVEENPkFWHWKgca2mVz6D";
   users.mutableUsers = false;
   users.users.ar = {
-    extraGroups = [ "video" "dialout" "plugdev" "pipewire" ];
+    extraGroups = [
+      "video"
+      "dialout"
+      "plugdev"
+      "pipewire"
+    ];
   };
 
   documentation = {
     enable = lib.mkForce false;
-  } // builtins.listToAttrs (map (x: {
-    name = x;
-    value = { enable = lib.mkForce false; };
-  }) [ "man" "info" "nixos" "doc" "dev" ]);
+  }
+  // builtins.listToAttrs (
+    map
+      (x: {
+        name = x;
+        value = {
+          enable = lib.mkForce false;
+        };
+      })
+      [
+        "man"
+        "info"
+        "nixos"
+        "doc"
+        "dev"
+      ]
+  );
 
   services.openssh.settings.PasswordAuthentication = lib.mkForce true;
   services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
@@ -167,7 +200,9 @@ in {
     enable = true;
     package = pkgs.bluez;
   };
-  services.udisks2 = { enable = true; };
+  services.udisks2 = {
+    enable = true;
+  };
 
   # diet
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
@@ -185,7 +220,11 @@ in {
     gnugrep
     (glibcLocales.override {
       allLocales = false;
-      locales = [ "en_US.UTF-8/UTF-8" "en_CA.UTF-8/UTF-8" "en_DK.UTF-8/UTF-8" ];
+      locales = [
+        "en_US.UTF-8/UTF-8"
+        "en_CA.UTF-8/UTF-8"
+        "en_DK.UTF-8/UTF-8"
+      ];
     })
 
     # nice-to-haves
@@ -224,7 +263,10 @@ in {
       User = "klipper";
       RuntimeDirectory = "klipper-mcu";
       StateDirectory = "klipper";
-      SupplementaryGroups = [ "dialout" "pipewire" ];
+      SupplementaryGroups = [
+        "dialout"
+        "pipewire"
+      ];
       OOMScoreAdjust = "-999";
       CPUSchedulingPolicy = "rr";
       CPUSchedulingPriority = 99;
@@ -235,7 +277,10 @@ in {
     };
   };
   systemd.services.klipper.serviceConfig = {
-    SupplementaryGroups = [ "dialout" "pipewire" ];
+    SupplementaryGroups = [
+      "dialout"
+      "pipewire"
+    ];
     ReadWritePaths = "/var/lib/moonraker/config";
   };
   services.klipper = {
@@ -261,20 +306,30 @@ in {
         max_z_accel = "30";
         max_z_velocity = "5";
       };
-      mcu = { serial = "/dev/ttyAMA0"; };
-      "mcu rpi" = { serial = "/run/klipper-mcu/mcu-rpi"; };
-      virtual_sdcard = { path = "/var/lib/moonraker/gcodes"; };
+      mcu = {
+        serial = "/dev/ttyAMA0";
+      };
+      "mcu rpi" = {
+        serial = "/run/klipper-mcu/mcu-rpi";
+      };
+      virtual_sdcard = {
+        path = "/var/lib/moonraker/gcodes";
+      };
 
       pause_resume = { };
       display_status = { };
       exclude_object = { };
-      force_move = { enable_force_move = "true"; };
+      force_move = {
+        enable_force_move = "true";
+      };
 
       save_variables = {
         filename = "/var/lib/moonraker/config/variables.cfg";
       };
 
-      "temperature_sensor rpi" = { sensor_type = "temperature_host"; };
+      "temperature_sensor rpi" = {
+        sensor_type = "temperature_host";
+      };
 
       "stepper_x" = {
         step_pin = "gpio11";
@@ -341,13 +396,13 @@ in {
         gcode = [ "SET_GCODE_OFFSET X=0 Y=0 Z=0" ];
         initial_duration = ".02";
       };
-    } // lib.mapAttrs' (name: value:
-      lib.nameValuePair
-      ("gcode_macro " + (builtins.replaceStrings [ ".gcode" ] [ "" ] name)) {
-        gcode = lib.remove "" (lib.splitString "\n"
-          (builtins.readFile (./klipper-macros/. + "/${name}")));
-      }) (lib.attrsets.filterAttrs (n: v: n != ".gitkeep")
-        (builtins.readDir ./klipper-macros/.));
+    }
+    // lib.mapAttrs' (
+      name: value:
+      lib.nameValuePair ("gcode_macro " + (builtins.replaceStrings [ ".gcode" ] [ "" ] name)) {
+        gcode = lib.remove "" (lib.splitString "\n" (builtins.readFile (./klipper-macros/. + "/${name}")));
+      }
+    ) (lib.attrsets.filterAttrs (n: v: n != ".gitkeep") (builtins.readDir ./klipper-macros/.));
   };
 
   services.moonraker = {
@@ -377,7 +432,9 @@ in {
       };
       # causes issues for some reason
       # zeroconf = { mdns_hostname = "barbie-girl"; };
-      machine = { provider = "systemd_cli"; };
+      machine = {
+        provider = "systemd_cli";
+      };
       "webcam rpi" = {
         enabled = "True";
         service = "mjpegstreamer-adaptive";
@@ -408,8 +465,7 @@ in {
     description = "uStreamer for video0";
     serviceConfig = {
       Type = "simple";
-      ExecStart =
-        "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --rotate 90 --slowdown --resolution 1296x972 --desired-fps 30";
+      ExecStart = "${pkgs.ustreamer}/bin/ustreamer --encoder=HW --persistent --rotate 90 --slowdown --resolution 1296x972 --desired-fps 30";
     };
   };
 

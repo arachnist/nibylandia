@@ -1,13 +1,14 @@
 { stdenv, fetchzip }:
 
-let version = "v0.3";
-in stdenv.mkDerivation {
+let
+  version = "v0.3";
+in
+stdenv.mkDerivation {
   pname = "rpi5-uefi-bin";
   inherit version;
 
   src = fetchzip {
-    url =
-      "https://github.com/worproject/rpi5-uefi/releases/download/${version}/RPi5_UEFI_Release_${version}.zip";
+    url = "https://github.com/worproject/rpi5-uefi/releases/download/${version}/RPi5_UEFI_Release_${version}.zip";
     sha256 = "sha256-bjEvq7KlEFANnFVL0LyexXEeoXj7rHGnwQpq09PhIb0=";
     stripRoot = false;
   };
@@ -21,5 +22,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = { description = "EDK2 port for raspberry pi 5"; };
+  meta = {
+    description = "EDK2 port for raspberry pi 5";
+  };
 }

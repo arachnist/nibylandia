@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, runCommand, libuuid }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  runCommand,
+  libuuid,
+}:
 
 let
   srcWithVendoring = fetchFromGitHub {
@@ -9,7 +16,8 @@ let
     hash = "sha256-mGMqgJXsEFq79aHes8HUGcKrfbGjeAHTA/xzbq5qURs=";
   };
   pythonEnv = buildPackages.python3.withPackages (ps: [ ps.tkinter ]);
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "rpi5-edk2-tools";
   version = "20240316";
 
@@ -29,20 +37,30 @@ in stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ pythonEnv ];
-  depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.bash ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    buildPackages.bash
+  ];
   depsHostHost = [ libuuid ];
   strictDeps = true;
 
   # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
   GCC5_AARCH64_PREFIX = stdenv.cc.targetPrefix;
 
-  makeFlags = [ "-C edk2/BaseTools" "-j 14" ];
+  makeFlags = [
+    "-C edk2/BaseTools"
+    "-j 14"
+  ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-return-type"
+  env.NIX_CFLAGS_COMPILE =
+    "-Wno-return-type"
     + lib.optionalString stdenv.cc.isGNU " -Wno-error=stringop-truncation"
     + lib.optionalString stdenv.isDarwin " -Wno-error=macro-redefined";
 
-  hardeningDisable = [ "format" "fortify" ];
+  hardeningDisable = [
+    "format"
+    "fortify"
+  ];
 
   installPhase = ''
     mkdir -vp $out

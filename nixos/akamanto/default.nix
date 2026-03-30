@@ -1,4 +1,9 @@
-{ pkgs, lib, inputs, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   ci-secrets = import ../../ci-secrets.nix;
@@ -19,20 +24,28 @@ let
     done
   '';
   klipperHostMcu = "${
-      pkgs.klipper-firmware.override { firmwareConfig = ./klipper-rpi.cfg; }
-    }/klipper.elf";
-in {
+    pkgs.klipper-firmware.override { firmwareConfig = ./klipper-rpi.cfg; }
+  }/klipper.elf";
+in
+{
   # https://en.wikipedia.org/wiki/Aka_Manto
   networking.hostName = "akamanto";
   deployment.buildOnTarget = lib.mkForce false;
 
-  imports = (with inputs.self.nixosModules; [ common ])
-    ++ (with inputs.raspberry-pi-nix.nixosModules; [ raspberry-pi sd-image ]);
+  imports =
+    (with inputs.self.nixosModules; [ common ])
+    ++ (with inputs.raspberry-pi-nix.nixosModules; [
+      raspberry-pi
+      sd-image
+    ]);
 
   nixpkgs.overlays = [ inputs.raspberry-pi-nix.overlays.core ];
 
   hardware.enableRedistributableFirmware = lib.mkForce false;
-  hardware.firmware = with pkgs; [ raspberrypiWirelessFirmware wireless-regdb ];
+  hardware.firmware = with pkgs; [
+    raspberrypiWirelessFirmware
+    wireless-regdb
+  ];
 
   raspberry-pi-nix = {
     board = "bcm2712";
@@ -40,7 +53,10 @@ in {
   };
 
   boot = {
-    supportedFilesystems = lib.mkForce [ "vfat" "ext4" ];
+    supportedFilesystems = lib.mkForce [
+      "vfat"
+      "ext4"
+    ];
     kernelParams = [
       "fbcon=rotate:2"
       "8250.nr_uarts=11"
@@ -92,19 +108,36 @@ in {
     };
   };
 
-  users.users.root.hashedPassword =
-    "$y$j9T$.1ogQkT5J95hEFkgp9esc0$rneVdOpPwPDsgAckJsXJmzgVEENPkFWHWKgca2mVz6D";
+  users.users.root.hashedPassword = "$y$j9T$.1ogQkT5J95hEFkgp9esc0$rneVdOpPwPDsgAckJsXJmzgVEENPkFWHWKgca2mVz6D";
   users.mutableUsers = false;
   users.users.ar = {
-    extraGroups = [ "video" "dialout" "plugdev" "pipewire" ];
+    extraGroups = [
+      "video"
+      "dialout"
+      "plugdev"
+      "pipewire"
+    ];
   };
 
   documentation = {
     enable = lib.mkForce false;
-  } // builtins.listToAttrs (map (x: {
-    name = x;
-    value = { enable = lib.mkForce false; };
-  }) [ "man" "info" "nixos" "doc" "dev" ]);
+  }
+  // builtins.listToAttrs (
+    map
+      (x: {
+        name = x;
+        value = {
+          enable = lib.mkForce false;
+        };
+      })
+      [
+        "man"
+        "info"
+        "nixos"
+        "doc"
+        "dev"
+      ]
+  );
 
   services.openssh.settings.PasswordAuthentication = lib.mkForce false;
   services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
@@ -124,7 +157,9 @@ in {
     enable = true;
     package = pkgs.bluez;
   };
-  services.udisks2 = { enable = true; };
+  services.udisks2 = {
+    enable = true;
+  };
 
   # diet
   boot.binfmt.emulatedSystems = lib.mkForce [ ];
@@ -132,13 +167,19 @@ in {
     # avoid warnings
     (pkgs.glibcLocales.override {
       allLocales = false;
-      locales = [ "en_US.UTF-8/UTF-8" "en_CA.UTF-8/UTF-8" "en_DK.UTF-8/UTF-8" ];
+      locales = [
+        "en_US.UTF-8/UTF-8"
+        "en_CA.UTF-8/UTF-8"
+        "en_DK.UTF-8/UTF-8"
+      ];
     })
 
     # strictly unnecessary
     (pkgs.v4l-utils.override { withGUI = false; })
-  ] ++ (with pkgs;
-  # lib.mkForce
+  ]
+  ++ (
+    with pkgs;
+    # lib.mkForce
     [
       # strictly required
       coreutils
@@ -188,7 +229,10 @@ in {
       User = "klipper";
       RuntimeDirectory = "klipper-mcu";
       StateDirectory = "klipper";
-      SupplementaryGroups = [ "dialout" "pipewire" ];
+      SupplementaryGroups = [
+        "dialout"
+        "pipewire"
+      ];
       OOMScoreAdjust = "-999";
       CPUSchedulingPolicy = "rr";
       CPUSchedulingPriority = 99;
@@ -199,7 +243,10 @@ in {
     };
   };
   systemd.services.klipper.serviceConfig = {
-    SupplementaryGroups = [ "dialout" "pipewire" ];
+    SupplementaryGroups = [
+      "dialout"
+      "pipewire"
+    ];
     ReadWritePaths = "/var/lib/moonraker/config";
   };
   ## uncomment if you need manual config changes
@@ -219,8 +266,7 @@ in {
         enableKlipperFlash = false;
         enable = true;
         configFile = ./klipper-octopus.cfg;
-        serial =
-          "/dev/serial/by-id/usb-Klipper_stm32f429xx_400048000251313133383438-if00";
+        serial = "/dev/serial/by-id/usb-Klipper_stm32f429xx_400048000251313133383438-if00";
         package = pkgs.klipper-firmware.override {
           gcc-arm-embedded = pkgs.gcc-arm-embedded-11;
         };
@@ -239,16 +285,21 @@ in {
         max_z_velocity = "5";
       };
       mcu = {
-        serial =
-          "/dev/serial/by-id/usb-Klipper_stm32f429xx_400048000251313133383438-if00";
+        serial = "/dev/serial/by-id/usb-Klipper_stm32f429xx_400048000251313133383438-if00";
       };
-      "mcu rpi" = { serial = "/run/klipper-mcu/mcu-rpi"; };
-      virtual_sdcard = { path = "/var/lib/moonraker/gcodes"; };
+      "mcu rpi" = {
+        serial = "/run/klipper-mcu/mcu-rpi";
+      };
+      virtual_sdcard = {
+        path = "/var/lib/moonraker/gcodes";
+      };
 
       pause_resume = { };
       display_status = { };
       exclude_object = { };
-      force_move = { enable_force_move = "true"; };
+      force_move = {
+        enable_force_move = "true";
+      };
 
       idle_timeout = {
         timeout = 1800;
@@ -280,31 +331,74 @@ in {
         min_y = 5.0;
         max_y = 200.0;
         # klippy is, apparently, very specific about bed mesh formatting
-        points = "\n" + lib.concatStringsSep "\n" (map (s: "  " + s)
-          (map (l: lib.concatStringsSep ", " l) [
-            [ "-0.747500" "-0.752500" "-0.776250" "-0.851250" "-0.990625" ]
-            [ "-0.590000" "-0.582500" "-0.588750" "-0.688750" "-0.839375" ]
-            [ "-0.376875" "-0.362500" "-0.388750" "-0.464375" "-0.623750" ]
-            [ "-0.184375" "-0.220000" "-0.208750" "-0.221250" "-0.361875" ]
-            [ "0.128125" "0.078750" "0.065000" "0.038750" "-0.075625" ]
-          ]));
+        points =
+          "\n"
+          + lib.concatStringsSep "\n" (
+            map (s: "  " + s) (
+              map (l: lib.concatStringsSep ", " l) [
+                [
+                  "-0.747500"
+                  "-0.752500"
+                  "-0.776250"
+                  "-0.851250"
+                  "-0.990625"
+                ]
+                [
+                  "-0.590000"
+                  "-0.582500"
+                  "-0.588750"
+                  "-0.688750"
+                  "-0.839375"
+                ]
+                [
+                  "-0.376875"
+                  "-0.362500"
+                  "-0.388750"
+                  "-0.464375"
+                  "-0.623750"
+                ]
+                [
+                  "-0.184375"
+                  "-0.220000"
+                  "-0.208750"
+                  "-0.221250"
+                  "-0.361875"
+                ]
+                [
+                  "0.128125"
+                  "0.078750"
+                  "0.065000"
+                  "0.038750"
+                  "-0.075625"
+                ]
+              ]
+            )
+          );
       };
 
       probe = {
         pin = "P1.25";
         z_offset = "-0.300";
       };
-      safe_z_home = { home_xy_position = "110, 110"; };
+      safe_z_home = {
+        home_xy_position = "110, 110";
+      };
 
       "temperature_sensor ambient" = {
         sensor_pin = "P0.26";
         sensor_type = "ATC Semitec 104GT-2";
       };
 
-      "temperature_sensor rpi" = { sensor_type = "temperature_host"; };
+      "temperature_sensor rpi" = {
+        sensor_type = "temperature_host";
+      };
 
-      fan = { pin = "P2.4"; };
-      "fan_generic exhaust" = { pin = "P2.6"; };
+      fan = {
+        pin = "P2.4";
+      };
+      "fan_generic exhaust" = {
+        pin = "P2.6";
+      };
 
       firmware_retraction = {
         retract_length = "5.5";
@@ -412,7 +506,10 @@ in {
 
       "gcode_macro CANCEL_PRINT" = {
         description = "Cancel the actual running print";
-        gcode = [ "TURN_OFF_HEATERS" "CANCEL_PRINT_BASE" ];
+        gcode = [
+          "TURN_OFF_HEATERS"
+          "CANCEL_PRINT_BASE"
+        ];
         rename_existing = "CANCEL_PRINT_BASE";
       };
       "delayed_gcode bed_mesh_init" = {
@@ -423,13 +520,13 @@ in {
         gcode = [ "SET_GCODE_OFFSET X=0 Y=0 Z=-0.0" ];
         initial_duration = ".02";
       };
-    } // lib.mapAttrs' (name: value:
-      lib.nameValuePair
-      ("gcode_macro " + (builtins.replaceStrings [ ".gcode" ] [ "" ] name)) {
-        gcode = lib.remove "" (lib.splitString "\n"
-          (builtins.readFile (./klipper-macros/. + "/${name}")));
-      }) (lib.attrsets.filterAttrs (n: v: n != ".gitkeep")
-        (builtins.readDir ./klipper-macros/.));
+    }
+    // lib.mapAttrs' (
+      name: value:
+      lib.nameValuePair ("gcode_macro " + (builtins.replaceStrings [ ".gcode" ] [ "" ] name)) {
+        gcode = lib.remove "" (lib.splitString "\n" (builtins.readFile (./klipper-macros/. + "/${name}")));
+      }
+    ) (lib.attrsets.filterAttrs (n: v: n != ".gitkeep") (builtins.readDir ./klipper-macros/.));
   };
 
   services.moonraker = {
@@ -442,7 +539,10 @@ in {
       history = { };
       authorization = {
         force_logins = false;
-        cors_domains = [ "*.local" "*.waw.hackerspace.pl" ];
+        cors_domains = [
+          "*.local"
+          "*.waw.hackerspace.pl"
+        ];
         trusted_clients = [
           "127.0.0.1/32"
           "10.8.0.0/23"
@@ -452,12 +552,13 @@ in {
       };
       # causes issues for some reason
       # zeroconf = { mdns_hostname = "barbie-girl"; };
-      machine = { provider = "systemd_cli"; };
+      machine = {
+        provider = "systemd_cli";
+      };
       "webcam go2rtc" = {
         enabled = "True";
         aspect_ratio = "16:9";
-        stream_url =
-          "http://kodak.waw.hackerspace.pl:8080/stream.html?src=webcam&mode=webrtc";
+        stream_url = "http://kodak.waw.hackerspace.pl:8080/stream.html?src=webcam&mode=webrtc";
         service = "webrtc-go2rtc";
       };
     };
@@ -485,8 +586,7 @@ in {
   services.go2rtc = {
     enable = true;
     settings = {
-      streams.webcam =
-        "ffmpeg:device?video=0&resolution=1280x720#video=h264#rotate=180";
+      streams.webcam = "ffmpeg:device?video=0&resolution=1280x720#video=h264#rotate=180";
       api = {
         listen = ":8080";
         origin = "*";

@@ -1,13 +1,29 @@
-{ stdenv, buildPackages, rpi5-arm-tf, rpi5-edk2-tools, bc, util-linux, nasm
-, acpica-tools }:
+{
+  stdenv,
+  buildPackages,
+  rpi5-arm-tf,
+  rpi5-edk2-tools,
+  bc,
+  util-linux,
+  nasm,
+  acpica-tools,
+}:
 
-let pythonEnv = buildPackages.python3.withPackages (ps: [ ps.tkinter ]);
-in stdenv.mkDerivation rec {
+let
+  pythonEnv = buildPackages.python3.withPackages (ps: [ ps.tkinter ]);
+in
+stdenv.mkDerivation rec {
   pname = "rpi5-uefi";
 
   inherit (rpi5-edk2-tools) src version;
 
-  nativeBuildInputs = [ bc pythonEnv util-linux nasm acpica-tools ];
+  nativeBuildInputs = [
+    bc
+    pythonEnv
+    util-linux
+    nasm
+    acpica-tools
+  ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   strictDeps = true;
 

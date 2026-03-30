@@ -1,4 +1,9 @@
-{ runtimeShell, writeScriptBin, mastodon, symlinkJoin }:
+{
+  runtimeShell,
+  writeScriptBin,
+  mastodon,
+  symlinkJoin,
+}:
 
 let
   name = "mastodon-update.sh";
@@ -7,7 +12,8 @@ let
     exec ${mastodon.updateScript} "$@"
   '';
 
-in symlinkJoin {
+in
+symlinkJoin {
   inherit name;
   paths = [ script ];
 }

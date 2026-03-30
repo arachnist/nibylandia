@@ -1,10 +1,23 @@
-{ config, pkgs, modulesPath, ... }:
+{
+  config,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  boot.initrd.availableKernelModules =
-    [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "igb" "ixgbe" ];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "ahci"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+    "igb"
+    "ixgbe"
+  ];
   boot.zfs.extraPools = [ "tank" ];
   boot.zfs.package = pkgs.zfs_unstable;
   boot.supportedFilesystems = [ "zfs" ];
@@ -47,7 +60,12 @@
   fileSystems."/home/minecraft/survival/world" = {
     device = "survivalworld";
     fsType = "tmpfs";
-    options = [ "mode=755" "uid=1001" "gid=100" "size=40G" ];
+    options = [
+      "mode=755"
+      "uid=1001"
+      "gid=100"
+      "size=40G"
+    ];
   };
 
   fileSystems."/var/lib/matrix-synapse/media_store" = {

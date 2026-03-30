@@ -4,11 +4,14 @@ _:
   hardware.enableAllFirmware = true;
   boot.ryzen.enable = true;
 
-  boot.initrd.availableKernelModules =
-    [ "nvme" "ehci_pci" "xhci_pci" "rtsx_pci_sdmmc" ];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "ehci_pci"
+    "xhci_pci"
+    "rtsx_pci_sdmmc"
+  ];
 
-  boot.initrd.luks.devices."nixos".device =
-    "/dev/disk/by-uuid/f676b705-5ae7-4f71-abf9-b1aac0ac2363";
+  boot.initrd.luks.devices."nixos".device = "/dev/disk/by-uuid/f676b705-5ae7-4f71-abf9-b1aac0ac2363";
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/1FA4-9D1F";
@@ -18,7 +21,11 @@ _:
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = [ "defaults" "size=8G" "mode=755" ];
+    options = [
+      "defaults"
+      "size=8G"
+      "mode=755"
+    ];
   };
 
   fileSystems."/tmp" = {

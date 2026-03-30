@@ -1,19 +1,27 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   theCow = pkgs.writeText "cow.txt" (builtins.readFile ./cow.txt);
 in
 {
-  imports = [ inputs.simple-nixos-mailserver.nixosModule ]
-    ++ (with inputs.self.nixosModules; [
-      common
-      secureboot
-      monitoring
-      ci-runners
-      factorio
+  imports = [
+    inputs.simple-nixos-mailserver.nixosModule
+  ]
+  ++ (with inputs.self.nixosModules; [
+    common
+    secureboot
+    monitoring
+    ci-runners
+    factorio
 
-      ./hardware.nix
-    ]);
+    ./hardware.nix
+  ]);
 
   boot.kernelPackages = pkgs.linuxPackages;
 
@@ -54,8 +62,7 @@ in
     mode = "440";
   };
   age.secrets.keycloak.file = ../../secrets/mail/keycloak.age;
-  age.secrets.mastodonActiveRecordSecrets.file =
-    ../../secrets/mastodon-activerecord.age;
+  age.secrets.mastodonActiveRecordSecrets.file = ../../secrets/mastodon-activerecord.age;
 
   age.secrets.notbotConfig = {
     group = "bot";
@@ -68,13 +75,13 @@ in
     mode = "440";
     file = ../../secrets/synapseExtraConfig.age;
   };
-  age.secrets.acmeZorigamiZajebaLi.file =
-    ../../secrets/acme-zorigami-zajeba.li.age;
+  age.secrets.acmeZorigamiZajebaLi.file = ../../secrets/acme-zorigami-zajeba.li.age;
 
-  age.secrets.fedifetcherAccessToken_ar.file =
-    ../../secrets/fedifetcherAccessToken_ar.age;
+  age.secrets.fedifetcherAccessToken_ar.file = ../../secrets/fedifetcherAccessToken_ar.age;
 
-  nibylandia.monitoring-server = { domain = "monitoring.is-a.cat"; };
+  nibylandia.monitoring-server = {
+    domain = "monitoring.is-a.cat";
+  };
 
   services.nginx = {
     enable = true;
@@ -94,10 +101,26 @@ in
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "ar@is-a.cat";
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ] ++ [ 25565 25566 ]
-    ++ [ 113 ];
-  networking.firewall.allowedUDPPorts = [ 80 443 ]
-    ++ [ 19132 19133 25565 25566 ] ++ [ 51315 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ]
+  ++ [
+    25565
+    25566
+  ]
+  ++ [ 113 ];
+  networking.firewall.allowedUDPPorts = [
+    80
+    443
+  ]
+  ++ [
+    19132
+    19133
+    25565
+    25566
+  ]
+  ++ [ 51315 ];
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 5432 ];
 
   nix.settings.max-jobs = 1;
@@ -134,11 +157,10 @@ in
   users.users.bot = {
     isNormalUser = true;
     group = "bot";
-    openssh.authorizedKeys.keys =
-      config.users.users.ar.openssh.authorizedKeys.keys ++ [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG599UildOrAq+LIOQjKqtGMwjgjIxozI1jtQQRKHtCP q3k@mimeomia"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHYIBqUBavv4RPjazPdsvTT35ibfud3cG1KuCSh2l2zh q3k@ospad"
-      ];
+    openssh.authorizedKeys.keys = config.users.users.ar.openssh.authorizedKeys.keys ++ [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG599UildOrAq+LIOQjKqtGMwjgjIxozI1jtQQRKHtCP q3k@mimeomia"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHYIBqUBavv4RPjazPdsvTT35ibfud3cG1KuCSh2l2zh q3k@ospad"
+    ];
   };
   users.groups.bot = { };
 
@@ -149,8 +171,7 @@ in
     serviceConfig = {
       Type = "simple";
       User = "ar";
-      ExecStart = ''
-        ${pkgs.cass}/bin/cass -listen "127.0.0.1:8000" -file-store "/srv/www/arachnist.is-a.cat/c" -url-base "https://ar.is-a.cat/c/"'';
+      ExecStart = ''${pkgs.cass}/bin/cass -listen "127.0.0.1:8000" -file-store "/srv/www/arachnist.is-a.cat/c" -url-base "https://ar.is-a.cat/c/"'';
     };
   };
 
@@ -200,7 +221,9 @@ in
 
   systemd.timers.fedifetcher = {
     wantedBy = [ "multi-user.target" ];
-    timerConfig = { OnCalendar = "*:0/5"; };
+    timerConfig = {
+      OnCalendar = "*:0/5";
+    };
   };
 
   systemd.services.minecraft-overviewer = {
@@ -217,23 +240,26 @@ in
 
   systemd.timers.minecraft-overviewer = {
     wantedBy = [ "multi-user.target" ];
-    timerConfig = { OnCalendar = "hourly"; };
+    timerConfig = {
+      OnCalendar = "hourly";
+    };
   };
 
   systemd.timers.minecraft-backup = {
     wantedBy = [ "multi-user.target" ];
-    timerConfig = { OnCalendar = "*:0/15"; };
+    timerConfig = {
+      OnCalendar = "*:0/15";
+    };
   };
 
   users.users.minecraft = {
     isNormalUser = true;
     group = "users";
-    openssh.authorizedKeys.keys =
-      config.users.users.ar.openssh.authorizedKeys.keys ++ [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOHWPbzvwXTftY1r0dXcYZxT9QBnQkwepdMn8PCAPlYvYwUObEj3rgYrYRFrtCRWZVrKAdqBxnH9/6S9w631Zs7tgqEeDHJsotZNZV3qip7qGjn9IqUHXqF95MUDJV21AeBAqQ1xalefwCkwf/vYLFn8dSnsnlfO+mtlHZOuBED+SB2U1eNrWY2e45v8m7PqSyTCbCu0F3wVcHGwRFsxWA598wf85UBRVcSWVcUydE9F+PCS9sGETkXiRUDcHWnup8uygs4xLa9RADubhdGkUbQE6m6yOjvHJWZ4ov59zJh+hmpszCwfmUw/k39T2TM7tbwUWxgc68qDyaMGQr/Wzd x10a94@Celestia"
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDeJ+LSo3YXE6Jk6pGKL5om/VOi7XE5OvHA2U73V0pJXHa1bA4ityICeNqec2w8TSWSwTihJ4oAM7YLShkERNTcd1NWNHgUYova9nJ/nItFxrxDpTQsqK315u4d7nE+go09c85cyomHbDDcNVg9kJeCUjF+dr82N7JZfYVdQystOslOROYtl94GHuFHVOQyBRGeSztmakYvK1+3WV8dby6TfYG1l6uf6qLCg7q64zR4xDDP0KgfcrsusBQ6qYnKhop1fUTaW9NtEOQP/MhFLDp2YQmTsNJDiKAQpwwYLexWq4UcziXbnRfD56CHFHbW7Hu6Ltu35cHFKR2r9y4TBwTV crendgrim@gmx.de"
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC7PqzNBHwjSc+HiJh8yszVzzzS99DvE8I3am2dOne0R3vw7oG9Jg/uwQiCij8CbdGPDiirZwUUea8YBWXHz/JZtWLK3fARzsMhYJiiKaKm8jjXemdkfaH78GgEAAcSPaixDbTpRn6Uf1P25zOlysok7TFefGHloAKSs0uuWUbVHdCOY5DmWFbe5Ol19pjykQYHX1f6qFbcffP5zy6zE8WkqKY4Pof8g8t6I3ad4yyawcTU7zQB/3n6NRvhOtc7WAc8zG8Lb3O+T0ZZad+96KNle0q8rJetXIDX7GlQOR1I5XWStfLlHJJbpoGg9GAO74KonhY3TDy7clYLQ7CjLJtNQFk/FHNE1LTzxoAyGeyHav4PqO2xhZMJbMI8ug1/z8ceja7LqLqShtwMhnqDvXipL3egmioEXRZ4brOGs0BUgrYm67Yb5Sd2ia6+S2r7BkhTIYz61LcX62FJ/zecjEt9gFAuc3jGKhXS3htaFRDa4MsVmgkzIcDUONE+SoeH7YkXxTT1R45lEOpNzc9oXZDqx9hNXREMXbbOkPYqlAxB3pdJd9y6msDiOfOfYfJRlW60I0qy8P+XX6/9Sk04pf1c3nbpm4cWnXRYNC/Q7B2iQEHgZ8jLblr5DGKEvpiLGg1539VmQEQz15CI+XckvSHW9ADseuUYFrM5aVbFpLA6FQ== dhoagland@carol-mint"
-      ];
+    openssh.authorizedKeys.keys = config.users.users.ar.openssh.authorizedKeys.keys ++ [
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOHWPbzvwXTftY1r0dXcYZxT9QBnQkwepdMn8PCAPlYvYwUObEj3rgYrYRFrtCRWZVrKAdqBxnH9/6S9w631Zs7tgqEeDHJsotZNZV3qip7qGjn9IqUHXqF95MUDJV21AeBAqQ1xalefwCkwf/vYLFn8dSnsnlfO+mtlHZOuBED+SB2U1eNrWY2e45v8m7PqSyTCbCu0F3wVcHGwRFsxWA598wf85UBRVcSWVcUydE9F+PCS9sGETkXiRUDcHWnup8uygs4xLa9RADubhdGkUbQE6m6yOjvHJWZ4ov59zJh+hmpszCwfmUw/k39T2TM7tbwUWxgc68qDyaMGQr/Wzd x10a94@Celestia"
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDeJ+LSo3YXE6Jk6pGKL5om/VOi7XE5OvHA2U73V0pJXHa1bA4ityICeNqec2w8TSWSwTihJ4oAM7YLShkERNTcd1NWNHgUYova9nJ/nItFxrxDpTQsqK315u4d7nE+go09c85cyomHbDDcNVg9kJeCUjF+dr82N7JZfYVdQystOslOROYtl94GHuFHVOQyBRGeSztmakYvK1+3WV8dby6TfYG1l6uf6qLCg7q64zR4xDDP0KgfcrsusBQ6qYnKhop1fUTaW9NtEOQP/MhFLDp2YQmTsNJDiKAQpwwYLexWq4UcziXbnRfD56CHFHbW7Hu6Ltu35cHFKR2r9y4TBwTV crendgrim@gmx.de"
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC7PqzNBHwjSc+HiJh8yszVzzzS99DvE8I3am2dOne0R3vw7oG9Jg/uwQiCij8CbdGPDiirZwUUea8YBWXHz/JZtWLK3fARzsMhYJiiKaKm8jjXemdkfaH78GgEAAcSPaixDbTpRn6Uf1P25zOlysok7TFefGHloAKSs0uuWUbVHdCOY5DmWFbe5Ol19pjykQYHX1f6qFbcffP5zy6zE8WkqKY4Pof8g8t6I3ad4yyawcTU7zQB/3n6NRvhOtc7WAc8zG8Lb3O+T0ZZad+96KNle0q8rJetXIDX7GlQOR1I5XWStfLlHJJbpoGg9GAO74KonhY3TDy7clYLQ7CjLJtNQFk/FHNE1LTzxoAyGeyHav4PqO2xhZMJbMI8ug1/z8ceja7LqLqShtwMhnqDvXipL3egmioEXRZ4brOGs0BUgrYm67Yb5Sd2ia6+S2r7BkhTIYz61LcX62FJ/zecjEt9gFAuc3jGKhXS3htaFRDa4MsVmgkzIcDUONE+SoeH7YkXxTT1R45lEOpNzc9oXZDqx9hNXREMXbbOkPYqlAxB3pdJd9y6msDiOfOfYfJRlW60I0qy8P+XX6/9Sk04pf1c3nbpm4cWnXRYNC/Q7B2iQEHgZ8jLblr5DGKEvpiLGg1539VmQEQz15CI+XckvSHW9ADseuUYFrM5aVbFpLA6FQ== dhoagland@carol-mint"
+    ];
   };
 
   systemd.services.minecraft-backup = {
@@ -269,8 +295,13 @@ in
     };
   };
 
-  services.postgresql.ensureDatabases =
-    [ "nextcloud" "matrix-synapse" "mastodon" "dendrite" "notbot" ];
+  services.postgresql.ensureDatabases = [
+    "nextcloud"
+    "matrix-synapse"
+    "mastodon"
+    "dendrite"
+    "notbot"
+  ];
   services.postgresql.ensureUsers = [
     {
       name = "nextcloud";
@@ -306,7 +337,11 @@ in
     enable = true;
     stateVersion = 3;
     fqdn = "is-a.cat";
-    domains = [ "is-a.cat" "i.am-a.cat" "rsg.enterprises" ];
+    domains = [
+      "is-a.cat"
+      "i.am-a.cat"
+      "rsg.enterprises"
+    ];
     enableManageSieve = true;
     fullTextSearch = {
       enable = true;
@@ -332,14 +367,11 @@ in
         hashedPasswordFile = config.age.secrets.arMail.path;
       };
       "apo@is-a.cat".hashedPasswordFile = config.age.secrets.apoMail.path;
-      "madargon@is-a.cat".hashedPasswordFile =
-        config.age.secrets.madargonMail.path;
+      "madargon@is-a.cat".hashedPasswordFile = config.age.secrets.madargonMail.path;
       "enkiusz@is-a.cat".hashedPasswordFile = config.age.secrets.enkiMail.path;
-      "mastodon@is-a.cat".hashedPasswordFile =
-        config.age.secrets.mastodonMail.path;
+      "mastodon@is-a.cat".hashedPasswordFile = config.age.secrets.mastodonMail.path;
       "matrix@is-a.cat".hashedPasswordFile = config.age.secrets.matrixMail.path;
-      "vaultwarden@is-a.cat".hashedPasswordFile =
-        config.age.secrets.vaultwardenMail.path;
+      "vaultwarden@is-a.cat".hashedPasswordFile = config.age.secrets.vaultwardenMail.path;
     };
   };
   services.dovecot2 = {
@@ -353,10 +385,12 @@ in
       server_name = "is-a.cat";
 
       registrations_require_3pid = [ "email" ];
-      allowed_local_3pids = [{
-        medium = "email";
-        pattern = "^[^@]+@is-a.cat$";
-      }];
+      allowed_local_3pids = [
+        {
+          medium = "email";
+          pattern = "^[^@]+@is-a.cat$";
+        }
+      ];
       enable_registration = true;
       registration_requires_token = true;
       withJemalloc = true;
@@ -425,9 +459,7 @@ in
     forceSSL = true;
     enableACME = true;
     locations."/" = {
-      proxyPass = "http://127.0.0.1:${
-          toString config.services.vaultwarden.config.ROCKET_PORT
-        }";
+      proxyPass = "http://127.0.0.1:${toString config.services.vaultwarden.config.ROCKET_PORT}";
       proxyWebsockets = true;
     };
     locations."/notifications/hub" = {
@@ -454,42 +486,54 @@ in
     enp36s0f0 = {
       useDHCP = false;
       ipv4 = {
-        addresses = [{
-          address = "185.236.240.137";
-          prefixLength = 31;
-        }];
-        routes = [{
-          address = "0.0.0.0";
-          prefixLength = 0;
-          via = "185.236.240.136";
-        }];
+        addresses = [
+          {
+            address = "185.236.240.137";
+            prefixLength = 31;
+          }
+        ];
+        routes = [
+          {
+            address = "0.0.0.0";
+            prefixLength = 0;
+            via = "185.236.240.136";
+          }
+        ];
       };
       ipv6 = {
-        addresses = [{
-          address = "2a0d:eb00:8007::10";
-          prefixLength = 64;
-        }];
-        routes = [{
-          address = "::";
-          prefixLength = 0;
-          via = "2a0d:eb00:8007::1";
-        }];
+        addresses = [
+          {
+            address = "2a0d:eb00:8007::10";
+            prefixLength = 64;
+          }
+        ];
+        routes = [
+          {
+            address = "::";
+            prefixLength = 0;
+            via = "2a0d:eb00:8007::1";
+          }
+        ];
       };
     };
     # funky crossconnects
     enp36s0f1 = {
       useDHCP = false;
-      ipv4.addresses = [{
-        address = "10.21.37.1";
-        prefixLength = 27;
-      }];
+      ipv4.addresses = [
+        {
+          address = "10.21.37.1";
+          prefixLength = 27;
+        }
+      ];
     };
     enp39s0 = {
       useDHCP = false;
-      ipv4.addresses = [{
-        address = "10.21.37.33";
-        prefixLength = 27;
-      }];
+      ipv4.addresses = [
+        {
+          address = "10.21.37.33";
+          prefixLength = 27;
+        }
+      ];
     };
     virbr0 = {
       ipv4.routes = [
@@ -498,10 +542,12 @@ in
           prefixLength = 32;
         }
       ];
-      ipv6.addresses = [{
-        address = "2a0d:eb00:8007:4001::1";
-        prefixLength = 64;
-      }];
+      ipv6.addresses = [
+        {
+          address = "2a0d:eb00:8007:4001::1";
+          prefixLength = 64;
+        }
+      ];
       ipv6.routes = [
         {
           address = "2a0d:eb00:8007:4001::";
@@ -535,8 +581,11 @@ in
         {
           publicKey = "g/XhdVYsegn7Pp58Y1HFNxp4jhmA8YjRDg8W8J6swCw=";
           endpoint = "i.am-a.cat:51315";
-          allowedIPs =
-            [ "10.255.255.2/32" "192.168.20.0/24" "192.168.24.0/24" ];
+          allowedIPs = [
+            "10.255.255.2/32"
+            "192.168.20.0/24"
+            "192.168.24.0/24"
+          ];
           persistentKeepalive = 15;
         }
         {
@@ -557,21 +606,24 @@ in
     enable = true;
     settings = {
       interfaces-config = {
-        interfaces = [ "enp36s0f1/10.21.37.1" "enp39s0/10.21.37.33" ];
+        interfaces = [
+          "enp36s0f1/10.21.37.1"
+          "enp39s0/10.21.37.33"
+        ];
       };
 
       subnet4 = [
         {
           id = 1;
           subnet = "10.21.37.0/27";
-          pools = [{ pool = "10.21.37.5 - 10.21.37.25"; }];
+          pools = [ { pool = "10.21.37.5 - 10.21.37.25"; } ];
           reservations-out-of-pool = true;
           reservations-in-subnet = true;
         }
         {
           id = 2;
           subnet = "10.21.37.32/27";
-          pools = [{ pool = "10.21.37.37 - 10.21.37.57"; }];
+          pools = [ { pool = "10.21.37.37 - 10.21.37.57"; } ];
           reservations-out-of-pool = true;
           reservations-in-subnet = true;
         }
@@ -599,7 +651,9 @@ in
     "ar.is-a.cat" = {
       forceSSL = true;
       enableACME = true;
-      locations."/" = { root = "/srv/www/arachnist.is-a.cat"; };
+      locations."/" = {
+        root = "/srv/www/arachnist.is-a.cat";
+      };
       locations."/up" = {
         proxyPass = "http://127.0.0.1:8000";
         basicAuthFile = config.age.secrets.cassAuth.path;
@@ -647,7 +701,9 @@ in
     "arachnist.is-a.cat" = {
       forceSSL = true;
       enableACME = true;
-      locations."/" = { root = "/srv/www/arachnist.is-a.cat"; };
+      locations."/" = {
+        root = "/srv/www/arachnist.is-a.cat";
+      };
       locations."=/cow.txt" = {
         alias = theCow;
       };
@@ -655,7 +711,9 @@ in
     "brata.zajeba.li" = {
       forceSSL = true;
       enableACME = true;
-      locations."/" = { root = "/srv/www/brata.zajeba.li"; };
+      locations."/" = {
+        root = "/srv/www/brata.zajeba.li";
+      };
       locations."=/cow.txt" = {
         alias = theCow;
       };
@@ -667,7 +725,9 @@ in
         proxyPass = "http://127.0.0.1:9001";
         proxyWebsockets = true;
       };
-      locations."/" = { root = pkgs.glowing-bear; };
+      locations."/" = {
+        root = pkgs.glowing-bear;
+      };
       locations."=/cow.txt" = {
         alias = theCow;
       };
@@ -676,48 +736,47 @@ in
       forceSSL = true;
       enableACME = true;
     };
-    "${config.services.matrix-synapse.settings.server_name}" = let
-      clientConfig."m.homeserver".base_url =
-        "https://${config.services.matrix-synapse.settings.server_name}";
-      serverConfig = {
-        "m.server" =
-          "${config.services.matrix-synapse.settings.server_name}:443";
-        "m.homeserver" = {
-          "base_url" =
-            "https://${config.services.matrix-synapse.settings.server_name}";
+    "${config.services.matrix-synapse.settings.server_name}" =
+      let
+        clientConfig."m.homeserver".base_url =
+          "https://${config.services.matrix-synapse.settings.server_name}";
+        serverConfig = {
+          "m.server" = "${config.services.matrix-synapse.settings.server_name}:443";
+          "m.homeserver" = {
+            "base_url" = "https://${config.services.matrix-synapse.settings.server_name}";
+          };
+        };
+        mkWellKnown = data: ''
+          default_type application/json;
+          add_header Access-Control-Allow-Origin *;
+          return 200 '${builtins.toJSON data}';
+        '';
+      in
+      {
+        enableACME = true;
+        forceSSL = true;
+
+        locations."/_synapse/client".proxyPass = "http://[::1]:8008";
+        locations."/_matrix" = {
+          proxyPass = "http://127.0.0.1:8008";
+          extraConfig = ''
+            proxy_hide_header Access-Control-Allow-Origin;
+            add_header Access-Control-Allow-Origin *;
+          '';
+        };
+
+        locations."= /.well-known/matrix/server".extraConfig = mkWellKnown serverConfig;
+        locations."= /.well-known/matrix/client".extraConfig = mkWellKnown clientConfig;
+        /*
+          locations."/.well-known/matrix/server" = {
+            return = ''
+              200 "{\"m.server\":\"${config.services.matrix-synapse.settings.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://${config.services.matrix-synapse.settings.server_name}\"}}"'';
+          };
+        */
+        locations."=/cow.txt" = {
+          alias = theCow;
         };
       };
-      mkWellKnown = data: ''
-        default_type application/json;
-        add_header Access-Control-Allow-Origin *;
-        return 200 '${builtins.toJSON data}';
-      '';
-    in {
-      enableACME = true;
-      forceSSL = true;
-
-      locations."/_synapse/client".proxyPass = "http://[::1]:8008";
-      locations."/_matrix" = {
-        proxyPass = "http://127.0.0.1:8008";
-        extraConfig = ''
-          proxy_hide_header Access-Control-Allow-Origin;
-          add_header Access-Control-Allow-Origin *;
-        '';
-      };
-
-      locations."= /.well-known/matrix/server".extraConfig =
-        mkWellKnown serverConfig;
-      locations."= /.well-known/matrix/client".extraConfig =
-        mkWellKnown clientConfig;
-      /* locations."/.well-known/matrix/server" = {
-           return = ''
-             200 "{\"m.server\":\"${config.services.matrix-synapse.settings.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://${config.services.matrix-synapse.settings.server_name}\"}}"'';
-         };
-      */
-      locations."=/cow.txt" = {
-        alias = theCow;
-      };
-    };
     "matrix.${config.services.matrix-synapse.settings.server_name}" = {
       enableACME = true;
       forceSSL = true;
@@ -748,30 +807,31 @@ in
         alias = theCow;
       };
     };
-    /* ${config.services.dendrite.settings.global.server_name} = {
-         enableACME = true;
-         forceSSL = true;
-         locations = {
-           "/.well-known/matrix/server".return = ''
-             200 "{\"m.server\":\"matrix.${config.services.dendrite.settings.global.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
-           '';
-           "/.well-known/matrix/client".return = ''
-             200 "{\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
-           '';
-         };
-       };
-       "matrix.${config.services.dendrite.settings.global.server_name}" = {
-         enableACME = true;
-         forceSSL = true;
-         locations = {
-           "/_matrix".proxyPass =
-             "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
-           "/_dendrite".proxyPass =
-             "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
-           "/_synapse".proxyPass =
-             "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
-         };
-       };
+    /*
+      ${config.services.dendrite.settings.global.server_name} = {
+        enableACME = true;
+        forceSSL = true;
+        locations = {
+          "/.well-known/matrix/server".return = ''
+            200 "{\"m.server\":\"matrix.${config.services.dendrite.settings.global.server_name}:443\",\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
+          '';
+          "/.well-known/matrix/client".return = ''
+            200 "{\"m.homeserver\":{\"base_url\":\"https://matrix.${config.services.dendrite.settings.global.server_name}\"}}"
+          '';
+        };
+      };
+      "matrix.${config.services.dendrite.settings.global.server_name}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations = {
+          "/_matrix".proxyPass =
+            "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
+          "/_dendrite".proxyPass =
+            "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
+          "/_synapse".proxyPass =
+            "http://127.0.0.1:${toString config.services.dendrite.httpPort}";
+        };
+      };
     */
     "rower.zajeba.li" = {
       enableACME = true;
@@ -804,24 +864,27 @@ in
       };
     };
   };
-  security.acme.certs = let
-    cloudflareDefaults = {
-      extraDomainNames = lib.mkForce [ ];
-      dnsProvider = "cloudflare";
-      webroot = lib.mkForce null;
-      credentialFiles = {
-        CLOUDFLARE_DNS_API_TOKEN_FILE =
-          config.age.secrets.acmeZorigamiZajebaLi.path;
+  security.acme.certs =
+    let
+      cloudflareDefaults = {
+        extraDomainNames = lib.mkForce [ ];
+        dnsProvider = "cloudflare";
+        webroot = lib.mkForce null;
+        credentialFiles = {
+          CLOUDFLARE_DNS_API_TOKEN_FILE = config.age.secrets.acmeZorigamiZajebaLi.path;
+        };
       };
+    in
+    {
+      "wildcard.zajeba.li" = {
+        domain = "*.zajeba.li";
+      }
+      // cloudflareDefaults;
+      "wildcard.nie.zajeba.li" = {
+        domain = "*.nie.zajeba.li";
+      }
+      // cloudflareDefaults;
     };
-  in {
-    "wildcard.zajeba.li" = {
-      domain = "*.zajeba.li";
-    } // cloudflareDefaults;
-    "wildcard.nie.zajeba.li" = {
-      domain = "*.nie.zajeba.li";
-    } // cloudflareDefaults;
-  };
 
   services.oidentd.enable = true;
 
@@ -856,7 +919,9 @@ in
 
   virtualisation.libvirtd.enable = true;
 
-  users.groups.domi = { gid = 1004; };
+  users.groups.domi = {
+    gid = 1004;
+  };
   users.users.domi = {
     isNormalUser = true;
     uid = 1004;
@@ -868,7 +933,9 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIImhJ+2pw5c1Tzx/g+S04on5bUXhwzloqRaiXti5UC7A domi@zork"
     ];
   };
-  users.groups.linus = { gid = 1005; };
+  users.groups.linus = {
+    gid = 1005;
+  };
   users.users.linus = {
     isNormalUser = true;
     uid = 1005;
@@ -883,7 +950,9 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICr7oqFHkwPMV67PhjdLomvcfdQfZ4W+KncQ86ywjtrt Termius@iPhone"
     ];
   };
-  users.groups.elly = { gid = 1006; };
+  users.groups.elly = {
+    gid = 1006;
+  };
   users.users.elly = {
     isNormalUser = true;
     uid = 1006;
@@ -894,7 +963,9 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIh3CBzyn8Ww6RAq8vDwYiGSN3pCBoK5iqCHxIWh30Ti"
     ];
   };
-  users.groups.mei = { gid = 1007; };
+  users.groups.mei = {
+    gid = 1007;
+  };
   users.users.mei = {
     isNormalUser = true;
     uid = 1007;

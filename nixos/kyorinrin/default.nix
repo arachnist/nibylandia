@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 
 let
   pkgsOld = inputs.nixpkgsOld.legacyPackages.x86_64-linux;
@@ -28,38 +33,44 @@ in
   virtualisation.docker.enable = true;
   virtualisation.waydroid.enable = true;
 
-  networking.firewall.allowedTCPPorts = [ 8000 8080 ];
+  networking.firewall.allowedTCPPorts = [
+    8000
+    8080
+  ];
   hardware.sensor.iio.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    maliit-keyboard
-    maliit-framework
-    kdePackages.plasma-keyboard
+  environment.systemPackages =
+    with pkgs;
+    [
+      maliit-keyboard
+      maliit-framework
+      kdePackages.plasma-keyboard
 
-    iio-sensor-proxy
-    xournalpp
+      iio-sensor-proxy
+      xournalpp
 
-    # pkgs.comfyuiPackages.rocm.comfyui-with-extensions
+      # pkgs.comfyuiPackages.rocm.comfyui-with-extensions
 
-    woeusb-ng
-    ntfs3g
+      woeusb-ng
+      ntfs3g
 
-    bison
-    flex
-    fontforge
-    makeWrapper
-    pkg-config
-    gnumake
-    gcc
-    libiconv
-    autoconf
-    automake
-    libtool
+      bison
+      flex
+      fontforge
+      makeWrapper
+      pkg-config
+      gnumake
+      gcc
+      libiconv
+      autoconf
+      automake
+      libtool
 
-    krita
-  ] ++ (with pkgsOld; [
-    # krita
-  ]);
+      krita
+    ]
+    ++ (with pkgsOld; [
+      # krita
+    ]);
 
   services.displayManager.sddm.settings.Fingerprintlogin = {
     Session = "plasma";

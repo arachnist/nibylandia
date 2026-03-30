@@ -1,7 +1,16 @@
-{ stdenvNoCC, yarn-berry, cacert, src, hash, }:
+{
+  stdenvNoCC,
+  yarn-berry,
+  cacert,
+  src,
+  hash,
+}:
 stdenvNoCC.mkDerivation {
   name = "yarn-deps";
-  nativeBuildInputs = [ yarn-berry cacert ];
+  nativeBuildInputs = [
+    yarn-berry
+    cacert
+  ];
   inherit src;
 
   dontInstall = true;

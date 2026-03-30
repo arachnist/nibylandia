@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
@@ -50,8 +54,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description =
-      "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";
+    description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";
     homepage = "https://github.com/RPi-Distro/firmware-nonfree";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;

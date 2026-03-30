@@ -17,7 +17,11 @@
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
 
-  networking.firewall.allowedTCPPorts = [ 8000 8080 8188 ];
+  networking.firewall.allowedTCPPorts = [
+    8000
+    8080
+    8188
+  ];
 
   # nixpkgs.overlays = [ inputs.nix-comfyui.overlays.default ];
 

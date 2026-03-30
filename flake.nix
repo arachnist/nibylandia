@@ -34,15 +34,26 @@
     raspberry-pi-nix.url = "github:nix-community/raspberry-pi-nix";
   };
 
-  outputs = { self, nixpkgs, deploy-rs, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      deploy-rs,
+      ...
+    }@inputs:
     let
-      systems = [ "x86_64-linux" "aarch64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
-      pkgsForDeploy =
-        forAllSystems (system: import nixpkgs { inherit system; });
-      deployPkgs = forAllSystems (system:
-        let pkgs = pkgsForDeploy.${system};
-        in import nixpkgs {
+      pkgsForDeploy = forAllSystems (system: import nixpkgs { inherit system; });
+      deployPkgs = forAllSystems (
+        system:
+        let
+          pkgs = pkgsForDeploy.${system};
+        in
+        import nixpkgs {
           inherit system;
           overlays = [
             deploy-rs.overlay
@@ -53,11 +64,14 @@
               };
             })
           ];
-        });
+        }
+      );
       inherit (nixpkgs) lib;
       meta = import ./meta.nix;
-    in {
-      formatter = forAllSystems (system:
+    in
+    {
+      formatter = forAllSystems (
+        system:
         inputs.nix-formatter-pack.lib.mkFormatter {
           inherit nixpkgs system;
 
@@ -72,16 +86,20 @@
               nixfmt.enable = true;
             };
           };
-        });
+        }
+      );
 
       overlays = import ./overlays;
 
-      nixosModules = lib.mapAttrs' (name: value:
+      nixosModules = lib.mapAttrs' (
+        name: value:
         lib.nameValuePair (builtins.replaceStrings [ ".nix" ] [ "" ] name) {
           imports = [ (./modules/. + "/${name}") ];
-        }) (builtins.readDir ./modules);
+        }
+      ) (builtins.readDir ./modules);
 
-      nixosConfigurations = builtins.mapAttrs (name: value:
+      nixosConfigurations = builtins.mapAttrs (
+        name: value:
         nixpkgs.lib.nixosSystem {
           inherit (value) system;
           modules = [
@@ -92,7 +110,8 @@
           ];
           extraModules = [ inputs.colmena.nixosModules.deploymentOptions ];
           specialArgs = { inherit inputs; };
-        }) meta.hosts;
+        }
+      ) meta.hosts;
 
       deploy.nodes = builtins.mapAttrs (name: value: {
         fastConnection = false;
@@ -101,27 +120,23 @@
         profiles.system = {
           user = "root";
           sshUser = "root";
-          path =
-            deployPkgs.${value.config.nixpkgs.system}.deploy-rs.lib.activate.nixos
-            value;
+          path = deployPkgs.${value.config.nixpkgs.system}.deploy-rs.lib.activate.nixos value;
         };
       }) self.nixosConfigurations;
 
       colmena = {
         meta = {
           nixpkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
-          nodeSpecialArgs = builtins.mapAttrs (_: v: v._module.specialArgs)
-            self.nixosConfigurations;
+          nodeSpecialArgs = builtins.mapAttrs (_: v: v._module.specialArgs) self.nixosConfigurations;
           specialArgs.lib = lib;
         };
-      } // builtins.mapAttrs (_: v: { imports = v._module.args.modules; })
-        self.nixosConfigurations;
+      }
+      // builtins.mapAttrs (_: v: { imports = v._module.args.modules; }) self.nixosConfigurations;
 
       packages = forAllSystems (system: {
-        orca-slicer = (nixpkgs.legacyPackages.${system}.extend (f: p: (import ./overlays/nibylandia.nix) f p)).orca-slicer;
+        inherit ((nixpkgs.legacyPackages.${system}.extend (f: p: (import ./overlays/nibylandia.nix) f p))) orca-slicer;
       });
 
-      checks = builtins.mapAttrs
-        (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 }

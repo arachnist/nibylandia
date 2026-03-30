@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchzip, ... }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  ...
+}:
 
 stdenv.mkDerivation {
   pname = "sound-theme-undertunes";

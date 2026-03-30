@@ -1,7 +1,15 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
-let meta = import ../meta.nix;
-in {
+let
+  meta = import ../meta.nix;
+in
+{
   imports = with inputs; [
     agenix.nixosModules.default
 
@@ -17,8 +25,10 @@ in {
 
   age.secrets.nix-store.file = ../secrets/nix-store.age;
 
-  boot.binfmt.emulatedSystems =
-    lib.lists.remove pkgs.system [ "x86_64-linux" "aarch64-linux" ];
+  boot.binfmt.emulatedSystems = lib.lists.remove pkgs.system [
+    "x86_64-linux"
+    "aarch64-linux"
+  ];
   programs.command-not-found.enable = false;
   system.stateVersion = "23.11";
   services.openssh = {
@@ -58,29 +68,37 @@ in {
     openFirewall = true;
     useRoutingFeatures = lib.mkDefault "client";
     permitCertUid = "ar";
-    package = (pkgs.tailscale.overrideAttrs { doCheck = false; });
+    package = pkgs.tailscale.overrideAttrs { doCheck = false; };
   };
 
-  deployment.targetHost =
-    lib.mkDefault meta.hosts.${config.networking.hostName}.targetHost;
+  deployment.targetHost = lib.mkDefault meta.hosts.${config.networking.hostName}.targetHost;
 
   nix = {
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
     settings = {
-      trusted-users = [ "ar" "root" ];
-      substituters = (if config.networking.hostName != "scylla" then
-        [
-          "ssh://nix-ssh@scylla.tail412c1.ts.net?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
-        ]
-      else
-        [ ]) ++ (if config.networking.hostName != "zorigami" then
-          [
-            "ssh://nix-ssh@zorigami.tail412c1.ts.net?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
-          ]
-        else
-          [ ]);
+      trusted-users = [
+        "ar"
+        "root"
+      ];
+      substituters =
+        (
+          if config.networking.hostName != "scylla" then
+            [
+              "ssh://nix-ssh@scylla.tail412c1.ts.net?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
+            ]
+          else
+            [ ]
+        )
+        ++ (
+          if config.networking.hostName != "zorigami" then
+            [
+              "ssh://nix-ssh@zorigami.tail412c1.ts.net?trusted=1&ssh-key=${config.age.secrets.nix-store.path}"
+            ]
+          else
+            [ ]
+        );
       trusted-substituters = config.nix.settings.substituters;
     };
   };
@@ -137,7 +155,9 @@ in {
 
   users.defaultUserShell = pkgs.zsh;
 
-  users.groups.ar = { gid = 1000; };
+  users.groups.ar = {
+    gid = 1000;
+  };
   users.users.ar = {
     isNormalUser = true;
     uid = 1000;
@@ -187,9 +207,11 @@ in {
         DHCPServer = true;
         IPv6SendRA = true;
       };
-      addresses =
-        [ { Address = "10.0.0.1/24"; } { Address = "fd12:3456:789a::1/64"; } ];
-      ipv6Prefixes = [{ Prefix = "fd12:3456:789a::/64"; }];
+      addresses = [
+        { Address = "10.0.0.1/24"; }
+        { Address = "fd12:3456:789a::1/64"; }
+      ];
+      ipv6Prefixes = [ { Prefix = "fd12:3456:789a::/64"; } ];
     };
   };
 
