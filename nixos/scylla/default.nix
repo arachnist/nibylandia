@@ -381,6 +381,7 @@ in {
     listenOn = [ "192.168.20.1" "192.168.24.1" ];
     forwarders = [ "8.8.8.8" "1.1.1.1" "8.8.4.4" "1.0.0.1" ];
     cacheNetworks = [ "192.168.20.0/24" "192.168.24.0/24" ];
+    checkConfig = false;
     zones = {
       "nibylandia.lan" = {
         master = true;
