@@ -17,6 +17,7 @@ in
   ];
 
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+  nix.package = pkgs.lixPackageSets.stable.lix;
 
   deployment = {
     allowLocalDeployment = true;
