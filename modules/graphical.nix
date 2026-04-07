@@ -278,7 +278,44 @@ in
     # krita
     vlc
     libreoffice-qt6
-    freecad
+
+    (freecad.customize {
+      pythons = [
+        (
+          ps: with ps; [
+            ezdxf
+            networkx
+            olefile
+            xlrd
+            xlwt
+            (buildPythonPackage rec {
+              pname = "xlutils";
+              version = "2.0.0";
+              pyproject = true;
+
+              src = fetchPypi {
+                inherit pname version;
+                hash = "sha256-fg4sIzvRhf7PXivT9OlGnKSjvYfaZMgs/lsq8n5/nlQ=";
+              };
+
+              build-system = [
+                setuptools
+              ];
+
+              dependencies = [
+                xlrd
+                xlwt
+              ];
+
+              doCheck = false;
+
+              pythonImportsCheck = [ "xlutils" ];
+            })
+          ]
+        )
+      ];
+    })
+
     fastfetch
     wprs
 

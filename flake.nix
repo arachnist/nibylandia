@@ -133,10 +133,6 @@
       }
       // builtins.mapAttrs (_: v: { imports = v._module.args.modules; }) self.nixosConfigurations;
 
-      packages = forAllSystems (system: {
-        inherit ((nixpkgs.legacyPackages.${system}.extend (f: p: (import ./overlays/nibylandia.nix) f p))) orca-slicer;
-      });
-
       checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 }
