@@ -29,13 +29,17 @@ let
         ''
     ) { };
 
-  dn42_roa_update = pkgs.writeShellScriptBin "dn42_roa_update" ''
-    mkdir -p /etc/bird/
-    ${pkgs.curl}/bin/curl -sfSLR {-o,-z}/etc/bird/roa_dn42_v6.conf https://dn42.burble.com/roa/dn42_roa_bird2_6.conf
-    ${pkgs.curl}/bin/curl -sfSLR {-o,-z}/etc/bird/roa_dn42.conf https://dn42.burble.com/roa/dn42_roa_bird2_4.conf
-    ${pkgs.bird3}/bin/birdc c
-    ${pkgs.bird3}/bin/birdc reload in all
-  '';
+  dn42_roa_update =
+    let
+      bird = config.services.bird.package;
+    in
+    pkgs.writeShellScriptBin "dn42_roa_update" ''
+      mkdir -p /etc/bird/
+      ${pkgs.curl}/bin/curl -sfSLR {-o,-z}/etc/bird/roa_dn42_v6.conf https://dn42.burble.com/roa/dn42_roa_bird2_6.conf
+      ${pkgs.curl}/bin/curl -sfSLR {-o,-z}/etc/bird/roa_dn42.conf https://dn42.burble.com/roa/dn42_roa_bird2_4.conf
+      ${bird}/bin/birdc c
+      ${bird}/bin/birdc reload in all
+    '';
   pub_ip4 = "176.241.241.177";
 in
 {
