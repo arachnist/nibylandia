@@ -194,6 +194,10 @@ in
       }
     ];
     extraConfigFiles = [ "/var/lib/secrets/matrix/extraconfig" ];
+    log = {
+      root.level = "DEBUG";
+      loggers."synapse.storage.SQL".level = "INFO";
+    };
   };
 
   services.nginx = {
