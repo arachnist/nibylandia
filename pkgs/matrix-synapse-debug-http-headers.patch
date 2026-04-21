@@ -1,0 +1,19 @@
+diff --git a/synapse/http/matrixfederationclient.py b/synapse/http/matrixfederationclient.py
+index dbd4f1e4b6..b9562da073 100644
+--- a/synapse/http/matrixfederationclient.py
++++ b/synapse/http/matrixfederationclient.py
+@@ -704,12 +704,13 @@ class MatrixFederationHttpClient:
+                     headers_dict[b"Authorization"] = auth_headers
+ 
+                     logger.debug(
+-                        "{%s} [%s] Sending request: %s %s; timeout %fs",
++                        "{%s} [%s] Sending request: %s %s; timeout %fs; headers: %s",
+                         request.txn_id,
+                         request.destination,
+                         request.method,
+                         url_str,
+                         _sec_timeout,
++                        headers_dict,
+                     )
+ 
+                     outgoing_requests_counter.labels(
