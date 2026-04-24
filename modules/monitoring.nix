@@ -46,6 +46,7 @@ let
           !builtins.elem name [
             "minio"
             "tor"
+            "rspamd"
           ]
         )
         && builtins.typeOf v == "set"

@@ -374,9 +374,6 @@ in
       "vaultwarden@is-a.cat".hashedPasswordFile = config.age.secrets.vaultwardenMail.path;
     };
   };
-  services.dovecot2 = {
-    sieve.extensions = [ "fileinto" ];
-  };
 
   # is-a.cat
   services.matrix-synapse = {

@@ -18,7 +18,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     simple-nixos-mailserver = {
-      url = "gitlab:simple-nixos-mailserver/nixos-mailserver?ref=master";
+      url = "gitlab:simple-nixos-mailserver/nixos-mailserver?ref=main";
       # url = "github:arachnist/nixos-mailserver";
       # inputs.nixpkgs.follows = "nixpkgs";
     };
