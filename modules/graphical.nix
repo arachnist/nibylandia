@@ -288,6 +288,7 @@ in
             olefile
             xlrd
             xlwt
+            gitpython
             (buildPythonPackage rec {
               pname = "xlutils";
               version = "2.0.0";
