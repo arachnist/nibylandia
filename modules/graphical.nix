@@ -289,6 +289,7 @@ in
             xlrd
             xlwt
             gitpython
+            requests
             (buildPythonPackage rec {
               pname = "xlutils";
               version = "2.0.0";
