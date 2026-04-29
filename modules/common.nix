@@ -26,6 +26,10 @@ in
 
   age.secrets.nix-store.file = ../secrets/nix-store.age;
 
+  boot.extraModprobeConfig = ''
+    install algif_aead /bin/false
+  '';
+
   boot.binfmt.emulatedSystems = lib.lists.remove pkgs.system [
     "x86_64-linux"
     "aarch64-linux"

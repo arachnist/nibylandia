@@ -226,24 +226,24 @@ in
     };
   };
 
-  systemd.services.minecraft-overviewer = {
-    script = ''
-      ${pkgs.minecraft-overviewer}/bin/overviewer.py -p 12 -c "/srv/minecraft-overviewer/survival/config.py"
-      ${pkgs.minecraft-overviewer}/bin/overviewer.py -p 12 -c "/srv/minecraft-overviewer/survival/config.py" --genpoi
-    '';
-    serviceConfig = {
-      User = "minecraft";
-      Group = "users";
-      ProtectHome = "no";
-    };
-  };
-
-  systemd.timers.minecraft-overviewer = {
-    wantedBy = [ "multi-user.target" ];
-    timerConfig = {
-      OnCalendar = "hourly";
-    };
-  };
+  # systemd.services.minecraft-overviewer = {
+  #   script = ''
+  #     ${pkgs.minecraft-overviewer}/bin/overviewer.py -p 12 -c "/srv/minecraft-overviewer/survival/config.py"
+  #     ${pkgs.minecraft-overviewer}/bin/overviewer.py -p 12 -c "/srv/minecraft-overviewer/survival/config.py" --genpoi
+  #   '';
+  #   serviceConfig = {
+  #     User = "minecraft";
+  #     Group = "users";
+  #     ProtectHome = "no";
+  #   };
+  # };
+  #
+  # systemd.timers.minecraft-overviewer = {
+  #   wantedBy = [ "multi-user.target" ];
+  #   timerConfig = {
+  #     OnCalendar = "hourly";
+  #   };
+  # };
 
   systemd.timers.minecraft-backup = {
     wantedBy = [ "multi-user.target" ];
