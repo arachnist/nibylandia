@@ -25,6 +25,9 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages;
 
+  # FIXME: remove before next planned reboot
+  services.dbus.implementation = "dbus";
+
   age.secrets.cassAuth = {
     file = ../../secrets/cassAuth.age;
     group = "nginx";
