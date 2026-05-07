@@ -31,7 +31,6 @@ in
     "esp4"
     "esp6"
     "rxrpc"
-    "xfrm_user"
   ];
 
   boot.binfmt.emulatedSystems = lib.lists.remove pkgs.system [
