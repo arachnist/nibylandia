@@ -570,6 +570,7 @@ in
     "net.ipv6.conf.default.accept_ra" = false;
     "net.ipv4.conf.all.forwarding" = true;
     "net.ipv6.conf.all.forwarding" = true;
+    "kernel.modules_disabled" = true;
   };
   networking.wireguard.interfaces = {
     wg-nibylandia = {
