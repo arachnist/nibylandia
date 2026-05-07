@@ -26,13 +26,13 @@ in
 
   age.secrets.nix-store.file = ../secrets/nix-store.age;
 
-  boot.extraModprobeConfig = ''
-    install algif_aead /bin/false
-    install esp4 /bin/false
-    install esp6 /bin/false
-    install rxrpc /bin/false
-    install xfrm_user /bin/false
-  '';
+  boot.extraModprobeConfig = lib.concatMapStringsSep "\n" (x: "install ${x} /bin/false") [
+    "algif_aead"
+    "esp4"
+    "esp6"
+    "rxrpc"
+    "xfrm_user"
+  ];
 
   boot.binfmt.emulatedSystems = lib.lists.remove pkgs.system [
     "x86_64-linux"
