@@ -28,6 +28,10 @@ in
 
   boot.extraModprobeConfig = ''
     install algif_aead /bin/false
+    install esp4 /bin/false
+    install esp6 /bin/false
+    install rxrpc /bin/false
+    install xfrm_user /bin/false
   '';
 
   boot.binfmt.emulatedSystems = lib.lists.remove pkgs.system [
