@@ -32,6 +32,7 @@ in
     "esp6"
     "rxrpc"
     "authencesn"
+    "rds"
   ];
 
   boot.binfmt.emulatedSystems = lib.lists.remove pkgs.system [
