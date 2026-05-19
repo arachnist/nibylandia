@@ -33,6 +33,7 @@ in
     "rxrpc"
     "authencesn"
     "rds"
+    "rds_tcp"
   ];
 
   boot.binfmt.emulatedSystems = lib.lists.remove pkgs.system [
