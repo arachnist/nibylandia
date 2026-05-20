@@ -895,7 +895,6 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    john
     restic
     weechat
     rust-synapse-compress-state

@@ -1,10 +1,16 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p curl jq coreutils nix-prefetch-github gnused cacert bundix yarn-berry_4.yarn-berry-fetcher 'callPackage ../nix-from-pr { }'
+#! nix-shell -i bash -p curl jq coreutils nix-prefetch-github gnused cacert bundix yarn-berry_4.yarn-berry-fetcher
+
+# 'callPackage ../nix-from-pr { }'
 
 set -e
 set -x
 
+echo bla
+
 cd "$(dirname "$0")"
+
+echo getting commit it
 
 commit="$(curl -SsL "${1:-https://api.github.com/repos/arachnist/mastodon/branches/meow-mfm}")"
 rev="$(jq -r '.commit.sha' <<<"$commit")"
