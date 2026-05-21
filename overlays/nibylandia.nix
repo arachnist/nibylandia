@@ -23,7 +23,7 @@ in
         ${file-post-patch}
               ${tl-replacer}/tl-replacer ${tl-replacer}/tl-replacer.yaml
       '';
-      inherit (emoji-reactions) patches;
+      # inherit (emoji-reactions) patches;
     };
   nix-from-pr = super.callPackage ../pkgs/nix-from-pr { };
 

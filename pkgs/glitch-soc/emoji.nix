@@ -156,7 +156,7 @@
     {
       src = fetchurl {
         url =
-          "https://github.com/glitch-soc/mastodon/raw/24610d88aee07b72290d6030e03af7d21acfb6ef/app%2Fjavascript%2Fimages%2Fmailer-new%2Fheading%2Freaction.png";
+          "https://github.com/glitch-soc/mastodon/raw/59d198a05a647f2a14bb41d6da61c75f0ce875b0/app%2Fjavascript%2Fimages%2Fmailer-new%2Fheading%2Freaction.png";
         hash = "sha256-6W6+HHk+FBtt4jXgYjBox52FrBtFw7NN1W918BD2kSE=";
       };
       name = "app/javascript/images/mailer-new/heading/reaction.png";
@@ -164,7 +164,7 @@
     {
       src = fetchurl {
         url =
-          "https://github.com/glitch-soc/mastodon/raw/24610d88aee07b72290d6030e03af7d21acfb6ef/app%2Fjavascript%2Fimages%2Fmailer%2Ficon_add.png";
+          "https://github.com/glitch-soc/mastodon/raw/59d198a05a647f2a14bb41d6da61c75f0ce875b0/app%2Fjavascript%2Fimages%2Fmailer%2Ficon_add.png";
         hash = "sha256-UYDdj5GKsg1cfVTx04hwsEURk6iKZfQCMAA2UFT0SJA=";
       };
       name = "app/javascript/images/mailer/icon_add.png";
