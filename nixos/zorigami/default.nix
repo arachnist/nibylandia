@@ -864,6 +864,16 @@ in
         alias = theCow;
       };
     };
+    "there.is-a.cat" = {
+      enableACME = true;
+      forceSSL = true;
+
+      root = "/srv/www/there.is-a.cat";
+
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
+    };
   };
   security.acme.certs =
     let
