@@ -338,7 +338,7 @@ in
 
   mailserver = {
     enable = true;
-    stateVersion = 3;
+    stateVersion = 5;
     fqdn = "is-a.cat";
     domains = [
       "is-a.cat"
@@ -351,9 +351,6 @@ in
       memoryLimit = 2000;
     };
     localDnsResolver = false;
-    monitoring.enable = false;
-    borgbackup.enable = false;
-    backup.enable = false;
     messageSizeLimit = 41943040;
     x509.useACMEHost = "is-a.cat";
     accounts = {
