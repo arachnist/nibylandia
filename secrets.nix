@@ -122,4 +122,7 @@ in
   "secrets/factorio-server-password-zorigami.age".publicKeys = meta.users.ar ++ [
     meta.hosts.zorigami.publicKey
   ];
+  "secrets/linkding-env-zorigami.age".publicKeys = meta.users.ar ++ [
+    meta.hosts.zorigami.publicKey
+  ];
 }

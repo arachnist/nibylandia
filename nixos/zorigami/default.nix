@@ -894,6 +894,27 @@ in
       // cloudflareDefaults;
     };
 
+  age.secrets.linkdingenv.file = ../../secrets/linkding-env-zorigami.age;
+  services.linkding = {
+    enable = true;
+    database = {
+      type = "postgres";
+      createLocally = true;
+    };
+    settings.LD_CSRF_TRUSTED_ORIGINS = "https://links.of-a.cat";
+    environmentFile = config.age.secrets.linkdingenv.path;
+  };
+  services.nginx.virtualHosts."links.of-a.cat" = {
+    quic = true;
+    http3 = true;
+    forceSSL = true;
+    enableACME = true;
+    locations."/" = {
+      recommendedProxySettings = true;
+      proxyPass = with config.services.linkding; "http://${address}:${toString port}";
+    };
+  };
+
   services.oidentd.enable = true;
 
   programs.java = {
