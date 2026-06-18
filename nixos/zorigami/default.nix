@@ -11,7 +11,7 @@ let
 in
 {
   imports = [
-    inputs.simple-nixos-mailserver.nixosModule
+    inputs.simple-nixos-mailserver.nixosModules.mailserver
   ]
   ++ (with inputs.self.nixosModules; [
     common
@@ -905,8 +905,8 @@ in
     environmentFile = config.age.secrets.linkdingenv.path;
   };
   services.nginx.virtualHosts."links.of-a.cat" = {
-    quic = true;
-    http3 = true;
+    quic = false;
+    http3 = false;
     forceSSL = true;
     enableACME = true;
     locations."/" = {
