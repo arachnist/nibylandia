@@ -53,5 +53,8 @@ in
   ];
   boot.kernelPackages = latestKernelPackage;
 
-  virtualisation.waydroid.enable = true;
+  virtualisation.waydroid = {
+    enable = true;
+    package = pkgs.waydroid-nftables;
+  };
 }
