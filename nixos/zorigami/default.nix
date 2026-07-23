@@ -871,6 +871,26 @@ in
         alias = theCow;
       };
     };
+    "hswaw.pl" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        return = "301 https://hackerspace.pl/";
+      };
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
+    };
+    "hackerspacebydgoszcz.pl" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        return = "302 https://hsbdg.pl/";
+      };
+      locations."=/cow.txt" = {
+        alias = theCow;
+      };
+    };
   };
   security.acme.certs =
     let
