@@ -12,7 +12,7 @@ cd "$(dirname "$0")"
 
 echo getting commit it
 
-commit="$(curl -SsL "${1:-https://api.github.com/repos/arachnist/mastodon/branches/meow-mfm}")"
+commit="$(curl -SsL "${1:-https://api.github.com/repos/arachnist/mastodon/branches/meow-mfm-test}")"
 rev="$(jq -r '.commit.sha' <<<"$commit")"
 date="$(jq -r '.commit.commit.committer.date' <<<"$commit")"
 date="$(date --date="$date" --iso-8601=date)"
