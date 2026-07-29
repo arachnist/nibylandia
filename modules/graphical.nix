@@ -259,7 +259,8 @@ in
     floorp-bin
     imagemagick
     inkscape
-    nixfmt-classic
+    nixfmt
+    nixfmt-tree
     paprefs
     pavucontrol
     solvespace
