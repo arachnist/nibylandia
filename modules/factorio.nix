@@ -16,8 +16,8 @@
       (pkgs.stdenv.mkDerivation {
         name = "the-mines-mod-collection";
         src = fetchTarball {
-          url = "https://ar.is-a.cat/c/0799b5d91fc28cdbc1ed0a2a3c9c3fb3964040c4.tar";
-          sha256 = "sha256:135r47gvac59vlmqikhf87i27whb85qp3wc1bkd34yjwxdv321z4";
+          url = "https://ar.is-a.cat/c/fc6d082331fdd22165c8877e8c0d826c95a151ac.tar";
+          sha256 = "sha256:1lh2n48fw6p6073pdj7qm65604rihfrkds0kb346xjps4p2wj2c2";
         };
         deps = [ ];
         installPhase = ''
