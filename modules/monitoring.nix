@@ -183,7 +183,12 @@ in
         job_name = "hswaw_klipper";
         scrape_interval = "5s";
         metrics_path = "/metrics/klipper/probe";
-        static_configs = [ { targets = [ "inari.waw.hackerspace.pl" ]; } ];
+        static_configs = [ {
+          targets = [
+            "sovol.waw.hackerspace.pl"
+            "voron.waw.hackerspace.pl"
+          ];
+        } ];
         params.modules = [
           "process_stats"
           "job_queue"
