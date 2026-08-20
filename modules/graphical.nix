@@ -444,13 +444,7 @@ in
     networkmanager-openvpn
   ];
 
-  services.lact = {
-    enable = true;
-    package = pkgs.lact.override {
-      libdisplay-info = pkgs.libdisplay-info_0_2;
-    };
-  };
-
+  services.lact.enable = true;
   hardware.keyboard.zsa.enable = true;
 
   services.udev.packages = [
