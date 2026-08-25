@@ -44,14 +44,7 @@ in
     8080
   ];
 
-  # boot.kernelModules = [ "zfs" ];
-  environment.systemPackages = with pkgs; [
-    zfs
-  ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    zfs_unstable
-  ];
-  boot.kernelPackages = latestKernelPackage;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   virtualisation.waydroid = {
     enable = true;
