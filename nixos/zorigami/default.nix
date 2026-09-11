@@ -1025,4 +1025,10 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKKXXhLmJelCYIYW8iAPzrrZsRuOLdbOp5BFFnmszPJc mei@zork"
     ];
   };
+  users.users.radex = {
+    isNormalUser = true;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOccFr7RFddSB5kdvYCIdCyKgD3X79mC90cMImqziTd9 radex"
+    ];
+  };
 }
