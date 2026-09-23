@@ -202,12 +202,14 @@ in
 
   nixpkgs.overlays = [
     (self: super: {
+    /*
       matrix-synapse-unwrapped = super.matrix-synapse-unwrapped.overrideAttrs (o: {
         patches = (o.patches or []) ++ [
           ../../pkgs/matrix-synapse-debug-http-headers.patch
         ];
         doCheck = false;
       });
+    */
     })
   ];
 
