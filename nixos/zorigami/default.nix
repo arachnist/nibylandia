@@ -326,6 +326,9 @@ in
       name = "notbot";
       ensureDBOwnership = true;
     }
+    {
+      name = "radex";
+    }
   ];
   services.postgresql.authentication = ''
     host notbot notbot 100.64.0.0/10 scram-sha-256
