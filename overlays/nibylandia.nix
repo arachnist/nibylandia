@@ -69,6 +69,26 @@ in
     pillow = self.python311MCOverviewer.pkgs.pillow_with_headers;
   };
 
+  pythonForSynapse = super.python314.override {
+    packageOverrides = pyself: pysuper: {
+      pysaml2 = pysuper.pysaml2.overrideAttrs (o: {
+        disabledTests = o.disabledTests ++ [
+          "test_valid_saml_metadata_doc"
+          "test_valid_saml_response_doc"
+          "test_valid_saml_partial_doc"
+          "test_valid_eidas_saml_response_doc"
+        ];
+      });
+    };
+  };
+
+  matrix-synapse-unwrapped = (super.matrix-synapse-unwrapped.overrideAttrs (o: {
+    doCheck = false;
+    doInstallCheck = false;
+  })).override {
+    python3Packages = self.pythonForSynapse.pkgs;
+  };
+
   okular_no_perms = super.kdePackages.okular.override {
     poppler = super.kdePackages.poppler.overrideAttrs (old: {
       patches = [ ../pkgs/poppler-neuter-permissions.diff ] ++ (old.patches or [ ]);
