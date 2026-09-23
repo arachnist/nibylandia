@@ -114,7 +114,7 @@ in
         hosts = [
           "i.am-a.cat"
           "customs.waw.hackerspace.pl"
-          "edge01.waw.bgp.wtf"
+          "edge02.waw.bgp.wtf"
           "1.1.1.1"
           "185.236.240.143"
           "eos.hexi.co"
