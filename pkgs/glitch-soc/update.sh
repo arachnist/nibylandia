@@ -1,7 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p curl jq coreutils nix-prefetch-github gnused cacert bundix yarn-berry_4.yarn-berry-fetcher
-
-# 'callPackage ../nix-from-pr { }'
+#! nix-shell -i bash -p curl jq coreutils nix-prefetch-github gnused cacert bundix ('callPackage ../yarn-berry/package.nix { }').yarn-berry-fetcher ('callPackage ../nix-from-pr { }') ('callPackage ../nix-from-compare { }')
 
 set -e
 set -x
@@ -12,7 +10,7 @@ cd "$(dirname "$0")"
 
 echo getting commit it
 
-commit="$(curl -SsL "${1:-https://api.github.com/repos/arachnist/mastodon/branches/meow-mfm-test}")"
+commit="$(curl -SsL "${1:-https://api.github.com/repos/arachnist/mastodon/branches/meow-test}")"
 rev="$(jq -r '.commit.sha' <<<"$commit")"
 date="$(jq -r '.commit.commit.committer.date' <<<"$commit")"
 date="$(date --date="$date" --iso-8601=date)"
@@ -24,11 +22,12 @@ sed -i -Ee "s|^( *rev = )\".*\";|\\1\"$rev\";|g;" ./source.nix
 sed -i -Ee "s|^( *hash = )\".*\";|\\1\"$hash\";|g;" ./source.nix
 sed -i -Ee "s|^( *version = )\".*\";|\\1\"unstable-$date\";|g;" ./source.nix
 
-# nix-from-pr -o emoji.nix glitch-soc/mastodon 2462
+nix-from-pr -o emoji.nix glitch-soc/mastodon 2462
+# nix-from-compare -o mfm.nix glitch-soc/mastodon 999eagle:mastodon:mfm main
 
 echo "building source"
 # do this to make sure all patches are applied before generating the gemset
-srcdir="$(nix-build --no-out-link -E 'let pkgs = import <nixpkgs> {}; overlay = import ../../overlays/nibylandia.nix; in (overlay pkgs pkgs).glitch-soc.src')"
+srcdir="$(nix-build --no-out-link -E 'let pkgs = import <nixpkgs> { overlays = [ (import ../../overlays/nibylandia.nix) ]; }; overlay = import ../../overlays/nibylandia.nix; in (overlay pkgs pkgs).glitch-soc.src')"
 
 echo "creating gemset"
 rm -f gemset.nix

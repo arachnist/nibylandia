@@ -12,20 +12,28 @@ in
       emoji-reactions = import ../pkgs/glitch-soc/emoji.nix {
         inherit (super) fetchpatch2 fetchurl;
       };
+      mfm = import ../pkgs/glitch-soc/mfm.nix {
+        inherit (super) fetchpatch2 fetchurl;
+      };
       file-post-patch = lib.concatMapStringsSep "\n" (f: ''
         mkdir -p "$(dirname "${f.name}")"
         cp -f "${f.src}" "${f.name}"
-      '') emoji-reactions.files;
+      '') (emoji-reactions.files
+        #++ mfm.files
+      );
       tl-replacer = super.callPackage ../pkgs/glitch-soc/tl-replacer { };
     in
     self.callPackage ../pkgs/glitch-soc {
       srcPostPatch = ''
         ${file-post-patch}
-              ${tl-replacer}/tl-replacer ${tl-replacer}/tl-replacer.yaml
+        ${tl-replacer}/tl-replacer ${tl-replacer}/tl-replacer.yaml
       '';
-      # inherit (emoji-reactions) patches;
+      patches = emoji-reactions.patches
+      # ++ mfm.patches
+      ;
     };
   nix-from-pr = super.callPackage ../pkgs/nix-from-pr { };
+  nix-from-compare = super.callPackage ../pkgs/nix-from-compare { };
 
   python311MCOverviewer = super.python311.override {
     packageOverrides = pyself: pysuper: {
@@ -99,4 +107,6 @@ in
   sound-theme-undertunes = super.callPackage ../pkgs/sound-theme-undertunes.nix { };
 
   probe-rs-rules = super.callPackage ../pkgs/probe-rs-rules { };
+  
+  yarn-berry_4_18 = super.callPackage ../pkgs/yarn-berry/package.nix { };
 }

@@ -126,7 +126,9 @@
 
       colmena = {
         meta = {
-          nixpkgs = import inputs.nixpkgs { system = "x86_64-linux"; };
+          nixpkgs = import inputs.nixpkgs {
+            system = "x86_64-linux";
+          };
           nodeSpecialArgs = builtins.mapAttrs (_: v: v._module.specialArgs) self.nixosConfigurations;
           specialArgs.lib = lib;
         };

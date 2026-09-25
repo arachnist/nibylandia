@@ -2,6 +2,7 @@
   callPackage,
   patches ? [ ],
   srcPostPatch ? "",
+  yarn-berry_4_18,
   mastodon,
 }:
 let
@@ -15,17 +16,22 @@ let
   yarn-deps = callPackage ./yarn.nix {
     inherit src;
     hash = src.yarnHash;
+    yarn-berry = yarn-berry_4_18;
   };
 
   # this is mastodon built from the glitch source
   # modules are unpatched though
   glitch-1 = mastodon.override {
     pname = "glitch";
+    yarn-berry_4 = yarn-berry_4_18;
     srcOverride = src;
     gemset = ./. + "/gemset.nix";
   };
 
-  modules = callPackage ./modules.nix { inherit glitch-1 yarn-deps; };
+  modules = callPackage ./modules.nix {
+    inherit glitch-1 yarn-deps;
+    yarn-berry = yarn-berry_4_18;
+  };
 
   glitch-2 = glitch-1.overrideAttrs (old: {
     mastodonModules = modules;
