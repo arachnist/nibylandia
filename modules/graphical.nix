@@ -131,11 +131,14 @@ in
   services.libinput.enable = true;
   services.displayManager = {
     sddm = {
-      enable = true;
+      enable = false;
       wayland = {
         enable = true;
         compositor = "kwin";
       };
+    };
+    plasma-login-manager = {
+      enable = true;
     };
     defaultSession = "plasma";
   };
