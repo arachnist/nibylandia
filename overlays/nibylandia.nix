@@ -90,10 +90,26 @@ in
     };
   };
 
-  matrix-synapse-unwrapped = (super.matrix-synapse-unwrapped.overrideAttrs (o: {
+  matrix-synapse-unwrapped = let
+    pname = "matrix-synapse";
+    version = "1.162.0rc1";
+    src = super.fetchFromGitHub {
+      owner = "element-hq";
+      repo = "synapse";
+      rev = "v${version}";
+      hash = "sha256-/ektj+6lQvQfydmZ1axSKK9FyZr8VkiI5szWup6jC5w=";
+    };
+  in (super.matrix-synapse-unwrapped.overrideAttrs (o: {
     doCheck = false;
     doInstallCheck = false;
-  })).override {
+  } // (if (super.lib.versionOlder super.matrix-synapse-unwrapped.version "1.162") then {
+    inherit pname version src;
+
+    cargoDeps = super.rustPlatform.fetchCargoVendor {
+      inherit pname version src;
+      hash = "sha256-BYDW01vrtifxfrFw+bayhAkwXXqzOx7jMd7zHBPnHbA=";
+    };
+  } else { }))).override {
     python3Packages = self.pythonForSynapse.pkgs;
   };
 
