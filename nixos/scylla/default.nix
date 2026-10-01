@@ -59,20 +59,27 @@ in
       "pci=pcie_bus_perf"
       "iommu.passthrough=1"
     ];
-    # Setup SFP+ network interfaces early so systemd can pick everything up.
-    initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.restool}/bin/restool
-      copy_bin_and_libs ${pkgs.restool}/bin/ls-main
-      copy_bin_and_libs ${pkgs.restool}/bin/ls-addni
-      # Patch paths
-      sed -i "1i #!$out/bin/sh" $out/bin/ls-main
-    '';
-    initrd.postDeviceCommands = ''
-      ls-addni dpmac.7
-      ls-addni dpmac.8
-      ls-addni dpmac.9
-      ls-addni dpmac.10
-    '';
+    initrd.systemd = {
+      initrdBin = with pkgs; [ restool ];
+      services = {
+        # Setup SFP+ network interfaces early so systemd can pick everything up.
+        setup-interfaces = {
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = [
+              "ls-addni dpmac.7"
+              "ls-addni dpmac.8"
+              "ls-addni dpmac.9"
+              "ls-addni dpmac.10"
+            ];
+          };
+          before = [
+            "initrd.target"
+            "initrd-switch-root.target"
+          ];
+        };
+      };
+    };
     kernel.sysctl = {
       "net.ipv4.conf.all.forwarding" = true;
 
@@ -389,44 +396,42 @@ in
     };
 
     dhcp-ddns = {
-      enable = true;
-      configFile = keaJsonWithIncludes "kea-dhcp-ddns.conf" {
-        DhcpDdns = {
-          dns-server-timeout = 100;
-          ip-address = "127.0.0.1";
-          ncr-format = "JSON";
-          ncr-protocol = "UDP";
-          forward-ddns = {
-            ddns-domains = [
-              {
-                key-name = "bind-key-2021-12-27";
-                dns-servers = [ { ip-address = "192.168.20.1"; } ];
-                name = "nibylandia.lan.";
-              }
-            ];
-          };
-          reverse-ddns = {
-            ddns-domains = [
-              {
-                key-name = "bind-key-2021-12-27";
-                dns-servers = [ { ip-address = "192.168.20.1"; } ];
-                name = "20.168.192.in-addr.arpa.";
-              }
-              {
-                key-name = "bind-key-2021-12-27";
-                dns-servers = [ { ip-address = "192.168.20.1"; } ];
-                name = "24.168.192.in-addr.arpa.";
-              }
-            ];
-          };
-          tsig-keys = [
+      enable = false;
+      settings = {
+        dns-server-timeout = 100;
+        ip-address = "127.0.0.1";
+        ncr-format = "JSON";
+        ncr-protocol = "UDP";
+        forward-ddns = {
+          ddns-domains = [
             {
-              name = "bind-key-2021-12-27";
-              algorithm = "HMAC-SHA512";
-              secret = "__keaInclude ${config.age.secrets.ddnsKeyKea.path}";
+              key-name = "bind-key-2021-12-27";
+              dns-servers = [ { ip-address = "192.168.20.1"; } ];
+              name = "nibylandia.lan.";
             }
           ];
         };
+        reverse-ddns = {
+          ddns-domains = [
+            {
+              key-name = "bind-key-2021-12-27";
+              dns-servers = [ { ip-address = "192.168.20.1"; } ];
+              name = "20.168.192.in-addr.arpa.";
+            }
+            {
+              key-name = "bind-key-2021-12-27";
+              dns-servers = [ { ip-address = "192.168.20.1"; } ];
+              name = "24.168.192.in-addr.arpa.";
+            }
+          ];
+        };
+        tsig-keys = [
+          {
+            name = "bind-key-2021-12-27";
+            algorithm = "HMAC-SHA512";
+            secret-file = config.age.secrets.ddnsKeyKea.path;
+          }
+        ];
       };
     };
   };
@@ -552,4 +557,6 @@ in
     restool
     ethtool
   ];
+
+  services.dbus.implementation = "dbus";
 }
