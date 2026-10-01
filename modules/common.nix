@@ -127,6 +127,7 @@ in
   environment.systemPackages = with pkgs; [
     file
     git
+    git-lfs
     libarchive
     lm_sensors
     lshw
