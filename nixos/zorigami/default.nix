@@ -970,6 +970,8 @@ in
 
   virtualisation.libvirtd.enable = true;
 
+  virtualisation.docker.enable = true;
+
   users.groups.domi = {
     gid = 1004;
   };
