@@ -21,8 +21,8 @@ rustPlatform.buildRustPackage rec {
     owner = "arachnist";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "3bc52022fba17b1e1b79877592a7c27659d8a194";
-    hash = "sha256-i6mS3J+vKPoAtXar8bNy+oqbcqlgBu0aX+T0re0uY2s=";
+    rev = "8293c47ba80d8119ca9dbc15cfaecf24cd9a01a5";
+    hash = "sha256-kGidNRGSPxhSSFZ+UqtbTmaOlIuZZoeviaOQnIW9/PU=";
   };
   /*
     src = builtins.fetchGit {
