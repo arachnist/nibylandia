@@ -17,19 +17,19 @@ rustPlatform.buildRustPackage rec {
   inherit version;
 
   src = fetchFromGitea {
-    domain = "code.hackerspace.pl";
-    owner = "ar";
+    domain = "codeberg.org";
+    owner = "arachnist";
     repo = "notbot";
     # tag = "v${version}";
-    rev = "98f2c25a8ead10e431bcaad658f29e4492124f21";
-    hash = "sha256-k3n8gCA5/w6PR0cGGVECDBALfEjFyx8bBWMkRowZ3Z8=";
+    rev = "3bc52022fba17b1e1b79877592a7c27659d8a194";
+    hash = "sha256-i6mS3J+vKPoAtXar8bNy+oqbcqlgBu0aX+T0re0uY2s=";
   };
   /*
-  src = builtins.fetchGit {
-    url = "file:///home/ar/scm/notbot";
-    rev = "98f2c25a8ead10e431bcaad658f29e4492124f21";
-    ref = "riir";
-  };
+    src = builtins.fetchGit {
+      url = "file:///home/ar/scm/notbot";
+      rev = "0d77613cd3f4622da4158b0b075f4f8afdd96c98";
+      ref = "riir";
+    };
   */
 
   cargoLock = {
