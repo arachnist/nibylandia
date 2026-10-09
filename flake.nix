@@ -9,10 +9,7 @@
     nix-formatter-pack.url = "github:Gerschtli/nix-formatter-pack";
     deploy-rs.url = "github:serokell/deploy-rs";
     colmena.url = "github:zhaofengli/colmena/main";
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs.darwin.follows = "";
-    };
+    agenix.url = "github:ryantm/agenix";
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,6 +36,7 @@
       self,
       nixpkgs,
       deploy-rs,
+      colmena,
       ...
     }@inputs:
     let
@@ -123,6 +121,8 @@
           path = deployPkgs.${value.config.nixpkgs.system}.deploy-rs.lib.activate.nixos value;
         };
       }) self.nixosConfigurations;
+
+      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
 
       colmena = {
         meta = {
