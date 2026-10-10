@@ -184,12 +184,14 @@ in
         job_name = "hswaw_klipper";
         scrape_interval = "5s";
         metrics_path = "/metrics/klipper/probe";
-        static_configs = [ {
-          targets = [
-            "sovol.waw.hackerspace.pl"
-            "voron.waw.hackerspace.pl"
-          ];
-        } ];
+        static_configs = [
+          {
+            targets = [
+              "sovol.waw.hackerspace.pl"
+              "voron.waw.hackerspace.pl"
+            ];
+          }
+        ];
         params.modules = [
           "process_stats"
           "job_queue"
@@ -213,6 +215,12 @@ in
             replacement = "customs.hackerspace.pl";
           }
         ];
+      }
+      {
+        job_name = "hswaw_chronos";
+        scheme = "http";
+        metrics_path = "/metrics";
+        static_configs = [ { targets = [ "chronos.hswaw.net:9123" ]; } ];
       }
     ];
     systemd.services.victoriametrics = {
